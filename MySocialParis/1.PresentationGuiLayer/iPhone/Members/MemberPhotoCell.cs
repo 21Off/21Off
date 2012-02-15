@@ -61,7 +61,7 @@ namespace MSP.Client
 			private UIActivityIndicatorView spinner;
 			private UIImage mapPlanImage;
 			private static UIImage EmptyImage;
-			private UIButton keywordView, attentionView;
+			private UIButton keywordView, attentionView, addToEvent;
 			private DateTime lastPhotoClicked;
 			private int photoClickCnt = 0;
 			private static UIImage googleLogo;
@@ -101,12 +101,16 @@ namespace MSP.Client
 				var img1 = Graphics.GetImgResource("like40");
 				var img2 = Graphics.GetImgResource("comment40");
 				var img3 = Graphics.GetImgResource("keyword");
-				var img4 = Graphics.GetImgResource("alert");				
+				var img4 = Graphics.GetImgResource("alert");
+				
+				var img5 = Graphics.GetImgResource("alert");
 				
 				var rect1 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect2 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect3 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);
 				var rect4 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);
+				
+				var rect5 = new RectangleF(320 - 2 * PicXPad - 26, PicYPad, 26, 26);
 				
 				var rectSpinner = new RectangleF((320 - 30)/2, 2 * PicYPad + TitleHeight + (PicHeight - 30) / 2, 30, 30);
 			
@@ -119,6 +123,11 @@ namespace MSP.Client
 				commentairesView.BackgroundColor = UIColor.Clear;
 				commentairesView.Frame = rect2;								
 				commentairesView.SetBackgroundImage(img2, UIControlState.Normal);
+				
+				addToEvent = UIButton.FromType(UIButtonType.Custom);
+				addToEvent.BackgroundColor = UIColor.Clear;
+				addToEvent.Frame = rect5;
+				addToEvent.SetBackgroundImage(img5, UIControlState.Normal);
 			
 				keywordView = UIButton.FromType (UIButtonType.Custom);
 				keywordView.BackgroundColor = UIColor.Clear;
@@ -136,12 +145,14 @@ namespace MSP.Client
 					AddSubview (keywordView);
 				
 				AddSubview (attentionView);
+				AddSubview(addToEvent);
 				
 				interesantBtnView.TouchUpInside += LikePhoto;
 				commentairesView.TouchUpInside += GotoComments;
 				if (isMyImage) 
 					keywordView.TouchUpInside += SeeKeywords;
-				attentionView.TouchUpInside += GotoAttention;				
+				attentionView.TouchUpInside += GotoAttention;	
+				addToEvent.TouchDown += HandleAddToEventTouchDown;
 				
 				if (EmptyImage == null)
 					EmptyImage = UIImageUtils.MakeEmpty(new Size(320 - 2 * PicXPad, PicHeight));
@@ -156,6 +167,11 @@ namespace MSP.Client
 				photoBtn.ContentMode = UIViewContentMode.ScaleAspectFill;
 				
 				Update(tweet);
+			}
+
+			void HandleAddToEventTouchDown (object sender, EventArgs e)
+			{
+				
 			}
 							
 			#region Events

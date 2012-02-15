@@ -1,11 +1,16 @@
-﻿<Properties>
+﻿<Properties GitUserInfo="UsingMD">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/AppDelegateIPad.cs">
+    <Files>
+      <File FileName="MySocialParis/AppDelegateIPad.cs" Line="22" Column="3" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" />
+            <Node name="21Off.Client" expanded="True">
+              <Node name="AppDelegateIPad.cs" selected="True" />
+            </Node>
           </Node>
           <Node name="Share" expanded="True" />
         </State>
