@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DDEBF72A-0AC7-4C8F-9DF0-2DD9BD58EAEB}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>MSP.Client</RootNamespace>
+    <ReleaseVersion>0.6</ReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG;SILVERLIGHT;PocketPC;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <MtouchDebug>true</MtouchDebug>
+    <ConsolePause>false</ConsolePause>
+    <MtouchI18n />
+    <AssemblyName>21Off</AssemblyName>
+    <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchUseSGen>true</MtouchUseSGen>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <ConsolePause>false</ConsolePause>
+    <MtouchI18n />
+    <AssemblyName>21Off</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG;MONOTOUCH</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer: stephane Mottola (L2B558EGPA)</CodesignKey>
+    <ConsolePause>false</ConsolePause>
+    <MtouchI18n />
+    <AssemblyName>21Off</AssemblyName>
+    <CodesignEntitlements>Info.plist</CodesignEntitlements>
+    <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IpaPackageName />
+    <CodesignProvision>9D37D789-4627-4A35-A6B9-B06F380AC2A5</CodesignProvision>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchI18n />
+    <AssemblyName>21Off</AssemblyName>
+    <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodesignProvision>9D37D789-4627-4A35-A6B9-B06F380AC2A5</CodesignProvision>
+    <MtouchDebug>true</MtouchDebug>
+    <MtouchProfiling>true</MtouchProfiling>
+    <MtouchUseSGen>true</MtouchUseSGen>
+    <BuildIpa>true</BuildIpa>
+    <MtouchArch>ARMv7</MtouchArch>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Distribution|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Distribution</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <AssemblyName>21Off</AssemblyName>
+    <MtouchI18n />
+    <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
+    <CodesignEntitlements>Info.plist</CodesignEntitlements>
+    <CodesignProvision>0BA606B4-0970-4209-ACE7-2F30E605CB30</CodesignProvision>
+    <IpaPackageName />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Distribution|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Distribution</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <AssemblyName>MSPClient</AssemblyName>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+    <Reference Include="System.Json" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\Libs\ServiceStack.Text.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="en.lproj\Localizable.strings" />
+    <None Include="Images\app icon 512.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegateIPhone.cs" />
+    <Compile Include="AppDelegateIPad.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationAuthenticationService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationConfigurationService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationPhotographyService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationGeolocationService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationUsersService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationPicturesService.cs" />
+    <Compile Include="3.BusinessObjectsLayer\IUser.cs" />
+    <Compile Include="3.BusinessObjectsLayer\IImage.cs" />
+    <Compile Include="3.BusinessObjectsLayer\ICategory.cs" />
+    <Compile Include="3.BusinessObjectsLayer\IComment.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IApplicationCategoriesService.cs" />
+    <Compile Include="5.CommonSharedLayer\Exceptions\ClientApplicationException.cs" />
+    <Compile Include="5.CommonSharedLayer\Exceptions\ClientBusinessException.cs" />
+    <Compile Include="5.CommonSharedLayer\Exceptions\ClientDataException.cs" />
+    <Compile Include="5.CommonSharedLayer\Exceptions\ClientCommunicationException.cs" />
+    <Compile Include="3.BusinessObjectsLayer\IConfiguration.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib.designer.cs">
+      <DependentUpon>MainWindowIPhone.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPad\MainWindowIPad.xib.designer.cs">
+      <DependentUpon>MainWindowIPad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="MSPNavigationController.cs" />
+    <Compile Include="AppDelegateUIBuilder.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\StartMapViewController.xib.cs">
+      <DependentUpon>StartMapViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\StartMapViewController.xib.designer.cs">
+      <DependentUpon>StartMapViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\StartMediaViewController.xib.cs">
+      <DependentUpon>StartMediaViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\StartMediaViewController.xib.designer.cs">
+      <DependentUpon>StartMediaViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\PhotoDetailsViewController.xib.cs">
+      <DependentUpon>PhotoDetailsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\PhotoDetailsViewController.xib.designer.cs">
+      <DependentUpon>PhotoDetailsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoEffectsViewController.xib.cs">
+      <DependentUpon>PhotoEffectsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoEffectsViewController.xib.designer.cs">
+      <DependentUpon>PhotoEffectsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLocationViewController.xib.cs">
+      <DependentUpon>PhotoLocationViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLocationViewController.xib.designer.cs">
+      <DependentUpon>PhotoLocationViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoPostViewController.xib.cs">
+      <DependentUpon>PhotoPostViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoPostViewController.xib.designer.cs">
+      <DependentUpon>PhotoPostViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoCommentsViewController.xib.cs">
+      <DependentUpon>PhotoCommentsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoCommentsViewController.xib.designer.cs">
+      <DependentUpon>PhotoCommentsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoAlbumViewController.xib.cs">
+      <DependentUpon>PhotoAlbumViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoAlbumViewController.xib.designer.cs">
+      <DependentUpon>PhotoAlbumViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="RotatingTabBar.cs" />
+    <Compile Include="Utilities\Util.cs" />
+    <Compile Include="Utilities\Locale.cs" />
+    <Compile Include="SqliteNet\SQLite.cs" />
+    <Compile Include="Data\ImageStore.cs" />
+    <Compile Include="Data\Tweet.cs" />
+    <Compile Include="Utilities\LRUCache.cs" />
+    <Compile Include="Utilities\CustomViews\TriangleView.cs" />
+    <Compile Include="Utilities\CustomViews\ShapeView.cs" />
+    <Compile Include="Utilities\CustomViews\SquareView.cs" />
+    <Compile Include="Utilities\CustomViews\LoadingView.cs" />
+    <Compile Include="Utilities\CustomViews\UILoadingView.cs" />
+    <Compile Include="Utilities\CustomViews\LoadingHudView.cs" />
+    <Compile Include="Utilities\CustomViews\Hud.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\IPhotoUpdated.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\TilingView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\PhotoCellView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\PhotoCell.cs" />
+    <Compile Include="4.DataAccessLayer\Database.cs" />
+    <Compile Include="5.CommonSharedLayer\Singleton.cs" />
+    <Compile Include="3.BusinessObjectsLayer\BusinessImagesServiceImpl.cs" />
+    <Compile Include="2.ApplicationServicesLayer\IBusinessImagesService.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\BaseTimelineViewController.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\BuzzPhotoView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\ProfileViewController.xib.cs">
+      <DependentUpon>ProfileViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\ProfileViewController.xib.designer.cs">
+      <DependentUpon>ProfileViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\ActivityViewController.xib.cs">
+      <DependentUpon>ActivityViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\ActivityViewController.xib.designer.cs">
+      <DependentUpon>ActivityViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchViewController.xib.cs">
+      <DependentUpon>SearchViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchViewController.xib.designer.cs">
+      <DependentUpon>SearchViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\ActivityView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\SweepSupport.cs" />
+    <Compile Include="Utilities\Maps\GeoCoderDelegate.cs" />
+    <Compile Include="Utilities\Maps\MapViewDelegate.cs" />
+    <Compile Include="Utilities\Maps\MyAnnotation.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MembersPhotoViewControler.xib.cs">
+      <DependentUpon>MembersPhotoViewControler.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MembersPhotoViewControler.xib.designer.cs">
+      <DependentUpon>MembersPhotoViewControler.xib</DependentUpon>
+    </Compile>
+    <Compile Include="Data\IImageUpdated.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoViewAdjustViewController.xib.cs">
+      <DependentUpon>PhotoViewAdjustViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoViewAdjustViewController.xib.designer.cs">
+      <DependentUpon>PhotoViewAdjustViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\DeviceHardware.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\OverlayView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\VCViewController.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\pickerDelegate.cs" />
+    <Compile Include="Utilities\Graphics\Graphics.cs" />
+    <Compile Include="Utilities\Graphics\UIImageUtils.cs" />
+    <Compile Include="Utilities\NSUrlConnectionWrapper.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\PhotosElement.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\AdvancedEditingDialog.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchDialog.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\IMapPresenter.cs" />
+    <Compile Include="Utilities\Maps\PinAnnotationView.cs" />
+    <Compile Include="CustomNavigationBar.cs" />
+    <Compile Include="MyNavigationItem.cs" />
+    <Compile Include="Utilities\Graphics\UIViewExtensions.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MembersPhotoPanelView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\MemberPhotoElement.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\MemberPhotoCell.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\ActivityElement.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\ActivityCell.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\MembersView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\Timeline.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\PhotoDetailsView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\PhotoDetailsPanelView.cs" />
+    <Compile Include="Utilities\Graphics\GraphicsII.cs" />
+    <Compile Include="4.DataAccessLayer\Comment.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\LoginPageGarde.xib.cs">
+      <DependentUpon>LoginPageGarde.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\LoginPageGarde.xib.designer.cs">
+      <DependentUpon>LoginPageGarde.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\AuthentificationViewController.xib.cs">
+      <DependentUpon>AuthentificationViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\AuthentificationViewController.xib.designer.cs">
+      <DependentUpon>AuthentificationViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\NewAccountViewController.xib.cs">
+      <DependentUpon>NewAccountViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\NewAccountViewController.xib.designer.cs">
+      <DependentUpon>NewAccountViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="4.DataAccessLayer\Configuration.cs" />
+    <Compile Include="3.BusinessObjectsLayer\IKeyword.cs" />
+    <Compile Include="4.DataAccessLayer\Keyword.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoCommentsView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\CommentElement.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\CommentCell.cs" />
+    <Compile Include="4.DataAccessLayer\Like.cs" />
+    <Compile Include="3.BusinessObjectsLayer\ILike.cs" />
+    <Compile Include="Utilities\Maps\CalloutMapAnnotationView.cs" />
+    <Compile Include="Utilities\Maps\MapUtilities.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\SampleOwnerDrawnElement.cs" />
+    <Compile Include="Utilities\Graphics\UIViewBordered.cs" />
+    <Compile Include="3.BusinessObjectsLayer\IFollow.cs" />
+    <Compile Include="4.DataAccessLayer\Follow.cs" />
+    <Compile Include="Utilities\Graphics\Camera.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoMapViewController.xib.cs">
+      <DependentUpon>PhotoMapViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoMapViewController.xib.designer.cs">
+      <DependentUpon>PhotoMapViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\IMapLocationRequest.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\Map.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\Settings.cs" />
+    <Compile Include="2.ApplicationServicesLayer\AppServiceBase.cs" />
+    <Compile Include="2.ApplicationServicesLayer\UsersService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\DBUsersService.cs" />
+    <Compile Include="DataContracts\GetImages.cs" />
+    <Compile Include="2.ApplicationServicesLayer\DBImagesService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\ImagesService.cs" />
+    <Compile Include="DataContracts\GetFollowers.cs" />
+    <Compile Include="DataContracts\GetKeywords.cs" />
+    <Compile Include="DataContracts\GetLikes.cs" />
+    <Compile Include="DataContracts\GetComments.cs" />
+    <Compile Include="DataContracts\GetUser.cs" />
+    <Compile Include="2.ApplicationServicesLayer\KeywordsService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\FollowersService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\LikesService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\CommentsService.cs" />
+    <Compile Include="DataContracts\GetActivities.cs" />
+    <Compile Include="DataContracts\ExampleConfig.cs" />
+    <Compile Include="2.ApplicationServicesLayer\ActivitiesService.cs" />
+    <Compile Include="DataContracts\RestFiles\Files.cs" />
+    <Compile Include="DataContracts\RestFiles\File.cs" />
+    <Compile Include="DataContracts\RestFiles\FileResult.cs" />
+    <Compile Include="DataContracts\RestFiles\Folder.cs" />
+    <Compile Include="DataContracts\RestFiles\FolderResult.cs" />
+    <Compile Include="DataContracts\RestFiles\StoreNewImage.cs" />
+    <Compile Include="Utilities\Maps\ReverseGeocoder.cs" />
+    <Compile Include="2.ApplicationServicesLayer\DBFollowersService.cs" />
+    <Compile Include="Data\UIActivity.cs" />
+    <Compile Include="Utilities\JsonUtility.cs" />
+    <Compile Include="2.ApplicationServicesLayer\DBCommentsService.cs" />
+    <Compile Include="2.ApplicationServicesLayer\DBKeywordsService.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\HorizontalScrollView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\Block.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\BlockType.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\UserElementII.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\UserElement.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\UserCell.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MeNavController.xib.cs">
+      <DependentUpon>MeNavController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MeNavController.xib.designer.cs">
+      <DependentUpon>MeNavController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MeViewCont.xib.cs">
+      <DependentUpon>MeViewCont.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\MeViewCont.xib.designer.cs">
+      <DependentUpon>MeViewCont.xib</DependentUpon>
+    </Compile>
+    <Compile Include="2.ApplicationServicesLayer\DBActiviesService.cs" />
+    <Compile Include="DataContracts\FullImages.cs" />
+    <Compile Include="Utilities\Maps\IReverseGeo.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\DarkUIView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\TapView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\UIUtils.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLikersViewController.xib.cs">
+      <DependentUpon>PhotoLikersViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLikersViewController.xib.designer.cs">
+      <DependentUpon>PhotoLikersViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLikersView.cs" />
+    <Compile Include="2.ApplicationServicesLayer\DBLikesService.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\ImagesElement.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\Images2Element.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\ImagesCell.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchByKeywordViewController.xib.cs">
+      <DependentUpon>SearchByKeywordViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchByKeywordViewController.xib.designer.cs">
+      <DependentUpon>SearchByKeywordViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchUser.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoKeywordsView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoKeywordsViewController.xib.cs">
+      <DependentUpon>PhotoKeywordsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoKeywordsViewController.xib.designer.cs">
+      <DependentUpon>PhotoKeywordsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\BuzzPhoto.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SearchKeyword.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SocialNetworksParentViewController.xib.cs">
+      <DependentUpon>SocialNetworksParentViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SocialNetworksParentViewController.xib.designer.cs">
+      <DependentUpon>SocialNetworksParentViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Members\ContentReporter.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\EditingSource.cs" />
+    <Compile Include="Utilities\StringMimePart.cs" />
+    <Compile Include="Utilities\StreamMimePart.cs" />
+    <Compile Include="Utilities\UploadFile.cs" />
+    <Compile Include="Utilities\HttpUploadHelper.cs" />
+    <Compile Include="Utilities\MimePart.cs" />
+    <Compile Include="2.ApplicationServicesLayer\MimeTypes.cs" />
+    <Compile Include="Utilities\Maps\AnnotationBtnAssoc.cs" />
+    <Compile Include="Utilities\CustomViews\MBProgressHUD.cs" />
+    <Compile Include="Utilities\CustomViews\MBRoundProgressView.cs" />
+    <Compile Include="Utilities\CustomViews\MBProgressHUDMode.cs" />
+    <Compile Include="Utilities\Maps\CalloutView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SocialNetworksShareViewController.xib.cs">
+      <DependentUpon>SocialNetworksShareViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\SocialNetworksShareViewController.xib.designer.cs">
+      <DependentUpon>SocialNetworksShareViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\RelationsViewController.xib.cs">
+      <DependentUpon>RelationsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\RelationsViewController.xib.designer.cs">
+      <DependentUpon>RelationsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="2.ApplicationServicesLayer\ReportService.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\PreferencesViewController.xib.cs">
+      <DependentUpon>PreferencesViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\PreferencesViewController.xib.designer.cs">
+      <DependentUpon>PreferencesViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\RequestInfo.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\RequestType.cs" />
+    <Compile Include="Utilities\Reachability.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Photo\RelationsView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\EmptyViewController.xib.cs">
+      <DependentUpon>EmptyViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\EmptyViewController.xib.designer.cs">
+      <DependentUpon>EmptyViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="Data\StreamExtensions.cs" />
+    <Compile Include="Data\Downloader.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Home\ImageInfo.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\UIWebImageView.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\CustomHtmlElement.cs" />
+    <Compile Include="2.ApplicationServicesLayer\CDel.cs" />
+    <Compile Include="2.ApplicationServicesLayer\FacebookService.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\oAuthFacebook.cs" />
+    <Compile Include="DataContracts\StoreNewUserResponse.cs" />
+    <Compile Include="DataContracts\StoreNewUser.cs" />
+    <Compile Include="2.ApplicationServicesLayer\InstagramService.cs" />
+    <Compile Include="4.DataAccessLayer\Instagram.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPad\MainWindowIPad.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Home\StartMapViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Home\StartMediaViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Media\PhotoDetailsViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoEffectsViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLocationViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoPostViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoCommentsViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoAlbumViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\ProfileViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\ActivityViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\SearchViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Media\MembersPhotoViewControler.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoViewAdjustViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Login\LoginPageGarde.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Login\AuthentificationViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Login\NewAccountViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoMapViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Media\MeNavController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Media\MeViewCont.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoLikersViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\SearchByKeywordViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\PhotoKeywordsViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\SocialNetworksParentViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\SocialNetworksShareViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\RelationsViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\PreferencesViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\EmptyViewController.xib" xmlns="" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="1.PresentationGuiLayer\" />
+    <Folder Include="2.ApplicationServicesLayer\" />
+    <Folder Include="3.BusinessObjectsLayer\" />
+    <Folder Include="5.CommonSharedLayer\" />
+    <Folder Include="5.CommonSharedLayer\Exceptions\" />
+    <Folder Include="5.CommonSharedLayer\Communications\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\" />
+    <Folder Include="1.PresentationGuiLayer\iPad\" />
+    <Folder Include="1.PresentationGuiLayer\Android\" />
+    <Folder Include="Images\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\Home\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\Media\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\Photo\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="SqliteNet\" />
+    <Folder Include="en.lproj\" />
+    <Folder Include="es.lproj\" />
+    <Folder Include="Data\" />
+    <Folder Include="Utilities\CustomViews\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\Me\" />
+    <Folder Include="Utilities\Maps\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\Members\" />
+    <Folder Include="Images\Media\" />
+    <Folder Include="Images\Media\9A\" />
+    <Folder Include="Images\Share\" />
+    <Folder Include="Utilities\Graphics\" />
+    <Folder Include="1.PresentationGuiLayer\iPhone\Login\" />
+    <Folder Include="Images\Login\" />
+    <Folder Include="DataContracts\" />
+    <Folder Include="DataContracts\RestFiles\" />
+    <Folder Include="Images\Ver4\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\blueArrow.png" />
+    <Content Include="Images\Media\9A\icone_photo.png" />
+    <Content Include="Images\Share\cadre.png" />
+    <Content Include="Images\Share\icone_photo.png" />
+    <Content Include="Images\Share\placerdimentionner.png" />
+    <Content Include="Images\Media\9A\image_plan.jpg" />
+    <Content Include="Images\Login\emptyProfile.png" />
+    <Content Include="Images\Ver4\activity%402x.png" />
+    <Content Include="Images\Ver4\admirer%402x.png" />
+    <Content Include="Images\Ver4\album%402x.png" />
+    <Content Include="Images\Ver4\alert%402x.png" />
+    <Content Include="Images\Ver4\back%402x.png" />
+    <Content Include="Images\Ver4\buzz%402x.png" />
+    <Content Include="Images\Ver4\charmer%402x.png" />
+    <Content Include="Images\Ver4\comment%402x.png" />
+    <Content Include="Images\Ver4\delete%402x.png" />
+    <Content Include="Images\Ver4\friend%402x.png" />
+    <Content Include="Images\Ver4\global%402x.png" />
+    <Content Include="Images\Ver4\keyword%402x.png" />
+    <Content Include="Images\Ver4\like%402x.png" />
+    <Content Include="Images\Ver4\local%402x.png" />
+    <Content Include="Images\Ver4\map%402x.png" />
+    <Content Include="Images\Ver4\me%402x.png" />
+    <Content Include="Images\Ver4\ok%402x.png" />
+    <Content Include="Images\Ver4\position%402x.png" />
+    <Content Include="Images\Ver4\profile%402x.png" />
+    <Content Include="Images\Ver4\reload%402x.png" />
+    <Content Include="Images\Ver4\search%402x.png" />
+    <Content Include="Images\Ver4\share%402x.png" />
+    <Content Include="Images\Ver4\activity.png" />
+    <Content Include="Images\Ver4\admirer.png" />
+    <Content Include="Images\Ver4\album.png" />
+    <Content Include="Images\Ver4\alert.png" />
+    <Content Include="Images\Ver4\back.png" />
+    <Content Include="Images\Ver4\buzz.png" />
+    <Content Include="Images\Ver4\charmer.png" />
+    <Content Include="Images\Ver4\comment.png" />
+    <Content Include="Images\Ver4\delete.png" />
+    <Content Include="Images\Ver4\friend.png" />
+    <Content Include="Images\Ver4\global.png" />
+    <Content Include="Images\Ver4\keyword.png" />
+    <Content Include="Images\Ver4\like.png" />
+    <Content Include="Images\Ver4\local.png" />
+    <Content Include="Images\Ver4\map.png" />
+    <Content Include="Images\Ver4\me.png" />
+    <Content Include="Images\Ver4\ok.png" />
+    <Content Include="Images\Ver4\position.png" />
+    <Content Include="Images\Ver4\profile.png" />
+    <Content Include="Images\Ver4\reload.png" />
+    <Content Include="Images\Ver4\search.png" />
+    <Content Include="Images\Ver4\share.png" />
+    <Content Include="Images\Ver4\fond.png" />
+    <Content Include="Images\Ver4\fond%402x.png" />
+    <Content Include="Images\Ver4\more.png" />
+    <Content Include="Images\Ver4\more%402x.png" />
+    <Content Include="Images\Ver4\cadre100.png" />
+    <Content Include="Images\Ver4\cadre50.png" />
+    <Content Include="Images\Ver4\comment40.png" />
+    <Content Include="Images\Ver4\comment40%402x.png" />
+    <Content Include="Images\Ver4\like40.png" />
+    <Content Include="Images\Ver4\like40%402x.png" />
+    <Content Include="Images\callout_right.png" />
+    <Content Include="Images\callout_left.png" />
+    <Content Include="Images\callout_center.png" />
+    <Content Include="Images\Ver4\kewordsbuttonD.png" />
+    <Content Include="Images\Ver4\kewordsbuttonU.png" />
+    <Content Include="Images\Ver4\keywordsbuttonD%402x.png" />
+    <Content Include="Images\Ver4\keywordsbuttonU%402x.png" />
+    <Content Include="Images\Ver4\usersbuttonD.png" />
+    <Content Include="Images\Ver4\usersbuttonD%402x.png" />
+    <Content Include="Images\Ver4\usersbuttonU.png" />
+    <Content Include="Images\Ver4\usersbuttonU%402x.png" />
+    <Content Include="Images\Ver4\cadre200.png" />
+    <Content Include="Images\Ver4\messagenoposts.png" />
+    <Content Include="Images\Ver4\messagenoposts%402x.png" />
+    <Content Include="Images\star-off.png" />
+    <Content Include="Images\star-off%402x.png" />
+    <Content Include="Images\star-on.png" />
+    <Content Include="Images\star-on%402x.png" />
+    <Content Include="Images\swipe-clip.png" />
+    <Content Include="Images\swipe-clip%402x.png" />
+    <Content Include="Images\swipe-clipdark.png" />
+    <Content Include="Images\swipe-clipdark%402x.png" />
+    <Content Include="Images\swipe-profile.png" />
+    <Content Include="Images\swipe-profile%402x.png" />
+    <Content Include="Images\swipe-reply.png" />
+    <Content Include="Images\swipe-reply%402x.png" />
+    <Content Include="Images\swipe-retweet.png" />
+    <Content Include="Images\swipe-retweet%402x.png" />
+    <Content Include="Images\swipe-star-off.png" />
+    <Content Include="Images\swipe-star-off%402x.png" />
+    <Content Include="Images\swipe-star-on.png" />
+    <Content Include="Images\swipe-star-on%402x.png" />
+    <Content Include="Images\texture.png" />
+    <Content Include="Images\texture%402x.png" />
+    <Content Include="Images\menu-shadow.png" />
+    <Content Include="Images\21logo.jpg" />
+    <Content Include="Images\21logo%402x.jpg" />
+    <Content Include="Images\Icon.png" />
+    <Content Include="Images\Icon%40x2.png" />
+    <Content Include="Images\googleLogo.PNG" />
+    <Content Include="Images\signinFacebook.jpg" />
+    <Content Include="Images\carre.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MonoTouch.Dialog\MonoTouch.Dialog.csproj">
+      <Project>{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}</Project>
+      <Name>MonoTouch.Dialog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Share\Share.csproj">
+      <Project>{DE340AD9-5C7B-4539-9F7D-1E4C7C7CEF02}</Project>
+      <Name>Share</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="Info.plist" />
+  </ItemGroup>
+</Project>

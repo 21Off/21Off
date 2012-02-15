@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DE340AD9-5C7B-4539-9F7D-1E4C7C7CEF02}</ProjectGuid>
+    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Share</RootNamespace>
+    <AssemblyName>Share</AssemblyName>
+    <ReleaseVersion>0.6</ReleaseVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <MtouchDebug>true</MtouchDebug>
+    <ConsolePause>false</ConsolePause>
+    <MtouchI18n />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchLink>None</MtouchLink>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <MtouchDebug>true</MtouchDebug>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Distribution|iPhone' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\iPhone\Distribution</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Developer</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Distribution|iPhoneSimulator' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Distribution</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="monotouch" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Json" />
+    <Reference Include="monotouch-facebook">
+      <HintPath>..\Libs\monotouch-facebook.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="FaceBook\" />
+    <Folder Include="Twitter\" />
+    <Folder Include="Instagram\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FaceBook\DialogDelegate.cs" />
+    <Compile Include="FaceBook\FaceBookApplication.cs" />
+    <Compile Include="FaceBook\FacebookAuth.cs" />
+    <Compile Include="FaceBook\LoginDialogDelegate.cs" />
+    <Compile Include="FaceBook\RequestDelegate.cs" />
+    <Compile Include="FaceBook\SessionDelegate.cs" />
+    <Compile Include="Twitter\OAuthAuthorizer.cs" />
+    <Compile Include="Twitter\Punycode.cs" />
+    <Compile Include="Twitter\TwitterApplication.cs" />
+    <Compile Include="Twitter\Util.cs" />
+    <Compile Include="Twitter\WebUI.cs" />
+    <Compile Include="SocialLogin.cs" />
+    <Compile Include="ISocialApplication.cs" />
+    <Compile Include="FaceBook\FacebookAPI.cs" />
+    <Compile Include="FaceBook\FacebookAPIException.cs" />
+    <Compile Include="FaceBook\JSONObject.cs" />
+    <Compile Include="GraphUser.cs" />
+    <Compile Include="Instagram\InstagramApi.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FaceBook\libfacebook_ios_sdk.a" />
+  </ItemGroup>
+</Project>
