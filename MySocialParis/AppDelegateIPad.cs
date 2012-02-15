@@ -16,8 +16,7 @@ namespace MSP.Client
 		{
 			// If you have defined a view, add it here:
 			// window.AddSubview (navigationController.View);
-			window.MakeKeyAndVisible ();
-			
+			window.MakeKeyAndVisible ();			
 			return true;
 		}
 	}
