@@ -1,0 +1,25 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Distribution|iPhone" />
+  <MonoDevelop.Ide.Workbench>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True" selected="True">
+          <Node name="Client" expanded="True" />
+          <Node name="Share" expanded="True" />
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/Valeriu/Projects/MySocialParis/Share/FaceBook/FacebookAuth.cs" line="191" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.Client.MSP.Client>
+    <ProfileHeapShotSettings_27CRelease Output="/var/folders/hb/f_v30gqj6d7_mlbbp3nn9jvr0000gn/T/profiler-output.mlpd" Zip="True" HeapshotMode="ondemand" HeapshotGCInterval="1" HeapshotTimeInterval="1000" Calls="False" Alloc="False" CallDepth="100" StatisticalSampling="False" SampingFrequency="1000" MaxFrames="8" Mode="Memory" />
+    <ProfileHeapShotSettings_27CDebug Output="/var/folders/hb/f_v30gqj6d7_mlbbp3nn9jvr0000gn/T/profiler-output.mlpd" Zip="True" HeapshotMode="ondemand" HeapshotGCInterval="1" HeapshotTimeInterval="1000" Calls="False" Alloc="False" CallDepth="100" StatisticalSampling="False" SampingFrequency="1000" MaxFrames="8" Mode="Memory" />
+    <IPhoneTestFlightSettings_27CDistribution ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Facebook authentification integration" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
+    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Facebook authentification" NotifyTeamMembers="True" ReplaceBinaries="True" DistributionLists="" />
+  </MonoDevelop.Ide.ItemProperties.Client.MSP.Client>
+</Properties>
