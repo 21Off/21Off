@@ -1,10 +1,10 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Distribution|iPhone" />
   <MonoDevelop.Ide.Workbench ActiveDocument="../../Desktop/WelcomePage.cs">
     <Files>
-      <File FileName="../../Desktop/WelcomePage.cs" Line="117" Column="3" />
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/LoginPageGarde.xib.cs" Line="162" Column="124" />
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/NewAccountViewController.xib.cs" Line="148" Column="1" />
+      <File FileName="../../Desktop/WelcomePage.cs" Line="8" Column="24" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/LoginPageGarde.xib.cs" Line="1" Column="1" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/NewAccountViewController.xib.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -12,7 +12,6 @@
           <Node name="Client" expanded="True">
             <Node name="21Off.Client" expanded="True" selected="True" />
           </Node>
-          <Node name="Share" expanded="True" />
         </State>
       </Pad>
     </Pads>
@@ -27,6 +26,6 @@
     <ProfileHeapShotSettings_27CRelease Output="/var/folders/hb/f_v30gqj6d7_mlbbp3nn9jvr0000gn/T/profiler-output.mlpd" Zip="True" HeapshotMode="ondemand" HeapshotGCInterval="1" HeapshotTimeInterval="1000" Calls="False" Alloc="False" CallDepth="100" StatisticalSampling="False" SampingFrequency="1000" MaxFrames="8" Mode="Memory" />
     <ProfileHeapShotSettings_27CDebug Output="/var/folders/hb/f_v30gqj6d7_mlbbp3nn9jvr0000gn/T/profiler-output.mlpd" Zip="True" HeapshotMode="ondemand" HeapshotGCInterval="1" HeapshotTimeInterval="1000" Calls="False" Alloc="False" CallDepth="100" StatisticalSampling="False" SampingFrequency="1000" MaxFrames="8" Mode="Memory" />
     <IPhoneTestFlightSettings_27CDistribution ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Facebook authentification integration" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
-    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Facebook authentification" NotifyTeamMembers="True" ReplaceBinaries="True" DistributionLists="" />
+    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="WelcomePage Bug Fix" NotifyTeamMembers="True" ReplaceBinaries="True" DistributionLists="" />
   </MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
 </Properties>
