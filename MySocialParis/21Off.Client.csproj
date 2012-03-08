@@ -58,7 +58,7 @@
     <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IpaPackageName />
-    <CodesignProvision>9D37D789-4627-4A35-A6B9-B06F380AC2A5</CodesignProvision>
+    <CodesignProvision>D38E6823-D8C2-436B-9DDD-598BAAD3C425</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -464,6 +464,10 @@
     <Compile Include="DataContracts\StoreNewUser.cs" />
     <Compile Include="2.ApplicationServicesLayer\InstagramService.cs" />
     <Compile Include="4.DataAccessLayer\Instagram.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\WelcomePage.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Login\WelcomePage.designer.cs">
+      <DependentUpon>WelcomePage.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />
@@ -495,6 +499,7 @@
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Photo\RelationsViewController.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\PreferencesViewController.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\EmptyViewController.xib" xmlns="" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Login\WelcomePage.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -634,6 +639,8 @@
     <Content Include="Images\googleLogo.PNG" />
     <Content Include="Images\signinFacebook.jpg" />
     <Content Include="Images\carre.png" />
+    <Content Include="Images\Ver4\Newlogo.png" />
+    <Content Include="Images\Ver4\Newlogo%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoTouch.Dialog\MonoTouch.Dialog.csproj">

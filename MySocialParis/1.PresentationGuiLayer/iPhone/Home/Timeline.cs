@@ -16,17 +16,19 @@ namespace MSP.Client
 		private FilterType _FilterType;
 		private List<ImageInfo> _list;
 		private List<Image> previousList;
-		private MSPNavigationController _MSP;
+		private UINavigationController _MSP;
 		private IMapLocationRequest _MapLocationRequest;
 		
 		#endregion
 		
-		public TimelineViewController (FilterType filterType, bool pushing, MSPNavigationController msp, 
+		public TimelineViewController (FilterType filterType, bool pushing, UINavigationController msp, 
 		                               IMapLocationRequest maplocationRequest) 
 			: base(pushing)
 		{
 			_FilterType = filterType;
 			_MapLocationRequest = maplocationRequest;
+			
+			ShowLoadMorePhotos = true;
 			
 			this.TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 			this.TableView.BackgroundColor = new UIColor (226f, 231f, 237f, 1f);
@@ -270,6 +272,7 @@ namespace MSP.Client
 				wait.Set();
 			}
 		}
+		public bool ShowLoadMorePhotos {get;set;}
 		
 		private void DownloadTweets ()
 		{
@@ -280,6 +283,19 @@ namespace MSP.Client
 			this.BeginInvokeOnMainThread (delegate {
 				Root[0].RemoveRange(0, Root[0].Count);
 				
+					DownloadAsync();
+					
+					// Notify the dialog view controller that we are done
+					// this will hide the progress info	
+					this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });
+				//});
+			});
+		}
+		
+		private void DownloadAsync()
+		{
+			try
+			{
 				if (!hasImage)
 				{
 					var imgElement = new UIImageView(Graphics.GetImgResource("messagenoposts"));
@@ -292,37 +308,38 @@ namespace MSP.Client
 				}
 				
 				//NSTimer.CreateScheduledTimer (0, delegate {
-					for (int i = 0; i < 7; i++) {
-						Root[0].Add (new PhotosElement (this, i));
-					}
-				
-						LoadMoreElement more = null;
-						more = new LoadMoreElement (delegate 
-							{					
-								var wait = new ManualResetEventSlim(false);					
-								AppDelegateIPhone.ShowRealLoading("Loading more photos", null, wait);
-								
-								// Launch a thread to do some work
-								ThreadPool.QueueUserWorkItem (delegate 
-								{
-									AddMorePhotoElements(more, wait);
-								});
-							});
+				for (int i = 0; i < 7; i++) {
+					Root[0].Add (new PhotosElement (this, i));
+				}
+				if (ShowLoadMorePhotos)
+				{
+					LoadMoreElement more = null;
+					more = new LoadMoreElement (delegate 
+						{					
+							var wait = new ManualResetEventSlim(false);					
+							AppDelegateIPhone.ShowRealLoading("Loading more photos", null, wait);
 							
-						more.Height = 60;
-						more.Image = Graphics.GetImgResource("more");
+							// Launch a thread to do some work
+							ThreadPool.QueueUserWorkItem (delegate 
+							{
+								AddMorePhotoElements(more, wait);
+							});
+						});
 						
-						try {
-							Root[0].Insert (Root[0].Count, UITableViewRowAnimation.None, more);
-						} catch {
-					}
+					more.Height = 60;
+					more.Image = Graphics.GetImgResource("more");
 					
-					// Notify the dialog view controller that we are done
-					// this will hide the progress info	
-					this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });
-				//});
-			});
-		}			
+					try {
+						Root[0].Insert (Root[0].Count, UITableViewRowAnimation.None, more);
+					} catch {
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("DownloadAsync", ex);
+			}
+		}
 		
 		private bool InitList()
 		{

@@ -10,7 +10,7 @@ namespace MSP.Client
 {
 	public static class Graphics
 	{
-		public static UIImage GetImgResource(string resname)
+		public static UIImage GetImgResource(string resname, bool isPng = false)
 		{
 			try
 			{

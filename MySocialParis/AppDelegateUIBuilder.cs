@@ -100,7 +100,7 @@ namespace MSP.Client
 			tabBarController.SetViewControllers(navigationRoots, true);
 			tabBarController.ViewControllerSelected += HandleTabBarControllerViewControllerSelected;			
 						
-			window.AddSubview (tabBarController.View);
+			window.AddSubview (tabBarController.View);					
 		}					
 		
 		public void GotoToShare()

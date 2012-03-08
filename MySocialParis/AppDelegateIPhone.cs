@@ -147,30 +147,6 @@ namespace MSP.Client
 			var mainDB = Database.Main;
 			try
 			{
-				/*
-				mainDB.Execute("delete from User where 1 = 1");
-				mainDB.Execute("delete from Image where 1 = 1");
-				mainDB.Execute("delete from Configuration where 1 = 1");
-				mainDB.Execute("delete from Comment where 1 = 1");
-				mainDB.Execute("delete from Like where 1 = 1");
-				mainDB.Execute("delete from Follow where 1 = 1");
-				mainDB.Execute("delete from keyword where 1 = 1");
-				
-				return true;
-				*/				
-				/*
-				var resc = mainDB.Table<User>().ToList();
-				var activities = mainDB.Table<Activity>().ToList();
-				var resa = mainDB.Table<Image>().ToArray();
-				var resd = mainDB.Table<Configuration>().ToArray();
-				var resb = mainDB.Table<Comment>().ToArray();
-				var resf = mainDB.Table<Like>().ToArray();
-				var resg = mainDB.Table<Follow>().ToArray();
-				var rese = mainDB.Table<Keyword>().ToArray();
-				
-				return true;
-				*/
-				
 				LastUserLogged lastUser = Database.Main.Table<LastUserLogged>().LastOrDefault();
 				if (lastUser != null)
 				{
@@ -228,21 +204,23 @@ namespace MSP.Client
 		}
 		
 		public void InitLoginPage()
-		{			
-			var vc = new UIViewController();
-			//var vc = new UINavigationController();
-
-			window.AddSubview(vc.View);			
-			
+		{						
 			var loginPage = new LoginPageGarde(this);
-			
-			var nav = new UINavigationController(loginPage);
+			var welcomePage = new WelcomePage(this);
+						
+			var vc = new UIViewController();
+			var nav = new UINavigationController(welcomePage)
+			{
+				NavigationBarHidden = true,
+			};
 			loginPage.Nav = nav;
+			welcomePage.Nav = nav;		
+									
+			nav.Add(welcomePage.View);
 			
-			nav.NavigationBarHidden = true;
-			
-			//vc.PushViewController(nav, false);
-			vc.PresentModalViewController(nav, false);
+			window.AddSubview(nav.View);
+			//window.AddSubview(vc.View);
+			//vc.PresentModalViewController(nav, false);
 		}
 		
 		public override void DidEnterBackground (UIApplication application)
