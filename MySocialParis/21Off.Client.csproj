@@ -72,7 +72,7 @@
     <AssemblyName>21Off</AssemblyName>
     <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CodesignProvision>0B3C96E1-DAE5-47CF-80C4-B91B574E1D58</CodesignProvision>
+    <CodesignProvision>58CB640A-2258-4139-AEC2-8AC65FC76ADA</CodesignProvision>
     <MtouchDebug>true</MtouchDebug>
     <MtouchProfiling>true</MtouchProfiling>
     <MtouchUseSGen>true</MtouchUseSGen>
