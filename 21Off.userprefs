@@ -1,16 +1,19 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Distribution|iPhone" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../Desktop/WelcomePage.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/Utilities/Punycode.cs">
     <Files>
-      <File FileName="../../Desktop/WelcomePage.cs" Line="8" Column="24" />
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/LoginPageGarde.xib.cs" Line="1" Column="1" />
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/NewAccountViewController.xib.cs" Line="1" Column="1" />
+      <File FileName="MySocialParis/UI/Web.cs" Line="168" Column="75" />
+      <File FileName="MySocialParis/Utilities/Punycode.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" selected="True" />
+            <Node name="21Off.Client" expanded="True">
+              <Node name="Utilities" expanded="True">
+                <Node name="Punycode.cs" selected="True" />
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>

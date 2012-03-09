@@ -14,12 +14,13 @@ namespace MSP.Client
 		public MemberPhotoElement (Tweet tweet, Action<int> goToMembersPhotoAction) : base (null)
 		{
 			Tweet = tweet;	
-			_GoToMembersPhotoAction = goToMembersPhotoAction;
+			_GoToMembersPhotoAction = goToMembersPhotoAction;			
 		}		
 		
 		// Gets a cell on demand, reusing cells
 		public override UITableViewCell GetCell (UITableView tv)
-		{
+		{			
+			Console.WriteLine(41);
 			var cell = tv.DequeueReusableCell (key) as MemberPhotoCell;
 			if (cell == null)
 				cell = new MemberPhotoCell (UITableViewCellStyle.Default, key, Tweet, _GoToMembersPhotoAction);
@@ -31,6 +32,7 @@ namespace MSP.Client
 		
 		public override void Selected (DialogViewController dvc, UITableView tableView, NSIndexPath path)
 		{
+			Console.WriteLine(43);
 			//var profile = new DetailTweetViewController (Tweet);
 			//dvc.ActivateController (profile);
 		}
@@ -39,7 +41,16 @@ namespace MSP.Client
 		
 		public float GetHeight (UITableView tableView, NSIndexPath indexPath)
 		{
-			return MemberPhotoCell.GetCellHeight (tableView.Bounds, Tweet);
+			Console.WriteLine(42);
+			try
+			{
+				return MemberPhotoCell.GetCellHeight (tableView.Bounds, Tweet);
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("MemberPhotoElement GetHeight", ex);
+				return 0;
+			}
 		}
 		
 		#endregion

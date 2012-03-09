@@ -19,8 +19,7 @@ namespace TweetStation
 		public int LikesCount {get;set;}
 
 		public Action<Tweet> DeleteAction {get;set;}
-	}
-	
-
+		public Action<string> UrlTapAction {get;set;}
+	}	
 }
 

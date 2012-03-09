@@ -85,10 +85,18 @@ namespace MSP.Client
 					LikesCount = image.LikesCount,
 						
 					DeleteAction = DeleteAction,
+					UrlTapAction = UrlTap,
 				};
 				tweets.Add(tweet);
 			}
 			return tweets;
+		}
+		
+		private void UrlTap(string url)
+		{			
+			WebViewController.OpenUrl (this, url); 
+			
+			//InvokeOnMainThread(()=> nav.PushViewController(a, false));
 		}
 		
 		private void AddOlderPhotos(LoadMoreElement more)
@@ -196,16 +204,13 @@ namespace MSP.Client
 			
 			Action act = ()=>
 			{	
-				if (true)//this.NavigationController.ParentViewController is UINavigationController)
+				InvokeOnMainThread(()=>
 				{
-					InvokeOnMainThread(()=>
-					{
-						var nav = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
-						var a = new MembersPhotoViewControler(nav, userId, false);
-						
-						InvokeOnMainThread(()=> nav.PushViewController(a, false));
-					});
-				}
+					var nav = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
+					var a = new MembersPhotoViewControler(nav, userId, false);
+					
+					InvokeOnMainThread(()=> nav.PushViewController(a, false));
+				});
 			};			
 			AppDelegateIPhone.ShowRealLoading(View, "Loading photos", null, act);			
 		}

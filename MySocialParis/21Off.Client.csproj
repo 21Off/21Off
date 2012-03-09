@@ -122,7 +122,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegateIPhone.cs" />
-    <Compile Include="AppDelegateIPad.cs" />
     <Compile Include="2.ApplicationServicesLayer\IApplicationAuthenticationService.cs" />
     <Compile Include="2.ApplicationServicesLayer\IApplicationConfigurationService.cs" />
     <Compile Include="2.ApplicationServicesLayer\IApplicationPhotographyService.cs" />
@@ -141,9 +140,6 @@
     <Compile Include="3.BusinessObjectsLayer\IConfiguration.cs" />
     <Compile Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib.designer.cs">
       <DependentUpon>MainWindowIPhone.xib</DependentUpon>
-    </Compile>
-    <Compile Include="1.PresentationGuiLayer\iPad\MainWindowIPad.xib.designer.cs">
-      <DependentUpon>MainWindowIPad.xib</DependentUpon>
     </Compile>
     <Compile Include="MSPNavigationController.cs" />
     <Compile Include="AppDelegateUIBuilder.cs" />
@@ -469,10 +465,11 @@
     <Compile Include="1.PresentationGuiLayer\iPhone\Login\WelcomePage.designer.cs">
       <DependentUpon>WelcomePage.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Web.cs" />
+    <Compile Include="Utilities\Punycode.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />
-    <InterfaceDefinition Include="1.PresentationGuiLayer\iPad\MainWindowIPad.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Home\StartMapViewController.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Home\StartMediaViewController.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Media\PhotoDetailsViewController.xib" xmlns="" />
@@ -511,8 +508,6 @@
     <Folder Include="5.CommonSharedLayer\Exceptions\" />
     <Folder Include="5.CommonSharedLayer\Communications\" />
     <Folder Include="1.PresentationGuiLayer\iPhone\" />
-    <Folder Include="1.PresentationGuiLayer\iPad\" />
-    <Folder Include="1.PresentationGuiLayer\Android\" />
     <Folder Include="Images\" />
     <Folder Include="1.PresentationGuiLayer\iPhone\Home\" />
     <Folder Include="1.PresentationGuiLayer\iPhone\Media\" />
@@ -535,6 +530,7 @@
     <Folder Include="DataContracts\" />
     <Folder Include="DataContracts\RestFiles\" />
     <Folder Include="Images\Ver4\" />
+    <Folder Include="UI\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\blueArrow.png" />
@@ -642,6 +638,10 @@
     <Content Include="Images\carre.png" />
     <Content Include="Images\Ver4\Newlogo.png" />
     <Content Include="Images\Ver4\Newlogo%402x.png" />
+    <Content Include="Images\back.png" />
+    <Content Include="Images\back%402x.png" />
+    <Content Include="Images\forward.png" />
+    <Content Include="Images\forward%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonoTouch.Dialog\MonoTouch.Dialog.csproj">

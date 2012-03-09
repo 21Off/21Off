@@ -8,6 +8,7 @@ using MonoTouch.UIKit;
 using TweetStation;
 using MSP.Client.DataContracts;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace MSP.Client
 {
@@ -332,27 +333,39 @@ namespace MSP.Client
 					using (var nss = new NSString (tempUserText)){
 						var dim = nss.StringSize (textFont);
 						if (dim.Width > remainingSpace || r == splits.Count - 1)
-						{				
+						{											
 							string text = dim.Width > remainingSpace ? oldTemp : tempUserText;
-							int count = dim.Width > remainingSpace ? r : r + 1;
+							if (text == "") 
+							{
+								splits.Clear();
+								break;
+							}
+								
+							int count = dim.Width > remainingSpace ? r : r + 1;							
 							float pos = 2 * PicXPad + PicSize + (line == 0 ? userTextWidth + TextWidthPadding : 0);
 							
 							using (var nss2 = new NSString(text))
 							{
 								dim = nss2.StringSize(textFont);
 							}
-								
+														
 							var placement = new RectangleF (pos, lineY + textHeightPadding * (line + 1) + textSize * line, 
 							            dim.Width, textSize);
 							
+	  						var regx = new Regex("http://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\'\\,]*)?", 
+					                     RegexOptions.IgnoreCase); 
+    
+		    				Match match = regx.Match(text);
+							
 							blocks.Add(new Block()
 				            {
-								Value = text,
+								Value = match.Success ? match.Value : text,
 								Bounds = placement,
 								Font = textFont,
 								LineBreakMode = UILineBreakMode.WordWrap,
 								TextColor = UIColor.Black,
-							});
+								Type = match.Success ? BlockType.Url : BlockType.Text,
+							});							
 							
 							remainingSpace = width - 4 * PicXPad - 2 * PicSize;
 							line++;

@@ -9,6 +9,7 @@ using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
 using TweetStation;
 using RedPlum;
+using System.Text.RegularExpressions;
 
 namespace MSP.Client
 {	
@@ -19,6 +20,8 @@ namespace MSP.Client
 		const int userSize = 14;
 		const int textSize = 14;
 		const int timeSize = 12;
+		const int urlSize = 14;
+		const int TextX = 95;
 		
 		const int PicXPad = 12 / 2;
 		const int PicYPad = 12 / 2;
@@ -28,14 +31,14 @@ namespace MSP.Client
 		const int TextYOffset = userSize + 8;
 		const int TimeWidth = 46;
 		
-		const int TitleHeight = 48 / 2;		
-		
+		const int TitleHeight = 48 / 2;
 		const int PicHeight = 615 / 2;
+		
 		public const int MiniMapHeight = 80 / 2;
 		public const int MiniMapWidth = 460 / 2;
 		
 		static UIFont userFont = UIFont.BoldSystemFontOfSize (userSize);
-		static UIFont textFont = UIFont.SystemFontOfSize (textSize);				
+		static UIFont urlFont = UIFont.BoldSystemFontOfSize (urlSize);
 		
 		private MemberPhotoCellView tweetView;
 		public static int CellStyle;
@@ -44,7 +47,7 @@ namespace MSP.Client
 		
 		// Should never happen
 		public MemberPhotoCell (IntPtr handle) : base (handle) {
-			Console.WriteLine (Environment.StackTrace);
+			
 		}		
 				
 		public class MemberPhotoCellView : TapView, IImageUpdated {
@@ -67,13 +70,52 @@ namespace MSP.Client
 			private static UIImage googleLogo;
 			
 			#endregion
+						
+			public event Action<string> UrlTapped;
+			
+			private UIButton CreateUrl(string text, RectangleF frame)
+			{				
+				var url = UIButton.FromType (UIButtonType.Custom);
+				url.Font = urlFont;
+				url.LineBreakMode = UILineBreakMode.TailTruncation;
+				url.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
+				url.TitleShadowOffset = new SizeF (0, 1);
+				url.SetTitleColor (UIColor.FromRGB (0x32, 0x4f, 0x85), UIControlState.Normal);
+				url.SetTitleColor (UIColor.Red, UIControlState.Highlighted);
+				url.SetTitleShadowColor (UIColor.White, UIControlState.Normal);
+				url.TouchUpInside += HandleUrlTouchUpInside;
+				//url.Frame = new RectangleF (frame.X, 70, frame.Width, urlSize);
+				
+				using (var nss = new NSString (text))
+				{
+					var dim = nss.StringSize (urlFont);
+					frame.Width = dim.Width;
+					url.Frame = frame;
+				}
+				
+				url.SetTitle (text, UIControlState.Normal);
+				url.SetTitle (text, UIControlState.Highlighted);
+				
+				return url;
+			}
+
+			void HandleUrlTouchUpInside (object sender, EventArgs e)
+			{
+				string text = ((UIButton)sender).Title(UIControlState.Normal);
+				if (UrlTapped != null) 
+					UrlTapped (text);
+			}			
 	
 			public MemberPhotoCellView (Tweet tweet, Action<int> goToMembersPhotoAction) : base ()
-			{				
+			{			
+				Console.WriteLine(5);
+				
 				Tapped += OnTapped;
 				TappedBlock += OnTappedBlock;
 				TapAndHold += OnTapAndHold;
 				TapAndHoldCall += OnTapAndHoldCall;
+				
+				UrlTapped += tweet.UrlTapAction;
 				
 				this.goToUserPhotos = goToMembersPhotoAction;
 				
@@ -108,8 +150,7 @@ namespace MSP.Client
 				var rect1 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect2 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect3 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);
-				var rect4 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);
-				
+				var rect4 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);				
 				var rect5 = new RectangleF(320 - 2 * PicXPad - 26, PicYPad, 26, 26);
 				
 				var rectSpinner = new RectangleF((320 - 30)/2, 2 * PicYPad + TitleHeight + (PicHeight - 30) / 2, 30, 30);
@@ -513,16 +554,26 @@ namespace MSP.Client
 				
 			private void RealDraw (RectangleF rect)
 			{
+				Console.WriteLine(4);
 				if (_Tweet == null)
 					return;
 				
 				blocks.Clear();
+				urls.Clear();
 				
 				var bounds = Bounds;				
 				
 				var rectMiniMap = new RectangleF(0, 0, MiniMapWidth, MiniMapHeight);
 				float cellHeight = 0;
-				float lineY = Layout(bounds, _Tweet, blocks, out cellHeight);
+				float lineY = 0;
+				try
+				{
+					lineY = Layout(bounds, _Tweet, blocks, out cellHeight);
+				}
+				catch (Exception ex)
+				{
+					Util.LogException("MemberPhotoCell RealDraw", ex);
+				}
 				
 				titlePath = titlePath ?? GraphicsUtil.MakeRoundedRectPath(new RectangleF(PicXPad, 0, PicWidth, TitleHeight), 4);
 				badgePath = GraphicsUtil.MakeRoundedRectPath(new RectangleF(PicXPad, 0, PicWidth, cellHeight), 4);
@@ -612,13 +663,21 @@ namespace MSP.Client
 						else
 							DrawString (block.Value, block.Bounds, block.Font);
 					}
+					if (block.Type == BlockType.Url)
+					{
+						UIButton url = CreateUrl(block.Value, block.Bounds);						
+						AddSubview(url);
+						urls.Add(url);
+					}
 				}
 			}
+			
+			private List<UIButton> urls = new List<UIButton>();
 				
 			public const string seeAllComments = "->see all comments";
 				
 			public static float Layout(RectangleF bounds, Tweet tweet, List<Block> blocks, out float cellHeight)
-			{				
+			{
 				float lineY = TitleHeight + PicHeight + 3 * PicYPad;
 				string imageName = tweet.Image.Name ?? "";
 				using (var nss = new NSString (imageName))
@@ -634,6 +693,8 @@ namespace MSP.Client
 						TextColor = UIColor.DarkGray,
 					});					
 				}			
+				
+				Console.WriteLine("62");
 				
 				float paragraph = 20;
 				cellHeight =  PicYPad + MiniMapHeight + paragraph;
@@ -656,12 +717,16 @@ namespace MSP.Client
 					lineY += userSize;
 				}				
 				
+				Console.WriteLine("63");
+				
 				float commentsHeight = DrawComments(lineY, bounds, tweet, blocks);
 				cellHeight += commentsHeight;
 				lineY += commentsHeight;
 				
 				cellHeight += paragraph;
 				lineY += paragraph;
+				
+				Console.WriteLine("64");
 				float keywordsHeight = DrawKeywords(lineY, tweet, blocks);
 				cellHeight += Math.Max(keywordsHeight, 26) + PicYPad;
 				lineY += Math.Max(keywordsHeight, 26) + PicYPad;
@@ -676,7 +741,6 @@ namespace MSP.Client
 				var rect3 = new RectangleF(2 * PicXPad, lineY - PicYPad - 26, 26, 26);
 				var rect4 = new RectangleF(320 - 2 * PicXPad - 26, lineY - PicYPad - 26, 26, 26);
 				
-//				UIColor color = UIColor.FromRGB(33, 73, 153);
 				UIColor color = UIColor.FromRGB(150, 150, 150);
 				color.SetColor();
 												
@@ -719,19 +783,15 @@ namespace MSP.Client
 				float commentsHeight = 0;
 				int i = 0;
 				
-				//lineY += PicYPad;
-				//commentsHeight += PicYPad;
-				
 				foreach (Comment comment in tweet.Comments)
 				{
 					// Show only the first 5 comments
 					if (i >= 5)
 						break;
 					
-					User user = tweet.CommentsUsers[i];
+					Console.WriteLine("Enter");
 					
-					//lineY += PicYPad;
-					//commentsHeight += PicYPad;
+					User user = tweet.CommentsUsers[i];
 					
 					var userDim = new SizeF(0, 0);
 					using (var nss = new NSString (user.Name))
@@ -744,7 +804,7 @@ namespace MSP.Client
 							Bounds = placement,
 							Font = userFont,
 							TextColor = UIColor.FromRGB(33, 73, 153),
-							CallObject = user,					
+							CallObject = user,
 						});						
 					}
 					
@@ -752,34 +812,25 @@ namespace MSP.Client
 					float remainingSpace = 320 - 4 * PicXPad - PicXPad - userDim.Width;				
 					
 					List<string> splits = comment.Name.Split(new string[] {" "}, 
-						StringSplitOptions.RemoveEmptyEntries).ToList();
+						StringSplitOptions.RemoveEmptyEntries).ToList();									
 					
-					float res = CommentCell.LayoutList (splits, 320, blocks, userTextWidth, remainingSpace,
-						TextWidthPadding, lineY - PicYPad + 2, 0, textSize);
+					float res = 0;
+					try
+					{					
+						Console.WriteLine("Enter 2");
+						res = CommentCell.LayoutList (splits, 320, blocks, userTextWidth, remainingSpace, 
+						                              TextWidthPadding, lineY - PicYPad + 2, 0, textSize);
+					}
+					catch (Exception ex)
+					{
+						Util.LogException("CommentCell.LayoutList", ex);
+					}
 					
 					lineY += res;
 					commentsHeight += res;
-					/*
-					using (var nss = new NSString (comment.Name))
-					{						
-						var commentWitdh = 320 - 4 * PicXPad - PicXPad - userDim.Width;
-						var dim = nss.StringSize (textFont, new SizeF(commentWitdh, 100), UILineBreakMode.WordWrap);
-						
-						var placement = new RectangleF (2 * PicXPad + userDim.Width + PicXPad, lineY, commentWitdh, dim.Height);						
-						blocks.Add(new Block()
-			            {
-							Value = comment.Name,
-							Bounds = placement,
-							Font = textFont,
-							LineBreakMode = UILineBreakMode.WordWrap,
-							TextColor = UIColor.DarkGray,
-						});
-						
-						lineY += dim.Height;
-						commentsHeight += dim.Height;
-					}
-					*/
 					i++;
+					
+					Console.WriteLine("Exit");
 				}
 				return commentsHeight;
 			}
@@ -817,10 +868,6 @@ namespace MSP.Client
 							while (j < splits.Length)
 							{
 								newWord += splits[j] + " ";
-								/*
-								if (j <= splits.Count - 1)
-									newWord += " ";
-								*/	
 								
 								using (var nw = new NSString(newWord))
 								{
@@ -881,10 +928,12 @@ namespace MSP.Client
 		public MemberPhotoCell (UITableViewCellStyle style, NSString ident, Tweet tweet, Action<int> goToMembersPhotoAction) 
 			: base (style, ident)
 		{
+			Console.WriteLine(51);
 			SelectionStyle = UITableViewCellSelectionStyle.Blue;
 			
 			tweetView = new MemberPhotoCellView (tweet, goToMembersPhotoAction);
-			ContentView.Add (tweetView);			
+			ContentView.Add (tweetView);
+			Console.WriteLine(52);
 		}
 
 		// 
@@ -899,7 +948,15 @@ namespace MSP.Client
 		public static float GetCellHeight (RectangleF bounds, Tweet tweet)
 		{
 			float cellHeight = 0;
-			return MemberPhotoCellView.Layout(bounds, tweet, new List<Block>(), out cellHeight);
+			try
+			{
+				return MemberPhotoCellView.Layout(bounds, tweet, new List<Block>(), out cellHeight);
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("MemberPhotoCell GetCellHeight", ex);
+				return 0;
+			}
 		}
 
 		public override void LayoutSubviews ()

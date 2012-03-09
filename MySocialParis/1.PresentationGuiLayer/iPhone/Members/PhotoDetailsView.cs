@@ -50,12 +50,16 @@ namespace MSP.Client
 		{	
 			try
 			{
+				Console.WriteLine(1);
+				
 				var imageResponse = AppDelegateIPhone.AIphone.ImgServ.GetFullImage(_Image.Id);
 				if (imageResponse == null)
 				{					
 					this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });
 					return;
 				}
+				
+				Console.WriteLine(2);
 				
 				List<Comment> comments = new List<Comment>();
 				List<User> commentsUsers = new List<User>();
@@ -65,28 +69,17 @@ namespace MSP.Client
 					commentsUsers.Add(cresp.User);
 				}								
 				
+				Console.WriteLine(3);
 				this.BeginInvokeOnMainThread (delegate {
-					while (Root[0].Count > 0)
-						Root[0].Remove (0);
-					
-					NSTimer.CreateScheduledTimer (0.1, delegate {
-						Root[0].Add(new MemberPhotoElement(new Tweet()
-	                    { 
-							User = _ImageOwner,
-							Image = _Image,
-							Keywords = imageResponse.Keywords,
-							
-							Comments = comments,												
-							CommentsUsers = commentsUsers,
-							
-							LikesCount = imageResponse.LikesCount,
-							DeleteAction = DeleteAction,
-						}, GoToUserPhotos));
-						
-						// Notify the dialog view controller that we are done
-						// this will hide the progress info				
+					try					
+					{		
+						DownloadAsync(imageResponse, comments, commentsUsers);
+					}		
+					catch (Exception ex)
+					{
+						Util.LogException("PhotoDetailsView DownloadAsync", ex);
 						this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });
-					});
+					}
 				});
 			}
 			catch (Exception ex)
@@ -96,17 +89,56 @@ namespace MSP.Client
 			}			
 		}
 		
+		private void DownloadAsync(ImageResponse imageResponse, List<Comment> comments, List<User> commentsUsers)
+		{
+			while (Root[0].Count > 0)
+				Root[0].Remove (0);
+				
+			Console.WriteLine(4);
+			
+			NSTimer.CreateScheduledTimer (0.1, delegate {
+				try
+				{			
+					var mPhotoEl = new MemberPhotoElement(new Tweet()
+		            { 
+						User = _ImageOwner,
+						Image = _Image,
+						Keywords = imageResponse.Keywords,
+						
+						Comments = comments,												
+						CommentsUsers = commentsUsers,
+						
+						LikesCount = imageResponse.LikesCount,
+						DeleteAction = DeleteAction,
+						UrlTapAction = UrlTap,
+					}, GoToUserPhotos);
+					
+					Root[0].Add(mPhotoEl);
+					
+				}
+				catch (Exception ex)
+				{
+					Util.LogException("CreateScheduledTimer PhotoDetailsView", ex);
+				}
+				
+				// Notify the dialog view controller that we are done
+				// this will hide the progress info				
+				this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });
+			});
+		}
+		
+		private void UrlTap(string url)
+		{			
+			WebViewController.OpenUrl (this, url); 			
+		}
+		
 		private void GoToUserPhotos(int userId)
 		{
 			Action act = ()=>
 			{					
-				if (true)//this.NavigationController != null && this.NavigationController.ParentViewController is UINavigationController)
-				{
-					
-					var nav = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
-					var a = new MembersPhotoViewControler(nav, userId, false);
-					InvokeOnMainThread(()=> nav.PushViewController(a, false));
-				}
+				var nav = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
+				var a = new MembersPhotoViewControler(nav, userId, false);
+				InvokeOnMainThread(()=> nav.PushViewController(a, false));
 			};			
 			AppDelegateIPhone.ShowRealLoading(View, "Loading photos", null, act);			
 		}
