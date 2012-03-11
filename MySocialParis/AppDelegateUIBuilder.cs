@@ -1,6 +1,7 @@
 using System.Drawing;
 using MonoTouch.UIKit;
 using System;
+using MSP.Client.DataContracts;
 
 namespace MSP.Client
 {
@@ -103,10 +104,10 @@ namespace MSP.Client
 			window.AddSubview (tabBarController.View);					
 		}					
 		
-		public void GotoToShare()
+		public void GotoToShare(Image eventImage = null)
 		{
 			var vc = new VCViewController();
-			vc.Delegate = new pickerDelegate(vc, shareNavigationController);			
+			vc.Delegate = new pickerDelegate(vc, shareNavigationController, eventImage);			
 			
 			tabBarController.PresentModalViewController(vc, true);			
 		}
@@ -149,7 +150,10 @@ namespace MSP.Client
 					navigationRoots[2].TabBarItem.BadgeValue = count == 0 ? null : count.ToString();
 				});
 			}
-			catch (Exception ex) { }
+			catch (Exception)
+			{
+				// Ignore get notifications exceptions
+			}
 			
 			asking = false;
 		}

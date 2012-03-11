@@ -34,6 +34,7 @@ namespace MSP.Client
 		private UINavigationController _MSP;
 		private RootElement root;
 		private UIImage _image;
+		private Image eventImage;
 		
 		public PhotoPostViewController (UINavigationController msp, UIImage image, CLLocation photoLocation, 
 		                                string locationMapPhotoCapture) 
@@ -49,6 +50,21 @@ namespace MSP.Client
 			//NSNotificationCenter.DefaultCenter.AddObserver ("UIKeyboardWillShowNotification", KeyboardWillShow);			
 			
 			this.root = CreateRoot ();
+		}
+		
+		
+		public PhotoPostViewController (UINavigationController msp, UIImage image, Image eventImage) 
+						: base("PhotoPostViewController", null)
+		{
+			this._image = image;
+			this._MSP = msp;
+			this.eventImage = eventImage;
+			
+			PhotoLocation = new CLLocation(eventImage.Latitude, eventImage.Longitude);		
+			
+			this.root = CreateRoot ();
+			
+			Description.Value = eventImage.Name;
 		}
 		
 		void KeyboardWillShow (NSNotification notification)
@@ -69,13 +85,12 @@ namespace MSP.Client
 		private DialogViewController _dialogView;
 		private RectangleF mapFrame;
 		
+		private UIView topBar;
 		private Settings _Settings;
 		public string LocationMapPhotoCapture {get;set;}
 		
 		#endregion
 		
-		
-		private UIView topBar;
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();		

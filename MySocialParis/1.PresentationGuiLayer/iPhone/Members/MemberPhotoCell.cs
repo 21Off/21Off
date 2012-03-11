@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.CoreGraphics;
@@ -8,8 +7,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
 using TweetStation;
-using RedPlum;
-using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace MSP.Client
 {	
@@ -107,14 +105,11 @@ namespace MSP.Client
 			}			
 	
 			public MemberPhotoCellView (Tweet tweet, Action<int> goToMembersPhotoAction) : base ()
-			{			
-				Console.WriteLine(5);
-				
+			{
 				Tapped += OnTapped;
 				TappedBlock += OnTappedBlock;
 				TapAndHold += OnTapAndHold;
-				TapAndHoldCall += OnTapAndHoldCall;
-				
+				TapAndHoldCall += OnTapAndHoldCall;				
 				UrlTapped += tweet.UrlTapAction;
 				
 				this.goToUserPhotos = goToMembersPhotoAction;
@@ -143,8 +138,7 @@ namespace MSP.Client
 				var img1 = Graphics.GetImgResource("like40");
 				var img2 = Graphics.GetImgResource("comment40");
 				var img3 = Graphics.GetImgResource("keyword");
-				var img4 = Graphics.GetImgResource("alert");
-				
+				var img4 = Graphics.GetImgResource("alert");				
 				var img5 = Graphics.GetImgResource("alert");
 				
 				var rect1 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
@@ -209,13 +203,14 @@ namespace MSP.Client
 				
 				Update(tweet);
 			}
-
-			void HandleAddToEventTouchDown (object sender, EventArgs e)
-			{
-				
-			}
 							
 			#region Events
+			
+			private void HandleAddToEventTouchDown (object sender, EventArgs e)
+			{
+				if (_Tweet != null && _Tweet.Image != null)
+					AppDelegateIPhone.AIphone.GotoToShare(_Tweet.Image);
+			}			
 			
 			private void SeeKeywords(object sender, EventArgs e)
 			{
@@ -787,9 +782,7 @@ namespace MSP.Client
 				{
 					// Show only the first 5 comments
 					if (i >= 5)
-						break;
-					
-					Console.WriteLine("Enter");
+						break;					
 					
 					User user = tweet.CommentsUsers[i];
 					
@@ -816,8 +809,7 @@ namespace MSP.Client
 					
 					float res = 0;
 					try
-					{					
-						Console.WriteLine("Enter 2");
+					{
 						res = CommentCell.LayoutList (splits, 320, blocks, userTextWidth, remainingSpace, 
 						                              TextWidthPadding, lineY - PicYPad + 2, 0, textSize);
 					}
@@ -828,9 +820,7 @@ namespace MSP.Client
 					
 					lineY += res;
 					commentsHeight += res;
-					i++;
-					
-					Console.WriteLine("Exit");
+					i++;					
 				}
 				return commentsHeight;
 			}

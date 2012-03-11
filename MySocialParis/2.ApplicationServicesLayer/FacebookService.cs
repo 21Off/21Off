@@ -175,7 +175,7 @@ namespace MSP.Client
 			s.InvokeOnMainThread(()=>
 			{
 				var req = new NSUrlRequest(new NSUrl(url));
-				new NSUrlConnection(req, new CDel(req), true);
+				new NSUrlConnection(req, new ConnexionDelegate(req), true);
 			});
 			
 			return "";

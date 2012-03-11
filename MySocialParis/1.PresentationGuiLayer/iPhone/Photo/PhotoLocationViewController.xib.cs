@@ -170,14 +170,14 @@ namespace MSP.Client
 			UnloadLocationManager();
 			base.ViewDidDisappear(animated);
 		}		
-
+		
+		#region Events
+		
 		void HandleMapViewDidUpdateUserLocation (object sender, MKUserLocationEventArgs e)
 		{
 			if (!loaded)
 				HandleUpdatedLocation(e.UserLocation.Location);
-		}
-		
-		#region Events
+		}		
 
 		void HandleMapViewOnTouchEnded (PointF obj)
 		{
@@ -204,7 +204,6 @@ namespace MSP.Client
 		
 		void HandleUpdatedLocation (CLLocation newLocation)
 		{
-			Console.WriteLine("Updated location");
 			if (newLocation == null)
 			{
 				Action action = () =>

@@ -1,6 +1,8 @@
 using System;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using MonoTouch.CoreLocation;
+using MSP.Client.DataContracts;
 
 namespace MSP.Client
 {
@@ -8,12 +10,19 @@ namespace MSP.Client
 	{
 		private VCViewController _navigationController;
 		private UINavigationController _shareNavCont;
+		private Image prevImage;
 		
 		public pickerDelegate(VCViewController msp, UINavigationController shareNavCont) : base()
 		{
 			_navigationController = msp;
 			_shareNavCont = shareNavCont;
-		}			
+		}
+		
+		public pickerDelegate(VCViewController msp, UINavigationController shareNavCont, Image prevImage)
+			:this(msp, shareNavCont)
+		{
+			this.prevImage = prevImage;
+		}
 		
 		public override void Canceled (UIImagePickerController picker)
 		{	
@@ -29,7 +38,7 @@ namespace MSP.Client
 			
 			AppDelegateIPhone.tabBarController.DismissModalViewControllerAnimated(true);			
 			
-			var aaa =  _shareNavCont.TabBarController;
+			var aaa = _shareNavCont.TabBarController;
 			aaa.SelectedViewController = aaa.ViewControllers[0];
 			
 			var rotatingTb = (RotatingTabBar)AppDelegateIPhone.tabBarController;
@@ -53,8 +62,17 @@ namespace MSP.Client
 					});
 			}
 			
-			var photoLocation = new PhotoLocationViewController(_shareNavCont, image);
-			_shareNavCont.PushViewController(photoLocation, true);
+			if (prevImage != null)
+			{
+				var photoLocation = new CLLocation(prevImage.Latitude, prevImage.Longitude);				
+				var photoPost = new PhotoPostViewController(_shareNavCont, image, photoLocation, null);
+				_shareNavCont.PushViewController(photoPost, true);			
+			}
+			else
+			{
+				var photoLocation = new PhotoLocationViewController(_shareNavCont, image);
+				_shareNavCont.PushViewController(photoLocation, true);
+			}
 		}	
 	}
 	

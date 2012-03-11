@@ -1,7 +1,3 @@
-
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using SQLite;
 namespace MSP.Client.DataContracts
 {
 	public class StoreNewUserResponse

@@ -312,6 +312,9 @@ namespace MSP.Client
 			tweetView.SetNeedsDisplay ();			
 		}
 		
+		/// <summary>
+		/// TODO : Fix layout of comments with multiple uris
+		/// </summary>
 		public static float LayoutList (List<string> splits, float width, List<Block> blocks, 
 			float userTextWidth, float remainingSpace, float textHeightPadding, float lineY, 
 			float PicSize, float textSize)

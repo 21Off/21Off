@@ -1,21 +1,12 @@
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Json;
-using System.Net;
-using System.Threading;
-using System.Web;
-using FacebookN;
 using MonoTouch.Foundation;
-using MSP.Client.DataContracts;
+
 namespace MSP.Client
 {
-	public class CDel : NSUrlConnectionDelegate
+	public class ConnexionDelegate : NSUrlConnectionDelegate
 	{
 		private NSUrlRequest req;
 		
-		public CDel(NSUrlRequest req)
+		public ConnexionDelegate(NSUrlRequest req)
 		{
 			this.req = req;
 			data = new NSMutableData();			
