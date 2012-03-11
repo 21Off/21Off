@@ -24,7 +24,7 @@ namespace MSP.Client
 			{			
 				Image = image,
 				ImageFile = GetIOFile(filePath),
-				MapFile = GetIOFile(mapPath),
+				MapFile = mapPath == null ? null : GetIOFile(mapPath),
 				Keywords = keywords,
 				Comments = comments,
 			};

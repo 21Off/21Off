@@ -3,6 +3,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MonoTouch.CoreLocation;
 using MSP.Client.DataContracts;
+using TweetStation;
 
 namespace MSP.Client
 {
@@ -10,7 +11,7 @@ namespace MSP.Client
 	{
 		private VCViewController _navigationController;
 		private UINavigationController _shareNavCont;
-		private Image prevImage;
+		private Tweet tweet;
 		
 		public pickerDelegate(VCViewController msp, UINavigationController shareNavCont) : base()
 		{
@@ -18,10 +19,10 @@ namespace MSP.Client
 			_shareNavCont = shareNavCont;
 		}
 		
-		public pickerDelegate(VCViewController msp, UINavigationController shareNavCont, Image prevImage)
+		public pickerDelegate(VCViewController msp, UINavigationController shareNavCont, Tweet tweet)
 			:this(msp, shareNavCont)
 		{
-			this.prevImage = prevImage;
+			this.tweet = tweet;
 		}
 		
 		public override void Canceled (UIImagePickerController picker)
@@ -62,17 +63,18 @@ namespace MSP.Client
 					});
 			}
 			
-			if (prevImage != null)
+			UIViewController nextScreen = null;
+			
+			if (tweet != null)
 			{
-				var photoLocation = new CLLocation(prevImage.Latitude, prevImage.Longitude);				
-				var photoPost = new PhotoPostViewController(_shareNavCont, image, photoLocation, null);
-				_shareNavCont.PushViewController(photoPost, true);			
+				nextScreen = new PhotoPostViewController(_shareNavCont, image, tweet);
 			}
 			else
 			{
-				var photoLocation = new PhotoLocationViewController(_shareNavCont, image);
-				_shareNavCont.PushViewController(photoLocation, true);
+				nextScreen = new PhotoLocationViewController(_shareNavCont, image);				
 			}
+			
+			_shareNavCont.PushViewController(nextScreen, true);
 		}	
 	}
 	

@@ -209,7 +209,7 @@ namespace MSP.Client
 			private void HandleAddToEventTouchDown (object sender, EventArgs e)
 			{
 				if (_Tweet != null && _Tweet.Image != null)
-					AppDelegateIPhone.AIphone.GotoToShare(_Tweet.Image);
+					AppDelegateIPhone.AIphone.GotoToShare(_Tweet, AppDelegateIPhone.buzzNavigationController);
 			}			
 			
 			private void SeeKeywords(object sender, EventArgs e)

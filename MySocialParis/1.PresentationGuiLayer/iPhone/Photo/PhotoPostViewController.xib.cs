@@ -31,11 +31,6 @@ namespace MSP.Client
 
 		}
 		
-		private UINavigationController _MSP;
-		private RootElement root;
-		private UIImage _image;
-		private Image eventImage;
-		
 		public PhotoPostViewController (UINavigationController msp, UIImage image, CLLocation photoLocation, 
 		                                string locationMapPhotoCapture) 
 			: base("PhotoPostViewController", null)
@@ -53,30 +48,32 @@ namespace MSP.Client
 		}
 		
 		
-		public PhotoPostViewController (UINavigationController msp, UIImage image, Image eventImage) 
+		public PhotoPostViewController (UINavigationController msp, UIImage image, Tweet tweet) 
 						: base("PhotoPostViewController", null)
 		{
 			this._image = image;
 			this._MSP = msp;
-			this.eventImage = eventImage;
+			this.eventImage = tweet.Image;
 			
 			PhotoLocation = new CLLocation(eventImage.Latitude, eventImage.Longitude);		
 			
 			this.root = CreateRoot ();
+			isForEvent = true;
 			
 			Description.Value = eventImage.Name;
-		}
-		
-		void KeyboardWillShow (NSNotification notification)
-		{
-			var kbdBounds = (notification.UserInfo.ObjectForKey (UIKeyboard.BoundsUserInfoKey) as NSValue).RectangleFValue;
-			//Console.WriteLine(kbdBounds);
-			//composerView.Frame = ComputeComposerSize (kbdBounds);
-		}		
+			Keywords.AddRange(tweet.Keywords);
+		}	
 		
 		#endregion	
 		
 		#region Members
+			
+		private List<Keyword> Keywords = new List<Keyword>();
+		private UINavigationController _MSP;
+		private RootElement root;
+		private UIImage _image;
+		private Image eventImage;
+		private bool isForEvent;
 		
 		public MyEntryElement Description {get;set;}
 		public MyEntryElement FirstComment {get;set;}
@@ -90,6 +87,8 @@ namespace MSP.Client
 		public string LocationMapPhotoCapture {get;set;}
 		
 		#endregion
+		
+		#region Overrides
 		
 		public override void ViewDidLoad ()
 		{
@@ -117,15 +116,29 @@ namespace MSP.Client
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
-		}		
+		}	
+				
+		#endregion
 		
 		private bool isOnKeywordScreen = false;
 		
 		#region Events
-
+				
+		private void KeyboardWillShow (NSNotification notification)
+		{
+			var kbdBounds = (notification.UserInfo.ObjectForKey (UIKeyboard.BoundsUserInfoKey) as NSValue).RectangleFValue;
+			//Console.WriteLine(kbdBounds);
+			//composerView.Frame = ComputeComposerSize (kbdBounds);
+		}			
+		
 		private void HandleOkBtnTouchUpInside (object sender, EventArgs e)
 		{
-			Keywords = GetKeyword();
+			if (isForEvent)
+			{
+				isForEvent = false;
+			}
+			else
+				Keywords = GetKeyword();
 			
 			Section section = this.root.ElementAtOrDefault(0);
 			
@@ -139,6 +152,8 @@ namespace MSP.Client
 				
 				section.Add(CreateLoadMore(section));
 				SetTitleText("keywords", "enter keywords");
+				
+				Keywords.ForEach(el => section.Add(new StringElement(el.Name)));
 				_dialogView.View.Frame = mapFrame;
 				this.View.SetNeedsLayout();
 				
@@ -279,9 +294,8 @@ namespace MSP.Client
 				
 		private void SavePhoto()
 		{
-			if (PhotoLocation == null || LocationMapPhotoCapture == null)
+			if (PhotoLocation == null || (LocationMapPhotoCapture == null && eventImage == null))
 			{
-				Util.ShowAlertSheet("Couldnt get location", View);
 				return;
 			}
 			
@@ -300,7 +314,7 @@ namespace MSP.Client
 					Time = DateTime.UtcNow,
 				};
 				
-				var err = new NSError();				
+				var err = new NSError(new NSString("Photo"), 1);				
 				var jpgstr = Path.Combine(ImageStore.TmpDir, string.Format("{0}.jpg", image.Id));
 				int level = Util.Defaults.IntForKey ("sizeCompression");
 				
@@ -374,15 +388,22 @@ namespace MSP.Client
 				
 				InvokeOnMainThread(()=>
 				{
-					_MSP.PopViewControllerAnimated(true);
-					_MSP.PopViewControllerAnimated(true);
-					_MSP.SetViewControllers(new UIViewController[0], false);
-					
-					var aaa =  _MSP.TabBarController;			
-					aaa.SelectedViewController = aaa.ViewControllers[0];
-					
-					var rotatingTb = (RotatingTabBar)AppDelegateIPhone.tabBarController;
-					rotatingTb.SelectTab(0);
+					if (eventImage != null)
+					{
+						_MSP.PopViewControllerAnimated(true);
+					}
+					else
+					{
+						_MSP.PopViewControllerAnimated(true);
+						_MSP.PopViewControllerAnimated(true);
+						_MSP.SetViewControllers(new UIViewController[0], false);
+						
+						var aaa =  _MSP.TabBarController;			
+						aaa.SelectedViewController = aaa.ViewControllers[0];
+						
+						var rotatingTb = (RotatingTabBar)AppDelegateIPhone.tabBarController;
+						rotatingTb.SelectTab(0);
+					}
 				});				
 			}
 			catch (Exception ex)
@@ -408,7 +429,7 @@ namespace MSP.Client
 			};
 		}
 		
-		private List<Keyword> Keywords = new List<Keyword>();
+		
 		private List<Keyword> GetKeyword()
 		{
 			Section section = this.root.ElementAtOrDefault(0);

@@ -2,6 +2,7 @@ using System.Drawing;
 using MonoTouch.UIKit;
 using System;
 using MSP.Client.DataContracts;
+using TweetStation;
 
 namespace MSP.Client
 {
@@ -104,10 +105,13 @@ namespace MSP.Client
 			window.AddSubview (tabBarController.View);					
 		}					
 		
-		public void GotoToShare(Image eventImage = null)
+		public void GotoToShare(Tweet tweet = null, UINavigationController navCtrl = null)
 		{
+			if (navCtrl == null)
+				navCtrl = shareNavigationController;
+			
 			var vc = new VCViewController();
-			vc.Delegate = new pickerDelegate(vc, shareNavigationController, eventImage);			
+			vc.Delegate = new pickerDelegate(vc, navCtrl, tweet);			
 			
 			tabBarController.PresentModalViewController(vc, true);			
 		}

@@ -294,7 +294,6 @@ namespace MSP.Client
 		
 		public void ReverseGeocode (CLLocationCoordinate2D coord)
 		{
-			Console.WriteLine("Started " + NSThread.Current.IsMainThread);
 			geolocalisationDone = false;			
 				
 			try
@@ -318,7 +317,6 @@ namespace MSP.Client
 		
 		private void UnHandleGeocode()
 		{
-			Console.WriteLine("Ended");
 			geolocalisationDone = true;
 			//geoCoderDel.OnFoundWithPlacemark -= HandleGeoCoderDelOnFoundWithPlacemark;
 			//geoCoderDel.OnFailedWithError -= HandleGeoCoderDelOnFailedWithError;			
@@ -338,12 +336,9 @@ namespace MSP.Client
 				ann.Coordinate = newLocation;
 			}
 			
-			mapView.AddAnnotationObject (ann);
-			
-			LocationMapPhotoCapture = ScreenCapture ();
-			
-			mapView.SelectAnnotation (ann, false);
-			
+			mapView.AddAnnotationObject (ann);			
+			LocationMapPhotoCapture = ScreenCapture ();			
+			mapView.SelectAnnotation (ann, false);			
 			ReverseGeocode(newLocation);
 		}		
 
