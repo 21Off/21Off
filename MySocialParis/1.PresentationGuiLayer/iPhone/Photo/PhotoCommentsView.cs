@@ -18,12 +18,7 @@ namespace MSP.Client
 	}
 	
 	public class PhotoCommentsView : BaseTimelineViewController				
-	{	
-		public override Source CreateSizingSource (bool unevenRows)
-		{
-			return new EditingSource (this);
-		}
-		
+	{
 		private int _ImageID;
 		private User _photoOwner;
 		
@@ -42,6 +37,13 @@ namespace MSP.Client
 			this.Root = rootElement;			
 
 			ReloadTimeline();
+		}
+		
+		#region Overrides
+		
+		public override Source CreateSizingSource (bool unevenRows)
+		{
+			return new EditingSource (this);
 		}		
 		
 		public override void ReloadTimeline ()
@@ -53,9 +55,24 @@ namespace MSP.Client
 			}
 			
 			ThreadPool.QueueUserWorkItem(o => DownloadTweets ());
+		}		
+		
+		public override float GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
+		{
+			var element = Root[0].Elements [indexPath.Row];
+		
+			var sizable = element as CommentElement;
+			if (sizable == null)
+				return 60;
+			
+			return CommentCell.GetCellHeight(new RectangleF(0, 0, 320, 10), sizable._comment);
 		}
+		
+		#endregion
+		
+		#region Private methodes
 
-		void DownloadTweets ()
+		private void DownloadTweets ()
 		{
 			try
 			{
@@ -90,18 +107,42 @@ namespace MSP.Client
 				this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });				
 				Util.LogException("Download comments", ex);
 			}
-		}
+		}	
 		
-		public override float GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
+		private void AddNewCommentAsync(AddLoadMoreWithImageElement lme, Section section)
 		{
-			var element = Root[0].Elements [indexPath.Row];
-		
-			var sizable = element as CommentElement;
-			if (sizable == null)
-				return 60;
+			try
+			{
+				var comment = new Comment()
+				{
+					Name = lme.Value,
+					ParentId = _ImageID,
+					UserId = AppDelegateIPhone.AIphone.MainUser.Id,
+					Time = DateTime.UtcNow,
+				};
+				
+				AppDelegateIPhone.AIphone.CommentServ.PutNewComment(comment);
 			
-			return CommentCell.GetCellHeight(new RectangleF(0, 0, 320, 10), sizable._comment);
-		}		
+				// Now make sure we invoke on the main thread the updates
+				this.BeginInvokeOnMainThread(delegate {
+					lme.Animating = false;
+											
+					var uicomment = new UIComment()
+					{
+						Comment = comment,
+						PhotoOwner = _photoOwner,
+					};
+					
+					var act = new CommentElement(uicomment);
+					section.Insert(1, act);
+					lme.Value = null;							
+				});
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("Add comment", ex);
+			}
+		}
 		
 		private Element CreateLoadMore(Section section)
 		{
@@ -111,37 +152,7 @@ namespace MSP.Client
 				{			
 					// Launch a thread to do some work
 					ThreadPool.QueueUserWorkItem (delegate {
-						try
-						{
-							var comment = new Comment()
-							{
-								Name = lme.Value,
-								ParentId = _ImageID,
-								UserId = AppDelegateIPhone.AIphone.MainUser.Id,
-								Time = DateTime.UtcNow,
-							};
-							
-							AppDelegateIPhone.AIphone.CommentServ.PutNewComment(comment);
-						
-							// Now make sure we invoke on the main thread the updates
-							this.BeginInvokeOnMainThread(delegate {
-								lme.Animating = false;
-														
-								var uicomment = new UIComment()
-								{
-									Comment = comment,
-									PhotoOwner = _photoOwner,
-								};
-								
-								var act = new CommentElement(uicomment);
-								section.Insert(1, act);
-								lme.Value = null;							
-							});
-						}
-						catch (Exception ex)
-						{
-							Util.LogException("Add comment", ex);
-						}					
+							AddNewCommentAsync(lme, section);
 					});
 				}
 				else
@@ -150,6 +161,8 @@ namespace MSP.Client
 			});
 			
 			return loadMore2;
-		}		
+		}
+				
+		#endregion
 	}				
 }

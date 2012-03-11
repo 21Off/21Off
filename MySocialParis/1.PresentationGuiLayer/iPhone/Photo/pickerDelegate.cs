@@ -45,10 +45,13 @@ namespace MSP.Client
 				imagePicker.btnBib.Hidden = true;
 						
 			imagePicker.DismissModalViewControllerAnimated(true);
-			//AppDelegateIPhone.tabBarController.DismissModalViewControllerAnimated(true);
-			image.SaveToPhotosAlbum (delegate {
-				// ignore errors
-				});			
+			
+			if (imagePicker.IsCameraAvailable)
+			{
+				image.SaveToPhotosAlbum (delegate {
+					// ignore errors
+					});
+			}
 			
 			var photoLocation = new PhotoLocationViewController(_shareNavCont, image);
 			_shareNavCont.PushViewController(photoLocation, true);

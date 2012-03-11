@@ -1,26 +1,9 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/UI/Web.cs">
-    <Files>
-      <File FileName="MySocialParis/UI/Web.cs" Line="181" Column="6" />
-    </Files>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" selected="True">
-              <Node name="1.PresentationGuiLayer" expanded="True">
-                <Node name="iPhone" expanded="True">
-                  <Node name="Media" expanded="True" />
-                  <Node name="Members" expanded="True" />
-                  <Node name="Photo" expanded="True" />
-                </Node>
-              </Node>
-              <Node name="Data" expanded="True" />
-              <Node name="UI" expanded="True" />
-            </Node>
-          </Node>
-        </State>
+        <State expanded="True" selected="True" />
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
@@ -30,10 +13,4 @@
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
-    <ProfileHeapShotSettings_27CRelease Output="/var/folders/hb/f_v30gqj6d7_mlbbp3nn9jvr0000gn/T/profiler-output.mlpd" Zip="True" HeapshotMode="ondemand" HeapshotGCInterval="1" HeapshotTimeInterval="1000" Calls="False" Alloc="False" CallDepth="100" StatisticalSampling="False" SampingFrequency="1000" MaxFrames="8" Mode="Memory" />
-    <ProfileHeapShotSettings_27CDebug Output="/var/folders/hb/f_v30gqj6d7_mlbbp3nn9jvr0000gn/T/profiler-output.mlpd" Zip="True" HeapshotMode="ondemand" HeapshotGCInterval="1" HeapshotTimeInterval="1000" Calls="False" Alloc="False" CallDepth="100" StatisticalSampling="False" SampingFrequency="1000" MaxFrames="8" Mode="Memory" />
-    <IPhoneTestFlightSettings_27CDistribution ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Facebook authentification integration" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
-    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="WelcomePage Bug Fix&#xA;Added url links to comments and browser navigation&#xA;Corrected failing comments" NotifyTeamMembers="True" ReplaceBinaries="True" DistributionLists="" />
-  </MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
 </Properties>

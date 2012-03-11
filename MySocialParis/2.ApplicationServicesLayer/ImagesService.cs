@@ -17,7 +17,8 @@ namespace MSP.Client
 	{
 		#region IBusinessImagesService implementation
 		
-		public Image StoreNewImage(Image image, string filePath, string mapPath, List<Keyword> keywords)
+		public Image StoreNewImage(Image image, string filePath, string mapPath, 
+		                           List<Keyword> keywords, List<Comment> comments)
 		{
 			var sni = new StoreNewImage()
 			{			
@@ -25,27 +26,11 @@ namespace MSP.Client
 				ImageFile = GetIOFile(filePath),
 				MapFile = GetIOFile(mapPath),
 				Keywords = keywords,
+				Comments = comments,
 			};
-			
-			var we = new ManualResetEvent(false);			
 			string uri = string.Format("http://storage.21offserver.com/json/syncreply/StoreNewImage");
 			
-			/*						
-			var request = (HttpWebRequest) WebRequest.Create (uri);
-			request.Method = "PUT";	
-			using (var reqStream = request.GetRequestStream())
-			{
-				ServiceStack.Text.JsonSerializer.SerializeToStream(sni, typeof(StoreNewImage), reqStream);
-			};
-			using (var response = request.GetResponse())
-			{
-				using (var stream = response.GetResponseStream())
-				{
-					var responseString = new StreamReader(stream).ReadToEnd();
-					Console.WriteLine(responseString);
-				}
-			}
-			*/
+			var we = new ManualResetEvent(false);
 			JsonUtility.Upload (uri, sni, false, s =>
 			{
 				try
@@ -85,9 +70,7 @@ namespace MSP.Client
 		}
 		
 		public void DeleteImage(Image image)
-		{			
-			//var ttt = DataContractSerializer.Instance.Parse(image);
-			
+		{
 			var we = new ManualResetEvent(false);			
 			string uri = string.Format("http://storage.21offserver.com/json/syncreply/images?Id={0}", image.Id);			
 			
@@ -334,11 +317,9 @@ namespace MSP.Client
 
 		public FullImagesTimedResponse GetFullImagesOfUser(int userId, DateTime since)
 		{
-			//Reachability.ReachabilityChanged+= HandleReachabilityReachabilityChanged;
-			//bool res = Reachability.IsHostReachable("www.google.com");
-			
 			FullImagesTimedResponse fullImagesTimed = null;
 			List<ImageResponse> images = null;
+			
 			var we = new ManualResetEvent(false);
 			
 			string uri = string.Format("http://storage.21offserver.com/json/syncreply/FullImages?WhereUserId={0}&Since={1}&Count={2}", 

@@ -10,7 +10,6 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
 using TweetStation;
-using System.Collections.Specialized;
 
 namespace MSP.Client
 {
@@ -64,6 +63,7 @@ namespace MSP.Client
 		#region Members
 		
 		public MyEntryElement Description {get;set;}
+		public MyEntryElement FirstComment {get;set;}
 		public CLLocation PhotoLocation {get;set;}
 		
 		private DialogViewController _dialogView;
@@ -102,29 +102,26 @@ namespace MSP.Client
 		public override void ViewDidAppear (bool animated)
 		{
 			base.ViewDidAppear (animated);
-			if(_Settings!=null)
-			{
-				//_Settings.facebook.SetValue(_Settings.facebookApp.LoggedIn());
-				//_Settings.twitter.SetValue(_Settings.twitterApp.LoggedIn());
-			}
-		}
-		
+		}		
 		
 		private bool isOnKeywordScreen = false;
 		
 		#region Events
 
-		void HandleOkBtnTouchUpInside (object sender, EventArgs e)
+		private void HandleOkBtnTouchUpInside (object sender, EventArgs e)
 		{
 			Keywords = GetKeyword();
 			
 			Section section = this.root.ElementAtOrDefault(0);
 			
+			// We are in the first screen (POST) and we click on Ok button to go to Keyboard screen
 			if (section.Elements[0].GetType() == typeof(MyEntryElement))
 			{				
 				mapFrame = new RectangleF(0, 45, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height - 50 - 5);
 				
-				section.Remove(0);							
+				section.Clear();
+				root[1].Clear();
+				
 				section.Add(CreateLoadMore(section));
 				SetTitleText("keywords", "enter keywords");
 				_dialogView.View.Frame = mapFrame;
@@ -141,6 +138,7 @@ namespace MSP.Client
 				return;
 			}
 			
+			// We go on the Share screen
 			if (_Settings == null)
 			{
 				_Settings = new Settings();
@@ -162,15 +160,17 @@ namespace MSP.Client
 			AppDelegateIPhone.ShowRealLoading(View, "Posting photo", null, SavePhoto);
 		}
 		
-		void HandleBackBtnTouchUpInside (object sender, EventArgs e)
+		private void HandleBackBtnTouchUpInside (object sender, EventArgs e)
 		{
 			Section section = this.root.ElementAtOrDefault(0);
+			// We go back to the first screen, at the Post initialization
 			if (isOnKeywordScreen && _Settings == null)
 			{
 				_dialogView.View.SendSubviewToBack(topBar);
 				
 				section.RemoveRange(0, section.Count);
 				section.Add(Description);
+				root[1].Add(FirstComment);
 				SetTitleText("post", "describe your post");
 				
 				this.View.BringSubviewToFront(topBar);
@@ -180,6 +180,7 @@ namespace MSP.Client
 				return;
 			}
 			
+			// We go back to the Keywords screen
 			if (_Settings != null)
 			{
 				this.View.WillRemoveSubview(_Settings.View);
@@ -201,7 +202,7 @@ namespace MSP.Client
 		
 		#region Private methods
 		
-		SizeF GetTextSize (string text, UILabel label)
+		private SizeF GetTextSize (string text, UILabel label)
 		{
 			return new NSString (text).StringSize (label.Font, UIScreen.MainScreen.Bounds.Width, 
 			                                       UILineBreakMode.TailTruncation);
@@ -241,11 +242,7 @@ namespace MSP.Client
 						// Now make sure we invoke on the main thread the updates
 						this.BeginInvokeOnMainThread(delegate {
 							lme.Animating = false;
-							if (section.Count == 1)
-								section.Insert(1, new StringElement(lme.Value));
-							else
-								section.Insert(1, new StringElement(lme.Value));
-							
+							section.Insert(1, new StringElement(lme.Value));							
 							lme.Value = null;
 						
 						});
@@ -259,11 +256,11 @@ namespace MSP.Client
 			return loadMore2;
 		}
 		
-		void AdvancedConfigEdit (DialogViewController dvc)
+		private void AdvancedConfigEdit (DialogViewController dvc)
 		{
 			// Activate row editing & deleting
 			//dvc.TableView.SetEditing (true, true);
-		}		
+		}
 				
 		private void SavePhoto()
 		{
@@ -309,17 +306,21 @@ namespace MSP.Client
 				if (size.Width > maxWidth || size.Height > maxWidth)
 					_image = GraphicsII.Scale (_image, new SizeF (maxWidth, maxWidth*size.Height/size.Width));				
 				
-				//_image = _image.resizeImage(new SizeF(612, 612));
 				_image.AsJPEG((float)0.7).Save(jpgstr, true, out err);				
 								
-				image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords);
-								
-				//TODO Save all sizes photo + map in order to avoid further downloading
-				//var mapLocationstr = Path.Combine(ImageStore.MapLocations, string.Format("{0}.png", image.Id));
-				//var jpgstrFinal = Path.Combine(ImageStore.TmpDir, string.Format("{0}.png", image.Id));
-				
-				//File.Copy(LocationMapPhotoCapture, mapLocationstr, true);
-				//File.Copy(jpgstr, jpgstrFinal, true);
+				var comments = new List<Comment>();
+				if (!string.IsNullOrWhiteSpace(FirstComment.Value))
+				{
+					comments.Add(new Comment()
+		            { 
+						Name = FirstComment.Value, 
+						UserId = AppDel.MainUser.Id, 
+						Time = DateTime.UtcNow,
+						
+						// ParentId : Set this on server side on post time 
+					});
+				}
+				image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments);
 				
 				InvokeOnMainThread(()=>
 				{
@@ -375,12 +376,20 @@ namespace MSP.Client
 			}			
 		}
 		
-		RootElement CreateRoot ()
+		private RootElement CreateRoot ()
 		{
 			Description = new MyEntryElement ("title", null, false, UIReturnKeyType.Default);
+			FirstComment = new MyEntryElement ("first comment", null, false, UIReturnKeyType.Default);
 			
 			return new RootElement ("post") {
-				new Section (){ Description/*, KeywordsRoot*/ }, 					
+				new Section ()
+				{ 
+					Description,
+				},
+				new Section()
+				{
+					FirstComment,
+				}
 			};
 		}
 		
