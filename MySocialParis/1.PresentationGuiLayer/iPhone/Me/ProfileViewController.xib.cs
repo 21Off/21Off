@@ -8,6 +8,8 @@ using MonoTouch.CoreGraphics;
 using System.Threading;
 using MSP.Client.DataContracts;
 using Share;
+using System.Linq;
+using TweetStation;
 
 namespace MSP.Client
 {
@@ -40,6 +42,7 @@ namespace MSP.Client
 		#endregion
 		
 		private RootElement root;
+		private DialogViewController mainDv;
 		
 		public override void ViewDidLoad ()
 		{
@@ -48,6 +51,7 @@ namespace MSP.Client
 			var dv = new DialogViewController (root, true);			
 			dv.TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("fond"));
 			dv.View.Frame = new RectangleF(0, 45, 320, 480 - 40 - 25);
+			mainDv = dv;
 			
 			this.View.WillRemoveSubview(mainView);
 			this.View.AddSubview(dv.View);
@@ -77,13 +81,7 @@ namespace MSP.Client
 		{
 			return new RootElement ("Settings") {
 				new Section (){
-					new StringElement ("my posts"
-						/*, el => 
-	                 	{				
-							int userId = AppDelegateIPhone.AIphone.MainUser.Id;
-							return new MembersPhotoViewControler(AppDelegateIPhone.meNavigationController, userId);
-						}
-						*/, ()=>
+					new StringElement ("my posts", ()=>
 	                   {
 							Action act = ()=>
 							{
@@ -99,65 +97,7 @@ namespace MSP.Client
 					),
 					new StringElement("facebook friends", ()=>
 					{
-						Action act = () =>
-						{
-							var facebookApp = new FaceBook.FaceBookApplication(this);
-							if (!facebookApp.LoggedIn())
-							{
-								InvokeOnMainThread(()=>
-								{
-									var soc = new SocialNetworksParentViewController(_MSP);
-									_MSP.PushViewController(soc, true);
-								});								
-								return;
-							}
-		
-							List<Decimal> friends = AppDelegateIPhone.AIphone.FacebookServ.GetFriends();
-							if (friends == null)
-							{
-								Util.LogException("friends", new Exception());
-								return;
-							}
-							
-							var socialIds = new List<long>();
-							foreach (decimal d in friends)
-							{
-								socialIds.Add((long)d);
-							}
-							List<User> facebookFriends = AppDelegateIPhone.AIphone.UsersServ.GetSocialIds(socialIds, 1);
-							if (facebookFriends == null)
-							{
-								Util.LogException("facebookFriends", new Exception());
-								return;
-							}
-							if (facebookFriends.Count == 0)
-							{
-								InvokeOnMainThread(()=>
-								{
-									var alert = new UIAlertView("Search", "No facebook friend found", null, "Ok");
-									alert.Show();
-								});
-								return;
-							}
-															
-							InvokeOnMainThread(()=>
-							{
-								var root = new RootElement("") { new Section() };
-								foreach (User fuser in facebookFriends)
-								{
-									var user = new UserElementII(fuser, RelationType.Friends);
-									root[0].Add(user);
-								}
-								
-								var dv = new DialogViewController(root);
-								
-								var ev = new EmptyViewController(() => _MSP.PopViewControllerAnimated(true), "Facebook friends");
-								dv.TableView.BackgroundView = new UIImageView(UIImage.FromBundle("Images/Ver4/fond"));
-								dv.View.Frame = new RectangleF(0, 40, 320, 480 - 40);
-								ev.Add(dv.View);
-								_MSP.PushViewController(ev, true);
-							});
-						};
+						Action act = () => LoadFacebookFriends();
 						AppDelegateIPhone.ShowRealLoading(null, "Loading facebook friends", null, act);
 					}),
 					new StringElement ("my profile", ()=>
@@ -189,74 +129,95 @@ namespace MSP.Client
 					
 			};
 		}
-	}
-	
-	public class FbUserElement : OwnerDrawnElement
-	{
-		private static object lock_graph = new object();
-		private static Dictionary<decimal, GraphUser> graph = new Dictionary<decimal, GraphUser>();
 		
-		private GraphUser _User;
-		private UIFont fromFont = UIFont.BoldSystemFontOfSize(14.0f);
-		private UIImage userImage;
-		
-		public FbUserElement(GraphUser user) : base(UITableViewCellStyle.Default, "FbUserElement")
+		public void LoadFacebookFriends()
 		{
-			_User = user;
-		}
-		
-		private NSString nss = new NSString("x");
-		
-		public override void Draw (RectangleF bounds, CGContext context, UIView view)
-		{
-			UIColor.White.SetFill ();
-			context.FillRect (bounds);
-			
-			//if (userImage == null)
-			//	userImage = UIImageUtils.GetPreview (string.Format("Images/Profiles/{0}.jpg", _User.Id), new SizeF (40, 40));
-
-			if (userImage != null)
-				context.DrawImage(new RectangleF(0, 0, 40, 40), userImage.CGImage);
-			
-			UIColor.Black.SetColor ();
-			if (_User.name != null)			
-				view.DrawString(_User.name, new RectangleF(50, 5, bounds.Width/2, 10 ), fromFont, UILineBreakMode.TailTruncation);
-			else
+			var facebookApp = new FaceBook.FaceBookApplication(this);
+			if (!facebookApp.LoggedIn())
 			{
-				ThreadPool.QueueUserWorkItem(o =>
-				{					
-					GraphUser gUser = AppDelegateIPhone.AIphone.FacebookServ.GetFriend(_User.id);
-					if (gUser == null)
-						return;
-					
-					lock (lock_graph)
-					{
-						graph[gUser.id] = gUser;
-					}
-					
-					if (gUser.id == _User.id)
-					{
-						_User = gUser;						
-						nss.InvokeOnMainThread(()=>
-						{
-							var tv = this.GetContainerTableView();
-							if (tv != null)
-							{
-								var cell = GetCell(tv);
-								if (cell != null)
-									cell.SetNeedsDisplay();
-							}
-						});							
-					}
-					else
-						nss.InvokeOnMainThread(()=> view.SetNeedsDisplay());
-				});
+				InvokeOnMainThread(()=>
+				{
+					var soc = new SocialNetworksParentViewController(_MSP);
+					_MSP.PushViewController(soc, true);
+				});								
+				return;
 			}
+	
+			List<Decimal> friends = AppDelegateIPhone.AIphone.FacebookServ.GetFriends();
+			if (friends == null)
+			{
+				Util.LogException("friends", new Exception());
+				return;
+			}
+			
+			var socialIds = new List<long>();
+			foreach (decimal d in friends)
+			{
+				socialIds.Add((long)d);
+			}
+			List<User> facebookFriends = AppDelegateIPhone.AIphone.UsersServ.GetSocialIds(socialIds, 1);
+			if (facebookFriends == null)
+			{
+				Util.LogException("facebookFriends", new Exception());
+				return;
+			}
+			if (facebookFriends.Count == 0)
+			{
+				InvokeOnMainThread(()=>
+				{
+					var alert = new UIAlertView("Search", "No facebook friend found", null, "Ok");
+					alert.Show();
+				});
+				return;
+			}
+					
+			facebookApp = new FaceBook.FaceBookApplication (this);
+			InvokeOnMainThread(()=>
+			{								
+				var root = new RootElement("") { new Section() };
+				var dv = new DialogViewController(root, true);
+				
+				foreach (User fuser in facebookFriends)
+				{
+					var user = new UserElementII(fuser, RelationType.Friends);
+					root[0].Add(user);
+				}
+				foreach (long socialId in socialIds)
+				{
+					var guser = new GraphUser() { id = socialId };										
+					var fbUser = new FbUserElement(guser, u => 
+                    {													
+						//facebookApp.HandleOpenURL(new NSUrl(u));
+						//facebookApp.HandleOpenURL(NSUrl.FromString(u));
+						//return;
+						
+						WebViewController.OpenUrl (dv, u);
+						return;
+						
+	  					var fac = new FacebookAuthorizationViewController("168889879843414", 
+                             new string[] {"read_stream", "publish_stream", "user_groups"}, FbDisplayType.Touch);
+						
+					    fac.AccessToken += delegate(string accessToken, DateTime expires) {
+						   //Logged in, got your accessToken here and when it expires!
+						   //_MSP.PopViewControllerAnimated(true);
+							fac.OpenUrl(u);
+						 
+						   //Do something else here (eg: Save the accessToken and expiry date to be used in your Graph API calls)
+						 };
+	 
+	 					_MSP.PushViewController(fac, true);						 
+					});
+					root[0].Add(fbUser);
+				}				
+				
+				var ev = new EmptyViewController(() => _MSP.PopViewControllerAnimated(true), "Facebook friends");
+				dv.TableView.BackgroundView = new UIImageView(UIImage.FromBundle("Images/Ver4/fond"));
+				dv.View.Frame = new RectangleF(0, 40, 320, 480 - 40);
+				ev.Add(dv.View);
+				_MSP.PushViewController(ev, false);
+			});		
 		}
 		
-		public override float Height (RectangleF bounds)
-		{
-			return 40.0f;
-		}
+		private FaceBook.FaceBookApplication facebookApp;
 	}
 }

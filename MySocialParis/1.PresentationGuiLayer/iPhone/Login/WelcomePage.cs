@@ -140,7 +140,6 @@ namespace MSP.Client
 			FacebookAuth ();
 		}
 		
-		
 		private FaceBook.FaceBookApplication facebookApp;		
 				
 		void FacebookAuth ()
@@ -205,9 +204,8 @@ namespace MSP.Client
 					InvokeOnMainThread(()=>
                     {
 						_AppDel.MainWnd.WillRemoveSubview(this.View);
-						//Nav.PopViewControllerAnimated(false);
-						//_AppDel.MainWnd.WillRemoveSubview(Nav.View);
 						_AppDel.InitApp();
+						_AppDel.LoadFacebookFriends();
 					});
 				}
 				catch (Exception ex)

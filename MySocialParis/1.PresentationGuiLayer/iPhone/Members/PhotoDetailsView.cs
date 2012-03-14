@@ -129,7 +129,7 @@ namespace MSP.Client
 		
 		private void UrlTap(string url)
 		{			
-			WebViewController.OpenUrl (this, url); 			
+			WebViewController.OpenUrl (this, url);
 		}
 		
 		private void GoToUserPhotos(int userId)

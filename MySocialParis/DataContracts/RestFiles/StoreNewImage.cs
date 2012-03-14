@@ -5,12 +5,12 @@ namespace MSP.Client.DataContracts
 {
     public class StoreNewImage
     {
-        //[DataMember]
         public Image Image { get; set; }
         public List<Keyword> Keywords { get; set; }
 		public List<Comment> Comments { get; set; }
         public IOFile ImageFile { get; set; }
         public IOFile MapFile { get; set; }
+		public int IdRelation {get;set;}
     }
 
     public class StoreNewImageResponse

@@ -29,6 +29,47 @@ using MSP.Client;
 
 namespace TweetStation
 {	
+	public static class UrlStore
+	{
+		public static Uri GetPicUrlFromId (long id, long userid, SizeDB sizeDB)
+		{
+			Uri res = null;
+			try
+			{
+				if (sizeDB == SizeDB.Size100)
+				{
+					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_100/{0}/{1}.jpg", userid, id)));
+				}
+				if (sizeDB == SizeDB.Size75)
+				{
+					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_75/{0}/{1}.jpg", userid, id)));
+				}
+				if (sizeDB == SizeDB.Size50)
+				{
+					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_50/{0}/{1}.jpg", userid, id)));
+				}
+				if (sizeDB == SizeDB.SizeMiniMap)
+				{
+					return (res = new Uri(string.Format("http://storage.21offserver.com/files/MapLocations/{0}.jpg", id)));
+				}
+				if (sizeDB == SizeDB.SizeProfil)
+				{
+					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Profiles/{0}.jpg", userid)));
+				}
+				if (sizeDB == SizeDB.SizeFacebook)
+				{
+					string accessToken = NSUserDefaults.StandardUserDefaults.StringForKey("FacebookAccessToken");
+					return (res = new Uri(string.Format("https://graph.facebook.com/{0}/picture?access_token={1}", userid, accessToken)));
+				}				
+				return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_308_307/{0}/{1}.jpg", userid, id)));
+			}
+			finally
+			{
+				//idToUrl[new Tuple<long, SizeDB>(id, sizeDB)] = res.OriginalString;
+			}
+		}		
+	}
+	
 	//
 	// Provides an interface to download pictures in the background
 	// and keep a local cache of the original files + rounded versions
@@ -39,13 +80,12 @@ namespace TweetStation
 	//   Numbers above TmpStartId are transient pictures, used because Twitter
 	//   search returns a *different* set of userIds on search results
 	// 
-
 	public static class ImageStore
 	{
 		public const long TempStartId = 100000000000000;
 		const int MaxRequests = 6;
 		public static string PicDir, TmpDir, MapLocations;
-		public static string FileDB, FileDB50, FileDB100, FileDB75, Profiles;
+		public static string FileDB, FileDB50, FileDB100, FileDB75, ProfilesFacebook, Profiles;
 		
 		public readonly static UIImage DefaultImage;
 		public readonly static UIImage EmptyProfileImage;
@@ -58,6 +98,7 @@ namespace TweetStation
 		static LRUCache<long,UIImage> DBcache100;
 		static LRUCache<long,UIImage> DBcacheMiniMap;
 		static LRUCache<long,UIImage> DBcacheProfiles;
+		static LRUCache<long,UIImage> DBcacheFacebook;
 				
 		// A list of requests that have been issues, with a list of objects to notify.
 		static Dictionary<Tuple<long, long, SizeDB>, List<IImageUpdated>> pendingRequests;
@@ -93,6 +134,7 @@ namespace TweetStation
 			FileDB75 = Path.Combine(PicDir, "fileDB75/");
 			FileDB100 = Path.Combine(PicDir, "fileDB100/");
 			Profiles = Path.Combine(PicDir, "Profiles/");
+			ProfilesFacebook = Path.Combine(PicDir, "ProfilesFacebook/");
 			MapLocations = Path.Combine(PicDir, "MapLocations/");
 			
 			if (!Directory.Exists (PicDir))
@@ -113,6 +155,9 @@ namespace TweetStation
 			if (!Directory.Exists (Profiles))
 				Directory.CreateDirectory (Profiles);
 			
+			if (!Directory.Exists (ProfilesFacebook))
+				Directory.CreateDirectory (ProfilesFacebook);
+			
 			if (!Directory.Exists (MapLocations))
 				Directory.CreateDirectory (MapLocations);			
 
@@ -126,6 +171,7 @@ namespace TweetStation
 			DBcache100 = new LRUCache<long, MonoTouch.UIKit.UIImage>(200);
 			DBcacheMiniMap = new LRUCache<long, MonoTouch.UIKit.UIImage>(200);
 			DBcacheProfiles = new LRUCache<long, MonoTouch.UIKit.UIImage>(200);
+			DBcacheFacebook = new LRUCache<long, MonoTouch.UIKit.UIImage>(200);
 			
 			pendingRequests = new Dictionary<Tuple<long, long, SizeDB>, List<IImageUpdated>>();
 #if DEBUGIMAGE
@@ -146,6 +192,7 @@ namespace TweetStation
 			lock (DBcachefull.SyncValue) DBcachefull.Purge();
 			lock (DBcacheMiniMap.SyncValue) DBcacheMiniMap.Purge();
 			lock (DBcacheProfiles.SyncValue) DBcacheProfiles.Purge();
+			lock (DBcacheFacebook.SyncValue) DBcacheFacebook.Purge();
 		}
 		
 		public static LRUCache<long,UIImage> GetCache(SizeDB sizeDB)
@@ -170,6 +217,10 @@ namespace TweetStation
 			if (sizeDB == SizeDB.SizeProfil)
 			{
 				dbCache = DBcacheProfiles;
+			}			
+			if (sizeDB == SizeDB.SizeFacebook)
+			{
+				dbCache = DBcacheFacebook;
 			}
 			
 			return dbCache;
@@ -218,31 +269,6 @@ namespace TweetStation
 			}
 			
 			return pic;
-		}		
-		
-		static Uri GetPicUrlFromId (long id, long userid, SizeDB sizeDB)
-		{
-			if (sizeDB == SizeDB.Size100)
-			{
-				return new Uri(string.Format("http://storage.21offserver.com/files/Zoom_100/{0}/{1}.jpg", userid, id));
-			}
-			if (sizeDB == SizeDB.Size75)
-			{
-				return new Uri(string.Format("http://storage.21offserver.com/files/Zoom_75/{0}/{1}.jpg", userid, id));
-			}
-			if (sizeDB == SizeDB.Size50)
-			{
-				return new Uri(string.Format("http://storage.21offserver.com/files/Zoom_50/{0}/{1}.jpg", userid, id));
-			}
-			if (sizeDB == SizeDB.SizeMiniMap)
-			{
-				return new Uri(string.Format("http://storage.21offserver.com/files/MapLocations/{0}.jpg", id));
-			}
-			if (sizeDB == SizeDB.SizeProfil)
-			{
-				return new Uri(string.Format("http://storage.21offserver.com/files/Profiles/{0}.jpg", userid));
-			}
-			return new Uri(string.Format("http://storage.21offserver.com/files/Zoom_308_307/{0}/{1}.jpg", userid, id));
 		}
 		
 		//
@@ -260,7 +286,7 @@ namespace TweetStation
 			
 			Uri url;
 			lock (requestQueue)
-				url = GetPicUrlFromId (id, userid, sizeDB);
+				url = UrlStore.GetPicUrlFromId (id, userid, sizeDB);
 			
 			if (url == null)
 				return;		
@@ -282,7 +308,7 @@ namespace TweetStation
 					Util.Log ("Queuing Image request because {0} >= {1} {2}", requestQueue.Count, MaxRequests, picDownloaders);
 					var imgRequest = new ImgRequest() { ID = id, UserId = userid, SizeDb = sizeDB };
 					requestQueue.Push (imgRequest);
-				} else {
+				} else {					
 					ThreadPool.QueueUserWorkItem (delegate { 
 						
 							try {
@@ -381,7 +407,7 @@ namespace TweetStation
 					if (requestQueue.Count > 0){
 						ImgRequest imgRequest = requestQueue.Pop ();
 						id = imgRequest.ID;						
-						url = GetPicUrlFromId (id, imgRequest.UserId, imgRequest.SizeDb);
+						url = UrlStore.GetPicUrlFromId (id, imgRequest.UserId, imgRequest.SizeDb);
 						if (url == null){
 							Util.Log ("Dropping request {0} because url is null", id);
 							var dropReq = new Tuple<long, long, SizeDB>(id, imgRequest.UserId, imgRequest.SizeDb);
@@ -455,6 +481,10 @@ namespace TweetStation
 			if (sizeDB == SizeDB.Size50)
 			{
 				path = ImageStore.FileDB50;
+			}
+			if (sizeDB == SizeDB.SizeFacebook)
+			{
+				return ImageStore.ProfilesFacebook + userid + ".png";
 			}
 			if (sizeDB == SizeDB.SizeProfil)
 			{
@@ -549,5 +579,6 @@ namespace TweetStation
 		Size100,
 		SizeMiniMap,
 		SizeProfil,
+		SizeFacebook,
 	}
 }

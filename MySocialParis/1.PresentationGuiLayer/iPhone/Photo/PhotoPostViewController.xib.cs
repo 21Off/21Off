@@ -349,7 +349,7 @@ namespace MSP.Client
 						// ParentId : Set this on server side on post time 
 					});
 				}
-				image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments);
+				image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments, eventImage == null ? 0 : eventImage.Id);
 				
 				InvokeOnMainThread(()=>
 				{

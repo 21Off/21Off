@@ -15,7 +15,7 @@ namespace FaceBook
 		
 		// Your Facebook APP Id must be set before running this example
 		// See http://www.facebook.com/developers/createapp.php
-		protected const string _appId = "168889879843414";
+		public const string _appId = "168889879843414";
 		
 		protected Facebook _facebook;
 		
@@ -72,11 +72,6 @@ namespace FaceBook
 		               string imageUrl
 		               )
 		{
-#if DEBUG
-			if (string.IsNullOrEmpty(name)) name = "name";
-			if (string.IsNullOrEmpty(href)) href = "http://i54.tinypic.com/2n7i3p4.jpg";
-			if (string.IsNullOrEmpty(caption)) caption = "caption";
-#endif
 			if (string.IsNullOrEmpty(imageUrl)) imageUrl = href;
 
 			NSString attachmentStr = new NSString(
@@ -159,10 +154,10 @@ namespace FaceBook
 			_facebook.Logout(_sessionDelegate);	 
 		}
 		
-//		public void HandleOpenURL(NSUrl url)
-//		{
-//			_facebook.HandleOpenUrl(url);
-//		}
+		public void HandleOpenURL(NSUrl url)
+		{
+			_facebook.HandleOpenUrl(url);
+		}
 		
 		public void SaveSessionData(bool loggedIn)
 		{

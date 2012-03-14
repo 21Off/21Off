@@ -93,7 +93,6 @@
     <Compile Include="FaceBook\RequestDelegate.cs" />
     <Compile Include="FaceBook\SessionDelegate.cs" />
     <Compile Include="Twitter\OAuthAuthorizer.cs" />
-    <Compile Include="Twitter\Punycode.cs" />
     <Compile Include="Twitter\TwitterApplication.cs" />
     <Compile Include="Twitter\Util.cs" />
     <Compile Include="Twitter\WebUI.cs" />
@@ -104,6 +103,7 @@
     <Compile Include="FaceBook\JSONObject.cs" />
     <Compile Include="GraphUser.cs" />
     <Compile Include="Instagram\InstagramApi.cs" />
+    <Compile Include="Twitter\Punycode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FaceBook\libfacebook_ios_sdk.a" />

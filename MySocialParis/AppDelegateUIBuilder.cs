@@ -85,6 +85,16 @@ namespace MSP.Client
 			timer = new System.Threading.Timer(GetNotifications, null, 4000, 5 * 60 * 1000);
 		}
 		
+		public void LoadFacebookFriends()
+		{
+			tabBarController.SelectedViewController = meNavigationController;
+			var rotatingTb = (RotatingTabBar)AppDelegateIPhone.tabBarController;
+			rotatingTb.SelectTab(3);
+			
+			Action act = () => me.LoadFacebookFriends();
+			AppDelegateIPhone.ShowRealLoading(null, "Loading facebook friends", null, act);			
+		}
+		
 		private System.Threading.Timer timer;
 		private bool asking = false;
 		

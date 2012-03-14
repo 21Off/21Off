@@ -153,7 +153,7 @@ namespace MSP.Client
 					MainUser = mainDB.Get<User>(lastUser.UserId);
 				}
 				
-				if (MainUser != null)
+				if (MainUser != null && false)
 				{
 					window.AddSubview(new UIImageView(UIImage.FromBundle("Images/21logo.jpg")));
 					ShowRealLoading(window, "Logging in ...", "", 

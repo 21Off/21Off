@@ -47,15 +47,6 @@ namespace MSP.Client
 				{
 					Util.LogException("GetFriend", ex);
 				}
-				
-				/*
-	            var api = new FacebookN.FacebookAPI(accessToken);
-				
-				//https://graph.facebook.com/1121317006/picture
-								
-				JSONObject me = api.Get(string.Format("/{0}", id));
-	            Console.WriteLine(me.Dictionary["name"].String);
-	            */
 			}
 			return null;
 		}

@@ -18,7 +18,7 @@ namespace MSP.Client
 		#region IBusinessImagesService implementation
 		
 		public Image StoreNewImage(Image image, string filePath, string mapPath, 
-		                           List<Keyword> keywords, List<Comment> comments)
+		                           List<Keyword> keywords, List<Comment> comments, int idRelation = 0)
 		{
 			var sni = new StoreNewImage()
 			{			
@@ -27,6 +27,7 @@ namespace MSP.Client
 				MapFile = mapPath == null ? null : GetIOFile(mapPath),
 				Keywords = keywords,
 				Comments = comments,
+				IdRelation = idRelation,
 			};
 			string uri = string.Format("http://storage.21offserver.com/json/syncreply/StoreNewImage");
 			

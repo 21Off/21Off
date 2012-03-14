@@ -19,10 +19,28 @@ namespace MonoTouch.Dialog
 			get;set;	
 		}
 		
+		public UITableViewCellSelectionStyle SelectionStyle 
+		{
+			get;set;
+		}
+		
+		public UITableViewCellAccessory Accessory 
+		{
+			get;set;
+		}		
+		
 		public OwnerDrawnElement (UITableViewCellStyle style, string cellIdentifier) : base(null)
 		{
 			this.CellReuseIdentifier = cellIdentifier;
 			this.Style = style;
+		}
+		
+		public OwnerDrawnElement (UITableViewCellStyle style, string cellIdentifier, 
+                      UITableViewCellSelectionStyle selectionStyle, UITableViewCellAccessory accesory)
+			: this(style, cellIdentifier)
+		{
+			this.SelectionStyle = selectionStyle;
+			this.Accessory = accesory;			
 		}
 		
 		public float GetHeight (UITableView tableView, NSIndexPath indexPath)
@@ -36,7 +54,11 @@ namespace MonoTouch.Dialog
 			
 			if (cell == null)
 			{
-				cell = new OwnerDrawnCell(this, this.Style, this.CellReuseIdentifier);
+				cell = new OwnerDrawnCell(this, this.Style, this.CellReuseIdentifier)
+				{
+					SelectionStyle = SelectionStyle,
+					Accessory = Accessory,
+				};
 			}
 			else
 			{
@@ -48,6 +70,8 @@ namespace MonoTouch.Dialog
 		}	
 		
 		public abstract void Draw(RectangleF bounds, CGContext context, UIView view);
+		public virtual void DrawImageView(UIImageView view)
+		{}
 		
 		public abstract float Height(RectangleF bounds);
 		
@@ -68,7 +92,7 @@ namespace MonoTouch.Dialog
 				set {
 					if (view == null)
 					{
-						view = new OwnerDrawnCellView (value);
+						view = new OwnerDrawnCellView (value, this);
 						ContentView.Add (view);
 					}
 					else
@@ -95,31 +119,30 @@ namespace MonoTouch.Dialog
 		class OwnerDrawnCellView : UIView
 		{				
 			OwnerDrawnElement element;
+			OwnerDrawnCell cell;
 			
-			public OwnerDrawnCellView(OwnerDrawnElement element)
+			public OwnerDrawnCellView(OwnerDrawnElement element, OwnerDrawnCell cell)
 			{
 				this.element = element;
+				this.cell = cell;
 			}
-			
 			
 			public OwnerDrawnElement Element
 			{
 				get { return element; }
-				set {
-					element = value; 
-				}
+				set { element = value; }
 			}
 			
 			public void Update()
 			{
-				SetNeedsDisplay();
-			
+				SetNeedsDisplay();			
 			}
 			
 			public override void Draw (RectangleF rect)
 			{
 				CGContext context = UIGraphics.GetCurrentContext();
 				element.Draw(rect, context, this);
+				element.DrawImageView(cell.ImageView);
 			}
 		}
 	}

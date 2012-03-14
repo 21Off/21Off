@@ -62,7 +62,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -73,8 +73,6 @@
     <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CodesignProvision>58CB640A-2258-4139-AEC2-8AC65FC76ADA</CodesignProvision>
-    <MtouchDebug>true</MtouchDebug>
-    <MtouchProfiling>true</MtouchProfiling>
     <MtouchUseSGen>true</MtouchUseSGen>
     <BuildIpa>true</BuildIpa>
     <MtouchArch>ARMv7</MtouchArch>
@@ -467,6 +465,8 @@
     <Compile Include="UI\Web.cs" />
     <Compile Include="Utilities\Punycode.cs" />
     <Compile Include="2.ApplicationServicesLayer\ConnexionDelegate.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Me\FbUserElement.cs" />
+    <Compile Include="UI\FacebookAuthorizationViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />

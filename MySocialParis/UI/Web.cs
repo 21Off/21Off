@@ -117,6 +117,16 @@ namespace TweetStation
 				
 				title.Text = UpdateTitle ();
 			};
+			WebView.LoadError += delegate(object sender, UIWebErrorArgs e) {
+				stopButton.Enabled = false;
+				refreshButton.Enabled = true;
+				Util.PopNetworkActive (); 
+				UpdateNavButtons ();
+				
+				title.Text = e.Error.ToString();
+				
+				Util.Log(e.Error.ToString());
+			};
 			
 			title.Text = initialTitle;
 			View.AddSubview (WebView);
@@ -199,7 +209,19 @@ namespace TweetStation
 					host = url.Substring (7, last-7);
 				url = "http://" + EncodeIdna (host) + (last == -1 ? "" : url.Substring (last));
 			}
-			Main.WebView.LoadRequest (new NSUrlRequest (new NSUrl (url)));
+			
+			if (url.StartsWith ("https://")){
+				string host;
+				int last = url.IndexOf ('/', 8);
+				if (last == -1)
+					host = url.Substring (8);
+				else 
+					host = url.Substring (8, last-8);
+				url = "https://" + EncodeIdna (host) + (last == -1 ? "" : url.Substring (last));
+			}
+			//var nsurl = new NSUrl (url);
+			var nsurl = NSUrl.FromString(url);
+			Main.WebView.LoadRequest (new NSUrlRequest (nsurl));
 			
 			parent.PresentModalViewController (Main, true);
 
