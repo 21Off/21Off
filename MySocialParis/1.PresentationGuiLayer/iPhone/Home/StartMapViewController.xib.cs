@@ -113,7 +113,6 @@ namespace MSP.Client
 			{
 				if (subView is UIImageView)
 				{
-					//Console.WriteLine("Found it");
 					subView.Frame = new RectangleF(5, 5, subView.Frame.Width, subView.Frame.Height);
 					//((UIImageView)subView).Image.SaveToPhotosAlbum(null);
 				}

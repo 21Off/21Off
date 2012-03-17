@@ -186,6 +186,7 @@ namespace MSP.Client
 			Console.WriteLine (String.Format (format, args));
 		}				
 		
+		//[Conditional ("TRACE")]
 		public static void LogException (string text, Exception e)
 		{
 			try
@@ -197,7 +198,7 @@ namespace MSP.Client
 					s.WriteLine (msg);					
 				}
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 			}
 		}

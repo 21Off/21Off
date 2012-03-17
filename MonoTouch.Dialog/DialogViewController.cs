@@ -9,6 +9,7 @@
 // by Devin Doty and is Copyrighted 2009 enormego and released under the
 // MIT X11 license
 //
+
 using System;
 using MonoTouch.UIKit;
 using System.Drawing;
@@ -541,7 +542,6 @@ namespace MonoTouch.Dialog
 			if (root.Caption != null)
 			{
 				NavigationItem.Title = root.Caption;
-				//NavigationItem.TitleView = new UILabel() { Text = "aaasfs"};
 			}
 			if (dirty){
 				tableView.ReloadData ();
@@ -645,6 +645,6 @@ namespace MonoTouch.Dialog
 			this.pushing = pushing;
 			PrepareRoot (root);
 		}
-	}
-	
+	}	
 }
+

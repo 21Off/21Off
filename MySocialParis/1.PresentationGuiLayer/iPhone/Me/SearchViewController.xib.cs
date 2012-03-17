@@ -129,7 +129,7 @@ namespace MSP.Client
 			UIView.SetAnimationCurve(UIViewAnimationCurve.EaseInOut);
 			if (i == 0)
 			{
-			   Console.WriteLine("to map");
+			   Util.Log("to map");
 			   UIView.SetAnimationTransition 
 			        (UIViewAnimationTransition.FlipFromRight, this.View, true);
 			   SearchByKeyword.ViewWillAppear(true);
@@ -143,7 +143,7 @@ namespace MSP.Client
 			}
 			else
 			{
-			   Console.WriteLine("to list");
+			   Util.Log("to list");
 			   UIView.SetAnimationTransition 
 			         (UIViewAnimationTransition.FlipFromLeft, this.View, true);
 			   SearchByUser.ViewWillAppear(true);

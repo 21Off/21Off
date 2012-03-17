@@ -549,11 +549,14 @@ namespace MSP.Client
 				
 			private void RealDraw (RectangleF rect)
 			{
-				Console.WriteLine(4);
 				if (_Tweet == null)
 					return;
 				
 				blocks.Clear();
+				foreach (var url in urls)
+				{
+					url.RemoveFromSuperview();
+				}
 				urls.Clear();
 				
 				var bounds = Bounds;				
@@ -687,9 +690,7 @@ namespace MSP.Client
 						LineBreakMode = UILineBreakMode.TailTruncation,						
 						TextColor = UIColor.DarkGray,
 					});					
-				}			
-				
-				Console.WriteLine("62");
+				}				
 				
 				float paragraph = 20;
 				cellHeight =  PicYPad + MiniMapHeight + paragraph;
@@ -710,9 +711,7 @@ namespace MSP.Client
 					}
 					cellHeight += userSize;
 					lineY += userSize;
-				}				
-				
-				Console.WriteLine("63");
+				}								
 				
 				float commentsHeight = DrawComments(lineY, bounds, tweet, blocks);
 				cellHeight += commentsHeight;
@@ -721,7 +720,6 @@ namespace MSP.Client
 				cellHeight += paragraph;
 				lineY += paragraph;
 				
-				Console.WriteLine("64");
 				float keywordsHeight = DrawKeywords(lineY, tweet, blocks);
 				cellHeight += Math.Max(keywordsHeight, 26) + PicYPad;
 				lineY += Math.Max(keywordsHeight, 26) + PicYPad;
@@ -918,12 +916,10 @@ namespace MSP.Client
 		public MemberPhotoCell (UITableViewCellStyle style, NSString ident, Tweet tweet, Action<int> goToMembersPhotoAction) 
 			: base (style, ident)
 		{
-			Console.WriteLine(51);
 			SelectionStyle = UITableViewCellSelectionStyle.Blue;
 			
 			tweetView = new MemberPhotoCellView (tweet, goToMembersPhotoAction);
 			ContentView.Add (tweetView);
-			Console.WriteLine(52);
 		}
 
 		// 

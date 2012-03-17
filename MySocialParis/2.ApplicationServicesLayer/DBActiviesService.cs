@@ -18,7 +18,6 @@ namespace MSP.Client
 		
 		public IEnumerable<ActivityResponse> GetActivities(int userId, DateTime since)		
 		{
-			Console.WriteLine("DBActivities User: " +  userId + "  " + since);
 			var dbCmd = Database.Main;
 			
 			IEnumerable<Activity> res = dbCmd.Table<Activity>().Where(el => el.UserId == userId);
@@ -42,7 +41,6 @@ namespace MSP.Client
 					responses.Add(actResp);
 			}
 			
-			Console.WriteLine("DBActivities " +  responses.Count);
 			return responses;
 		}
 		

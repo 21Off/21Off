@@ -323,7 +323,7 @@ namespace TweetStation
 			wc.Headers.Add ("X-Auth-Service-Provider", signurl);
 		}
 		
-		class AuthorizationViewController : WebViewController {
+		class AuthorizationViewController : CustomWebViewController {
 			NSAction callback;
 			OAuthAuthorizer container;
 			string url;

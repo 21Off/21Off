@@ -98,7 +98,6 @@ namespace MSP.Client
 			
 			if (user.HasPhoto == 1)
 			{
-				Console.WriteLine("UpdateFromUserId");
 				profileImage = ImageStore.RequestFullPicture(userId, userId, SizeDB.SizeProfil, this);
 			}
 			

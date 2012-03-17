@@ -1,5 +1,3 @@
-/*
-
 using System;
 using System.Drawing;
 using MonoTouch.CoreAnimation;
@@ -10,7 +8,7 @@ using MonoTouch.UIKit;
 
 namespace MonoTouch.Dialog
 {
-	public static class GraphicsUtil {
+	public static class CustomGraphicsUtil {
 		
 		/// <summary>
 		///    Creates a path for a rectangle with rounded corners
@@ -109,6 +107,4 @@ namespace MonoTouch.Dialog
 		}		
 	}
 }
-
-*/
 

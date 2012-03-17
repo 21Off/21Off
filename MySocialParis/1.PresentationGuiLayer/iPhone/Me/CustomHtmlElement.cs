@@ -7,9 +7,10 @@ using MonoTouch.UIKit;
 using System.Collections.Generic;
 using MonoTouch.CoreGraphics;
 using System.Threading;
+
 namespace MSP.Client
 {
-	public class CustomHtmlElement : HtmlElement
+	public class CustomHtmlElement : CHtmlElement
 	{
 		private UINavigationController nav;
 		
@@ -62,5 +63,36 @@ namespace MSP.Client
 			
 			web.LoadRequest (NSUrlRequest.FromUrl (new NSUrl (Url)));
 		}
+		
+		// We use this class to dispose the web control when it is not
+		// in use, as it could be a bit of a pig, and we do not want to
+		// wait for the GC to kick-in.
+		private class WebViewController : UIViewController {
+			CHtmlElement container;
+			
+			public WebViewController (CHtmlElement container) : base ()
+			{
+				this.container = container;
+			}
+			
+			public override void ViewWillDisappear (bool animated)
+			{
+				base.ViewWillDisappear (animated);
+				NetworkActivity = false;
+				if (container.web == null)
+					return;
+
+				container.web.StopLoading ();
+				container.web.Dispose ();
+				container.web = null;
+			}
+
+			public bool Autorotate { get; set; }
+			
+			public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
+			{
+				return Autorotate;
+			}
+		}		
 	}
 }

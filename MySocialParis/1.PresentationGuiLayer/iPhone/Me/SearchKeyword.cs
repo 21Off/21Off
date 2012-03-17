@@ -102,7 +102,7 @@ namespace MSP.Client
 					entries.Add(new Images2Element(imagesInfos, i));
 				}
 				
-				var more = new LoadMoreElement (lme => {
+				var more = new CustomLoadMoreElement (lme => {
 					// Launch a thread to do some work
 					ThreadPool.QueueUserWorkItem (delegate {						
 						SearchMoreKeywords(entries, lme);
@@ -123,7 +123,7 @@ namespace MSP.Client
 			});
 		}
 		
-		private void SearchMoreKeywords(Section entries, LoadMoreElement lme)
+		private void SearchMoreKeywords(Section entries, CustomLoadMoreElement lme)
 		{
 			try
 			{

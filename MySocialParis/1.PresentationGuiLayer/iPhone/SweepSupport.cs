@@ -238,7 +238,7 @@ namespace MSP.Client
 				flags = "[*] CurrentMenuView";
 			else
 				flags = "";
-			Console.WriteLine ("{0} {1} {2}", indent (level), view.Frame, flags);
+			Util.Log ("{0} {1} {2}", indent (level), view.Frame, flags);
 			var sub = view.Subviews;
 			if (sub.Length == 0)
 				return;

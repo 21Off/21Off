@@ -207,7 +207,7 @@ namespace MSP.Client
 		
 		private int pageNumber = 0;
 		
-		private void AddMorePhotoElements(LoadMoreElement more, ManualResetEventSlim wait)
+		private void AddMorePhotoElements(CustomLoadMoreElement more, ManualResetEventSlim wait)
 		{						
 			try
 			{												
@@ -275,9 +275,7 @@ namespace MSP.Client
 		public bool ShowLoadMorePhotos {get;set;}
 		
 		private void DownloadTweets ()
-		{
-			//Console.WriteLine("IsMainThread " +  NSThread.Current.IsMainThread);
-			
+		{			
 			pageNumber = 1;
 			
 			this.BeginInvokeOnMainThread (delegate {
@@ -313,8 +311,8 @@ namespace MSP.Client
 				}
 				if (ShowLoadMorePhotos)
 				{
-					LoadMoreElement more = null;
-					more = new LoadMoreElement (delegate 
+					CustomLoadMoreElement more = null;
+					more = new CustomLoadMoreElement (delegate 
 						{					
 							var wait = new ManualResetEventSlim(false);					
 							AppDelegateIPhone.ShowRealLoading("Loading more photos", null, wait);

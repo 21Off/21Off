@@ -448,7 +448,7 @@ namespace TweetStation
 							try {
 								pr.UpdatedImage (qid.Item1, qid.Item2, qid.Item3);
 							} catch (Exception e){
-								Console.WriteLine (e);
+								Util.LogException("NotifyImageListeners", e);
 							}
 						}
 					}
@@ -519,7 +519,7 @@ namespace TweetStation
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine("DeleteDBPic: " + ex.Message);
+				Util.LogException("DeleteDBPic", ex);
 				return false;
 			}			
 		}

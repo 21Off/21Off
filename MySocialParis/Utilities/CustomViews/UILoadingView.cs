@@ -88,7 +88,7 @@ namespace MSP.Client
 		public void FadeOutAndRemove()
 		{
 			InvokeOnMainThread( delegate { 
-			Console.WriteLine ("Fade out loading screen...");
+			Util.Log ("Fade out loading screen...");
 				UIView.BeginAnimations("FadeOutLoadingView");
 				UIView.SetAnimationDuration(0.5f);
 				UIView.SetAnimationTransition(UIViewAnimationTransition.None, this, true);
@@ -100,7 +100,7 @@ namespace MSP.Client
 		
 		void FadeOutLoadingViewDone()
 		{ 
-				Console.WriteLine ("RemoveFromSuperview...");
+				Util.Log ("RemoveFromSuperview...");
 				this.RemoveFromSuperview();
 		}
 

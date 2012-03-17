@@ -1892,7 +1892,7 @@ namespace MonoTouch.Dialog
 			Selected = selected;
 		}
 	}
-	
+		
 	/// <summary>
 	///    RootElements are responsible for showing a full configuration page.
 	/// </summary>

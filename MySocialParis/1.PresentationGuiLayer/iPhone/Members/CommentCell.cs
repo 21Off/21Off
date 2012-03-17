@@ -45,7 +45,7 @@ namespace MSP.Client
 		
 		// Should never happen
 		public CommentCell (IntPtr handle) : base (handle) {
-			Console.WriteLine (Environment.StackTrace);
+			Util.Log (Environment.StackTrace);
 		}
 		
 		public class CommentCellView : UIView, IImageUpdated {

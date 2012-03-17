@@ -26,13 +26,6 @@ namespace MSP.Client
 		/// </summary>
 		public override void FoundWithPlacemark (MKReverseGeocoder geocoder, MKPlacemark placemark)
 		{
-			/*
-			Console.WriteLine (placemark.PostalCode + "\n" + placemark.SubThoroughfare + "\n" 
-			                   + placemark.Thoroughfare + "\n" + placemark.SubLocality + "\n"
-			                   + placemark.Locality + "\n" + placemark.SubAdministrativeArea + "\n"
-			                   + placemark.AdministrativeArea + "\n" + placemark.Country + "\n");
-		    */               
-			
 			if (OnFoundWithPlacemark == null)
 			{							
 				try 
@@ -55,7 +48,7 @@ namespace MSP.Client
 		{
 			if (OnFailedWithError == null)
 			{
-				Console.WriteLine ("Reverse Geocoder failed");
+				Util.Log("Reverse Geocoder failed");
 			}
 			else
 				OnFailedWithError(gc, error);

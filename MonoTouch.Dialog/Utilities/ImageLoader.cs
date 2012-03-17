@@ -238,7 +238,7 @@ namespace MonoTouch.Dialog.Utilities
 					ThreadPool.QueueUserWorkItem (delegate { 
 							try {
 								StartPicDownload (uri, target); 
-							} catch (Exception e){
+							} catch (Exception e){							
 								Console.WriteLine (e);
 							}
 						});

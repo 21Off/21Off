@@ -22,7 +22,6 @@
 //
 using System;
 using MonoTouch.UIKit;
-//using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using System.Drawing;
 
@@ -36,8 +35,8 @@ namespace TweetStation
 		}
 	}
 	
-	public class WebViewController : UIViewController {
-		static WebViewController Main = new WebViewController ();
+	public class CustomWebViewController : UIViewController {
+		static CustomWebViewController Main = new CustomWebViewController ();
 		
 		UIToolbar topBar;
 		UIToolbar toolbar;
@@ -45,7 +44,7 @@ namespace TweetStation
 		UILabel title;
 		protected UIWebView WebView;
 
-		protected WebViewController ()
+		protected CustomWebViewController ()
 		{
 			var fixedSpace = new UIBarButtonItem (UIBarButtonSystemItem.FixedSpace, null) {
 				Width = 26
@@ -71,8 +70,8 @@ namespace TweetStation
 				new UIBarButtonItem (Locale.GetText ("Close"), UIBarButtonItemStyle.Bordered, (o, e) => { DismissModalViewControllerAnimated (true);} )
 			};
 			
-			backButton = new UIBarButtonItem (UIBarButtonSystemItem.Rewind /*UIImage.FromBundle ("Images/back.png"), UIBarButtonItemStyle.Plain*/, (o, e) => { WebView.GoBack (); });
-			forwardButton = new UIBarButtonItem (UIBarButtonSystemItem.FastForward /*UIImage.FromBundle ("Images/forward.png"), UIBarButtonItemStyle.Plain*/, (o, e) => { WebView.GoForward (); });
+			backButton = new UIBarButtonItem (UIBarButtonSystemItem.Rewind, (o, e) => { WebView.GoBack (); });
+			forwardButton = new UIBarButtonItem (UIBarButtonSystemItem.FastForward, (o, e) => { WebView.GoForward (); });
 			refreshButton = new UIBarButtonItem (UIBarButtonSystemItem.Refresh, (o, e) => { WebView.Reload (); });
 			stopButton = new UIBarButtonItem (UIBarButtonSystemItem.Stop, (o, e) => { WebView.StopLoading (); });
 			

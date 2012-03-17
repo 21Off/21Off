@@ -49,17 +49,13 @@ namespace MSP.Client
 		void DownloadTweets ()
 		{	
 			try
-			{
-				Console.WriteLine(1);
-				
+			{				
 				var imageResponse = AppDelegateIPhone.AIphone.ImgServ.GetFullImage(_Image.Id);
 				if (imageResponse == null)
 				{					
 					this.BeginInvokeOnMainThread (delegate { ReloadComplete (); });
 					return;
-				}
-				
-				Console.WriteLine(2);
+				}				
 				
 				List<Comment> comments = new List<Comment>();
 				List<User> commentsUsers = new List<User>();
@@ -69,7 +65,6 @@ namespace MSP.Client
 					commentsUsers.Add(cresp.User);
 				}								
 				
-				Console.WriteLine(3);
 				this.BeginInvokeOnMainThread (delegate {
 					try					
 					{		
@@ -92,9 +87,7 @@ namespace MSP.Client
 		private void DownloadAsync(ImageResponse imageResponse, List<Comment> comments, List<User> commentsUsers)
 		{
 			while (Root[0].Count > 0)
-				Root[0].Remove (0);
-				
-			Console.WriteLine(4);
+				Root[0].Remove (0);				
 			
 			NSTimer.CreateScheduledTimer (0.1, delegate {
 				try

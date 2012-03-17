@@ -48,7 +48,7 @@ namespace MSP.Client
 		
 		// Should never happen
 		public ActivityCell (IntPtr handle) : base (handle) {
-			Console.WriteLine (Environment.StackTrace);
+			Util.Log (Environment.StackTrace);
 		}
 		
 		public class TweetCellView : UIView, IImageUpdated {

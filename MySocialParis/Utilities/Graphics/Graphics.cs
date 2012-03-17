@@ -42,7 +42,7 @@ namespace MSP.Client
 		
 		public static UIImage PrepareForProfileView (UIImage image, int size)
 		{
-			return GraphicsUtil.PrepareForProfileView(image, size, size);
+			return CustomGraphicsUtil.PrepareForProfileView(image, size, size);
 		}		
 		
 		public static CALayer MakeBackgroundLayer (UIImage image, RectangleF frame)

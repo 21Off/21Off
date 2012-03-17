@@ -384,7 +384,6 @@ namespace MSP.Client
 			var size = new SizeF (MemberPhotoCell.MiniMapWidth, MemberPhotoCell.MiniMapHeight);
 			var documentsDirectory = Environment.GetFolderPath (Environment.SpecialFolder.Personal);
 			
-			//Console.WriteLine ("start capture of frame: " + size);
 			UIGraphics.BeginImageContext (View.Frame.Size);
 			var ctx = UIGraphics.GetCurrentContext ();
 			if (ctx != null) {
@@ -409,14 +408,13 @@ namespace MSP.Client
 				NSData imgData = img.AsJPEG (0.8f);				
 				NSError err = null;
 				if (imgData.Save (png, false, out err)) {
-					Console.WriteLine ("saved as " + png);
 					return png;
 				} else {
 					//Console.WriteLine ("NOT saved as" + png + " because" + err.LocalizedDescription);
 					return null;
 				}
 			} else {
-				Console.WriteLine ("ctx null - doesn't seem to happen");
+				Util.Log("ctx null - doesn't seem to happen");
 				return null;
 			}
 		}

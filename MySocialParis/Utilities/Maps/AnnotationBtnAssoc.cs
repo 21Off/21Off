@@ -19,22 +19,13 @@ namespace MSP.Client
 
 		void HandleButtonTouchUpInside (object sender, EventArgs e)
 		{
-			Console.WriteLine("Annotation flash clicked 0");
 			if (OnPhotoClicked != null)
 			{
-				if (CalloutAnnot == null)
+				if (CalloutAnnot == null || CalloutAnnot.ParentAnnotation == null)
 				{
-					Console.WriteLine("CalloutAnnot is null !!!!");
 					return;
 				}
 				
-				if (CalloutAnnot.ParentAnnotation == null)
-				{
-					Console.WriteLine("CalloutAnnot.ParentAnnotation is null !!!!");
-					return;
-				}
-				
-				Console.WriteLine("Annotation flash clicked");
 				OnPhotoClicked(CalloutAnnot.ParentAnnotation.AssocImage);
 			}
 		}

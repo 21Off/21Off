@@ -13,7 +13,6 @@ namespace MSP.Client
 		public override void TouchesBegan (NSSet touches, UIEvent evt)
 		{
 			var touchPoint = ((UITouch)touches.AnyObject).LocationInView (this);
-			//Console.WriteLine (touchPoint.ToString ());
 			
 			base.TouchesBegan (touches, evt);
 			

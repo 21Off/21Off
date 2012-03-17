@@ -50,7 +50,7 @@ namespace MSP.Client
 			}
 			catch (Exception ex)
 			{
-				//Console.WriteLine(ex.Message);
+				Util.LogException("DidSelectAnnotationView", ex);
 			}
 		}
 		
@@ -58,13 +58,10 @@ namespace MSP.Client
 		{
 			if (view.Annotation is MyAnnotation)
 			{
-				var myAnnotation = (MyAnnotation)view.Annotation;
-				//Console.WriteLine("Deselect annotation view " + myAnnotation.Title + " - " + myAnnotation.Subtitle);
-				
+				var myAnnotation = (MyAnnotation)view.Annotation;				
 				if (myAnnotation.AssociatedCalloutMapAnnotation != null)
 				{
 					mapView.RemoveAnnotation(myAnnotation.AssociatedCalloutMapAnnotation);
-					//Console.WriteLine("Callout annotation removed");
 				}
 			}
 		}
@@ -183,14 +180,14 @@ namespace MSP.Client
 				}
 				
 			} catch (Exception ex) {
-				Console.WriteLine ("GetViewForAnnotation Exception " + ex);
+				Util.LogException("GetViewForAnnotation Exception", ex);
 				return null;
 			}
 		}
 
 		void HandleCalloutMapAnnotationViewOnAnnotationClicked1 (CalloutMapAnnotation obj)
 		{
-			Console.WriteLine("Clicked on map annotation view");
+			Util.Log("Clicked on map annotation view");
 			if (_Association != null)
 				_Association.ClickImage();
 		}

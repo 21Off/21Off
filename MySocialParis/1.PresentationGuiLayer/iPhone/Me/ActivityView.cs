@@ -186,8 +186,8 @@ namespace MSP.Client
 							Root[0].Add(new ActivityElement(activity, GoToMembersPhotoView, GoToPhotoDetailsView));
 						}
 					
-						LoadMoreElement more = null;
-						more = new LoadMoreElement (delegate 
+						CustomLoadMoreElement more = null;
+						more = new CustomLoadMoreElement (delegate 
 							{
 							// Launch a thread to do some work
 							ThreadPool.QueueUserWorkItem (delegate {

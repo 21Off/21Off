@@ -80,7 +80,7 @@ namespace MSP.Client
 			var email = new EntryElement ("e-mail:", "", "aaaa@mail.com");
 			var pseudo = new EntryElement ("username:", "", AppDelegateIPhone.AIphone.MainUser.Name);
 			UIFont font = UIFont.FromName ("HelveticaNeue", 12);
-			var shareMyPosts = new BooleanElement ("Everybody can share my posts", true, font);
+			var shareMyPosts = new CustomBooleanElement ("Everybody can share my posts", true, font);
 			
 			int userId = AppDelegateIPhone.AIphone.MainUser.Id;
 			

@@ -46,7 +46,7 @@ namespace MSP.Client
 
 		}
 			
-		public CheckboxElement facebook, twitter;
+		public CustomCheckboxElement facebook, twitter;
 		private MSPNavigationController msp;
 		
 		/*
@@ -80,8 +80,8 @@ namespace MSP.Client
 			Root = new RootElement (Locale.GetText ("Settings"))
 			{
 				new Section (Locale.GetText ("share your post on:")){
-					(facebook = new CheckboxElement (Locale.GetText ("Facebook"), facebookLoggedIn)),
-					(twitter = new CheckboxElement(Locale.GetText ("Twitter"),  twitterLoggedIn)),
+					(facebook = new CustomCheckboxElement (Locale.GetText ("Facebook"), facebookLoggedIn)),
+					(twitter = new CustomCheckboxElement(Locale.GetText ("Twitter"),  twitterLoggedIn)),
 				}							
 			};
 			

@@ -91,7 +91,7 @@ namespace MSP.Client
 			DrawString (caption, new PointF (HudRect.X + (HudRect.Width-captionSize.Width)/2, HudRect.Y + 10), font);
 
 			var ctx = UIGraphics.GetCurrentContext ();
-			using (var path = GraphicsUtil.MakeRoundedRectPath (progressRect, 5)){
+			using (var path = CustomGraphicsUtil.MakeRoundedRectPath (progressRect, 5)){
 				ctx.SetLineWidth (2);
 				ctx.AddPath (path);
 				ctx.StrokePath ();

@@ -36,7 +36,7 @@ namespace MSP.Client
 			Util.PushNetworkActive ();
 			Uri uri = new Uri (url);
 			
-			Console.WriteLine(uri);
+			Util.Log(uri.OriginalString);
 			
 			// Wake up 3G if it has been more than 3 minutes
 			lock (minuteLock){
@@ -63,7 +63,7 @@ namespace MSP.Client
 						callback(result);
 					
 				} catch (Exception e){
-					Console.WriteLine (e);
+					Util.LogException ("Launch", e);
 				}
 				lock (queue){
 					if (queue.Count > 0){

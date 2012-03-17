@@ -45,7 +45,7 @@ namespace MSP.Client
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Util.LogException("Draw ImagesElement", ex);
 			}
 		}
 		

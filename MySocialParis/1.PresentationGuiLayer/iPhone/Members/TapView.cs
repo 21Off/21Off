@@ -52,7 +52,7 @@ namespace MSP.Client
 				holdTimer = NSTimer.CreateScheduledTimer (TimeSpan.FromSeconds (1), delegate {
 					blockingTouchEvents = true;
 					
-					Console.WriteLine("Tap and hold "+ highlighted.Value);
+					Util.Log("Tap and hold "+ highlighted.Value);
 					if (TapAndHold != null)
 						TapAndHold (highlighted.Value);					
 					if (highlighted.CallObject != null && TapAndHoldCall != null)
@@ -87,7 +87,7 @@ namespace MSP.Client
 				return;
 			
 			if (highlighted != null && (highlighted.Font == userFont || userFont == null)){
-				Console.WriteLine("Touches ended " + highlighted.Value);
+				Util.Log("Touches ended " + highlighted.Value);
 				if (Tapped != null)
 					Tapped (highlighted.Value);
 				if (TappedBlock != null)

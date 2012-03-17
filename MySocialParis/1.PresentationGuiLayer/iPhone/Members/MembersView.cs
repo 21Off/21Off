@@ -99,7 +99,7 @@ namespace MSP.Client
 			//InvokeOnMainThread(()=> nav.PushViewController(a, false));
 		}
 		
-		private void AddOlderPhotos(LoadMoreElement more)
+		private void AddOlderPhotos(CustomLoadMoreElement more)
 		{
 			try
 			{
@@ -166,8 +166,8 @@ namespace MSP.Client
 							Util.LogException("DownloadTweets", ex);
 						}	
 						
-						LoadMoreElement more = null;
-						more = new LoadMoreElement (delegate {
+						CustomLoadMoreElement more = null;
+						more = new CustomLoadMoreElement (delegate {
 						
 							// Launch a thread to do some work
 							ThreadPool.QueueUserWorkItem (delegate {

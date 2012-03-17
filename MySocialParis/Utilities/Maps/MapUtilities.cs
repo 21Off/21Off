@@ -126,7 +126,7 @@ namespace MSP.Client
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex.Message);
+				Util.Log("DistanceBetween", ex);
 				return double.MaxValue;
 			}
 		}

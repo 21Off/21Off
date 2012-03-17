@@ -112,6 +112,7 @@
     <Reference Include="ServiceStack.Text">
       <HintPath>..\Libs\ServiceStack.Text.dll</HintPath>
     </Reference>
+    <Reference Include="MonoTouch.Dialog-1" />
   </ItemGroup>
   <ItemGroup>
     <None Include="en.lproj\Localizable.strings" />
@@ -644,13 +645,13 @@
     <Content Include="Images\forward%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MonoTouch.Dialog\MonoTouch.Dialog.csproj">
-      <Project>{3FFBFFF8-5560-4EDE-82E5-3FFDFBBA8A50}</Project>
-      <Name>MonoTouch.Dialog</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Share\Share.csproj">
       <Project>{DE340AD9-5C7B-4539-9F7D-1E4C7C7CEF02}</Project>
       <Name>Share</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DialogExtension\DialogExtension.csproj">
+      <Project>{F94A395E-5DF8-4A90-A84A-300CB86FFF49}</Project>
+      <Name>DialogExtension</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

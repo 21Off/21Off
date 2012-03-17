@@ -21,7 +21,6 @@ namespace MSP.Client
 				try
 				{
 					var json = JsonArray.Load (s);
-					Console.WriteLine(json.ToString());
 				}
 				catch (Exception ex)
 				{

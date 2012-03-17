@@ -28,7 +28,7 @@ namespace MSP.Client
 		
 		// Should never happen
 		public ImagesCell (IntPtr handle) : base (handle) {
-			Console.WriteLine (Environment.StackTrace);
+			Util.Log (Environment.StackTrace);
 		}
 		
 		public class ImagesCellView : UIView, IImageUpdated {

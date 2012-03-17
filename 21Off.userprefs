@@ -1,40 +1,15 @@
 ﻿<Properties GitUserInfo="UsingMD">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/1.PresentationGuiLayer/iPhone/Me/FbUserElement.cs">
-    <Files>
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Me/FbUserElement.cs" Line="119" Column="7" />
-      <File FileName="MonoTouch.Dialog/Elements/OwnerDrawnElement.cs" Line="60" Column="28" />
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Me/ProfileViewController.xib.cs" Line="184" Column="41" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True">
-              <Node name="1.PresentationGuiLayer" expanded="True">
-                <Node name="iPhone" expanded="True">
-                  <Node name="Login" expanded="True" />
-                  <Node name="Me" expanded="True">
-                    <Node name="EmptyViewController.xib" expanded="True" />
-                    <Node name="FbUserElement.cs" selected="True" />
-                    <Node name="ProfileViewController.xib" expanded="True" />
-                  </Node>
-                  <Node name="Media" expanded="True">
-                    <Node name="PhotoDetailsViewController.xib" expanded="True" />
-                  </Node>
-                  <Node name="Members" expanded="True" />
-                  <Node name="Photo" expanded="True">
-                    <Node name="PhotoPostViewController.xib" expanded="True" />
-                  </Node>
-                </Node>
-              </Node>
-              <Node name="2.ApplicationServicesLayer" expanded="True" />
-              <Node name="Data" expanded="True" />
-              <Node name="UI" expanded="True" />
-            </Node>
+            <Node name="21Off.Client" expanded="True" />
           </Node>
+          <Node name="DialogExtension" expanded="True" selected="True" />
           <Node name="MonoTouch.Dialog" expanded="True">
-            <Node name="Elements" expanded="True" />
+            <Node name="Utilities" expanded="True" />
           </Node>
         </State>
       </Pad>
@@ -43,10 +18,11 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
       <Breakpoint file="/Users/Valeriu/Projects/MySocialParis/Share/FaceBook/FacebookAuth.cs" line="191" />
+      <Breakpoint file="/Users/Valeriu/Projects/21Off/Share/FaceBook/FaceBookApplication.cs" line="159" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
-    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Add photo related to the curent&#xA;Add first comment on posting&#xA;Small refactoring ang bug fixes&#xA;Facebook invite" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
+    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Add photo related to the curent&#xA;Add first comment on posting&#xA;Small refactoring ang bug fixes&#xA;Facebook app invitation" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
   </MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
 </Properties>
