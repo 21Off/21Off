@@ -27,12 +27,7 @@ namespace MSP.Client
 			
 		}
 		
-		private bool isModal;
-		private MSPNavigationController msp;
-		private List<Image> images;
-		private string keyword;
-		
-		public SearchByKeywordViewController (MSPNavigationController msp, List<Image> images, string keyword, bool isModal)
+		public SearchByKeywordViewController (UINavigationController msp, List<Image> images, string keyword, bool isModal)
 			: base ("SearchByKeywordViewController", null)
 		{
 			this.isModal = isModal;
@@ -40,6 +35,15 @@ namespace MSP.Client
 			this.images = images;
 			this.keyword = keyword;
 		}
+		
+		#endregion
+		
+		#region Fields
+			
+		private bool isModal;
+		private UINavigationController msp;
+		private List<Image> images;
+		private string keyword;
 		
 		#endregion
 		
@@ -55,22 +59,28 @@ namespace MSP.Client
 			UIViewExtensions.SetTitleText("", keyword, null, subTitle);
 		}
 
-		void HandleMapBtnTouchDown (object sender, EventArgs e)
+		private void HandleMapBtnTouchDown (object sender, EventArgs e)
 		{
-			var _MSP = AppDelegateIPhone.aroundNavigationController;
 			var headerInfos = new HeaderInfos()
 			{
 				SubTitle = keyword,
 				Title = "Keywords",
 			};
 			
-			var b = new PhotoMapViewController(_MSP.VisibleViewController, images, headerInfos);
-			b.View.Frame = UIScreen.MainScreen.Bounds;
+			var navCont = AppDelegateIPhone.aroundNavigationController != null ? 
+				AppDelegateIPhone.aroundNavigationController.VisibleViewController :
+				AppDelegateIPhone.AIphone.GetCurrentNavControler();
 			
-			_MSP.VisibleViewController.PresentModalViewController(b, true);
+			if (navCont != null)
+			{
+				var b = new PhotoMapViewController(navCont, images, headerInfos);
+				b.View.Frame = UIScreen.MainScreen.Bounds;
+			
+				navCont.PresentModalViewController(b, true);
+			}
 		}
 
-		void HandleBackBtnTouchUpInside (object sender, EventArgs e)
+		private void HandleBackBtnTouchUpInside (object sender, EventArgs e)
 		{
 			if (isModal)
 				this.DismissModalViewControllerAnimated(true);
@@ -78,7 +88,7 @@ namespace MSP.Client
 				msp.PopViewControllerAnimated(true);
 		}
 		
-		void Initialize ()
+		private void Initialize ()
 		{
 			var root = new RootElement("search") {
 				new Section() 

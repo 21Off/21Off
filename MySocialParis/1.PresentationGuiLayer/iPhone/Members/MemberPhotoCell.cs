@@ -51,22 +51,21 @@ namespace MSP.Client
 				
 		public class MemberPhotoCellView : TapView, ISizeImageUpdated, IImageUpdated {
 			
-			#region Private members
+			#region Fields
 			
 			Tweet _Tweet;
 			int PicWidth;			
 			
-			UIButton photoBtn;
-			UIImage photoImage;
-			
-			private Action<int> goToUserPhotos;
-			private UIActivityIndicatorView spinner;
 			private UIImage mapPlanImage;
+			private UIButton photoBtn;
+			private UIImage photoImage;
+			private Action<int> goToUserPhotos;
+			private UIActivityIndicatorView spinner;			
 			private static UIImage EmptyImage;
+			private static UIImage googleLogo;			
 			private UIButton keywordView, attentionView, addToEvent;
 			private DateTime lastPhotoClicked;
 			private int photoClickCnt;
-			private static UIImage googleLogo;
 			private List<UIButton> urls = new List<UIButton>();
 			public const string seeAllComments = "->see all comments";
 			
@@ -202,7 +201,7 @@ namespace MSP.Client
 				return url;
 			}
 
-			void HandleUrlTouchUpInside (object sender, EventArgs e)
+			private void HandleUrlTouchUpInside (object sender, EventArgs e)
 			{
 				string text = ((UIButton)sender).Title(UIControlState.Normal);
 				if (UrlTapped != null) 
@@ -216,18 +215,24 @@ namespace MSP.Client
 			}			
 			
 			private void SeeKeywords(object sender, EventArgs e)
-			{
-				Action act = ()=>				
+			{				
+				var navCont = AppDelegateIPhone.tabBarController != null
+					? (UINavigationController)AppDelegateIPhone.tabBarController.SelectedViewController
+					: AppDelegateIPhone.AIphone.GetCurrentNavControler();
+
+				if (navCont != null)
 				{
-					var _MSP = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
-					InvokeOnMainThread(()=>
-					{
-						var b = new PhotoKeywordsViewController(_MSP.VisibleViewController, this._Tweet.Image.Id, _Tweet.User);					
-						_MSP.VisibleViewController.PresentModalViewController(b, true);
-					});
-				};
-				
-				AppDelegateIPhone.ShowRealLoading(AppDelegateIPhone.AIphone.MainWnd, "Loading keywords", null, act);				
+					Action act = ()=>
+					{	
+						InvokeOnMainThread(()=>
+						{
+							var b = new PhotoKeywordsViewController(navCont, this._Tweet.Image.Id, _Tweet.User);
+							navCont.PresentModalViewController(b, true);
+						});
+					};
+					
+					AppDelegateIPhone.ShowRealLoading(AppDelegateIPhone.AIphone.MainWnd, "Loading keywords", null, act);
+				}
 			}
 			
 			private void LikePhoto(object sender, EventArgs e)
@@ -347,73 +352,89 @@ namespace MSP.Client
 							}
 						}
 					};
-				}
-				
+				}				
 				actionSheet.ShowFromTabBar (AppDelegateIPhone.tabBarController.TabBar);
 			}			
 			
 			private void GotoComments(object sender, EventArgs e)
 			{
-				Action act = ()=>
-				{
-					var _MSP = AppDelegateIPhone.aroundNavigationController;
-					InvokeOnMainThread(()=>
-					{
-						var b = new PhotoCommentsViewController(_MSP.VisibleViewController, this._Tweet.Image.Id, _Tweet.User);					
-						_MSP.VisibleViewController.PresentModalViewController(b, true);
-					});
-				};
+				var navCont = AppDelegateIPhone.aroundNavigationController == null
+						? AppDelegateIPhone.AIphone.GetCurrentNavControler()
+						: AppDelegateIPhone.aroundNavigationController.VisibleViewController;
 				
-				AppDelegateIPhone.ShowRealLoading(AppDelegateIPhone.AIphone.MainWnd, "Loading comments", null, act);
+				if (navCont != null)
+				{
+					Action act = ()=>
+					{					
+						InvokeOnMainThread(()=>
+						{
+							var b = new PhotoCommentsViewController(navCont, this._Tweet.Image.Id, _Tweet.User);					
+							navCont.PresentModalViewController(b, true);
+						});
+					};
+				
+					AppDelegateIPhone.ShowRealLoading(AppDelegateIPhone.AIphone.MainWnd, "Loading comments", null, act);
+				}
 			}
 				
 			private void GotoMap()
 			{
-				var navCont = AppDelegateIPhone.aroundNavigationController ?? AppDelegateIPhone.AIphone.GetCurrentNavControler();
-				var b = new PhotoMapViewController(navCont, this._Tweet.Image);
-				b.View.Frame = UIScreen.MainScreen.Bounds;
-				
-				navCont.PresentModalViewController(b, true);
+				var navCont = AppDelegateIPhone.aroundNavigationController ?? AppDelegateIPhone.AIphone.GetCurrentNavControler();			
+				if (navCont != null)
+				{
+					var b = new PhotoMapViewController(navCont, this._Tweet.Image);
+					b.View.Frame = UIScreen.MainScreen.Bounds;					
+					navCont.PresentModalViewController(b, true);
+				}
 			}
 			
 			private void GotoPhotoLikers(Image image)
 			{
-				Action act = ()=>
-				{
-					var _MSP = AppDelegateIPhone.aroundNavigationController;
-					InvokeOnMainThread(()=>
-					{
-						var b = new PhotoLikersViewController(_MSP.VisibleViewController, this._Tweet);
-						_MSP.VisibleViewController.PresentModalViewController(b, true);
-					});
-				};
+				var navCont = AppDelegateIPhone.aroundNavigationController == null
+					? AppDelegateIPhone.AIphone.GetCurrentNavControler()
+					: AppDelegateIPhone.aroundNavigationController.VisibleViewController;
 				
-				AppDelegateIPhone.ShowRealLoading(AppDelegateIPhone.AIphone.MainWnd, "Showing photo likers", null, act);				
+				if (navCont != null)
+				{
+					Action act = ()=>
+					{	
+						InvokeOnMainThread(()=>
+						{
+							var b = new PhotoLikersViewController(navCont, this._Tweet);
+							navCont.PresentModalViewController(b, true);
+						});
+					};					
+					AppDelegateIPhone.ShowRealLoading(AppDelegateIPhone.AIphone.MainWnd, "Showing photo likers", null, act);					
+				}
 			}
 			
 			private void GotoList(string title)
 			{
-				Action act = ()=>
+				var navCont = AppDelegateIPhone.tabBarController == null
+					? AppDelegateIPhone.AIphone.GetCurrentNavControler()
+					: (UINavigationController)AppDelegateIPhone.tabBarController.SelectedViewController;
+				
+				if (navCont != null)
 				{
-					var images = new List<Image>();
-					var keywResp = AppDelegateIPhone.AIphone.KeywServ.GetSimilarImages(title, DateTime.MaxValue.Ticks);
-					var similarImages = keywResp.Images;
-					
-					foreach (SimilarImage similarImage in similarImages)
+					Action act = ()=>
 					{
-						images.Add(similarImage.Image);
-					}									
-					
-					InvokeOnMainThread(()=>
-	                {
-						var _MSP = AppDelegateIPhone.tabBarController.SelectedViewController as MSPNavigationController;
+						var images = new List<Image>();
+						var keywResp = AppDelegateIPhone.AIphone.KeywServ.GetSimilarImages(title, DateTime.MaxValue.Ticks);
+						var similarImages = keywResp.Images;
 						
-						var m = new SearchByKeywordViewController(_MSP, images, title, false);
-						_MSP.PushViewController(m, true);
-					});
-					
-				};
-				AppDelegateIPhone.ShowRealLoading(null, "Searching images", null, act);				
+						foreach (SimilarImage similarImage in similarImages)
+						{
+							images.Add(similarImage.Image);
+						}
+						
+						InvokeOnMainThread(()=>
+		                {
+							var m = new SearchByKeywordViewController(navCont, images, title, false);
+							navCont.PushViewController(m, true);
+						});		
+					};
+					AppDelegateIPhone.ShowRealLoading(null, "Searching images", null, act);
+				}
 			}
 			
 			private void OnTapped(string value)

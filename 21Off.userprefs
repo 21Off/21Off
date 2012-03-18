@@ -1,11 +1,11 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Distribution|iPhone" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
   <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
-        <State expanded="True" selected="True">
+        <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" />
+            <Node name="21Off.Client" expanded="True" selected="True" />
           </Node>
           <Node name="DialogExtension" expanded="True" />
           <Node name="MonoTouch.Dialog" expanded="True" />

@@ -223,8 +223,7 @@ namespace MSP.Client
 			
 			AppDelegateIPhone.ShowRealLoading(View, "Connexion", null, act);			
 		}
-		
-		
+				
 		private TimelineViewController likedMediaView;
 		private RequestInfo request;
 
