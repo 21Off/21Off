@@ -157,7 +157,8 @@ namespace MSP.Client
 				
 				InvokeOnMainThread(()=>
 				{
-					navigationRoots[2].TabBarItem.BadgeValue = count == 0 ? null : count.ToString();
+					if (navigationRoots.Length >= 3)
+						navigationRoots[2].TabBarItem.BadgeValue = count == 0 ? null : count.ToString();
 				});
 			}
 			catch (Exception)
@@ -170,6 +171,8 @@ namespace MSP.Client
 		
 		void HandleTabBarControllerViewControllerSelected (object sender, UITabBarSelectionEventArgs e)
 		{			
+			_currentNavControler = (UINavigationController)e.ViewController;
+			
 			if (e.ViewController == buzzNavigationController)
 				return;
 			

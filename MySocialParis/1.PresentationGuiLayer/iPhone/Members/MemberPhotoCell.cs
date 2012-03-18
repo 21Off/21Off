@@ -369,11 +369,11 @@ namespace MSP.Client
 				
 			private void GotoMap()
 			{
-				var _MSP = AppDelegateIPhone.aroundNavigationController;							
-				var b = new PhotoMapViewController(_MSP.VisibleViewController, this._Tweet.Image);
+				var navCont = AppDelegateIPhone.aroundNavigationController ?? AppDelegateIPhone.AIphone.GetCurrentNavControler();
+				var b = new PhotoMapViewController(navCont, this._Tweet.Image);
 				b.View.Frame = UIScreen.MainScreen.Bounds;
 				
-				_MSP.VisibleViewController.PresentModalViewController(b, true);
+				navCont.PresentModalViewController(b, true);
 			}
 			
 			private void GotoPhotoLikers(Image image)

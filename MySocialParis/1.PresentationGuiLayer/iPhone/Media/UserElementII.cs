@@ -40,11 +40,14 @@ namespace MSP.Client
 		{
 			tableView.DeselectRow (path, true);
 			
-			var uinav = (UINavigationController) AppDelegateIPhone.tabBarController.SelectedViewController;
-			var membersPhotoView = new MembersPhotoViewControler(uinav, User.Id, false);
-			uinav.PushViewController(membersPhotoView, true);
+			var uinav = AppDelegateIPhone.AIphone.GetCurrentNavControler();
+			if (uinav != null)
+			{
+				var membersPhotoView = new MembersPhotoViewControler(uinav, User.Id, false);
+				uinav.PushViewController(membersPhotoView, true);
 			
-			//dvc.ActivateController (membersPhotoView);
+				//dvc.ActivateController (membersPhotoView);
+			}
 		}
 	}	
 }

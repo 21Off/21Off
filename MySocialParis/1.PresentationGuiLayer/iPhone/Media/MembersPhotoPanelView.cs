@@ -47,7 +47,7 @@ namespace MSP.Client
 			
 			_IsDialogView = isDialogView;
 			_MembersPhotoView = membersPhotoView;
-			prevController = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
+			prevController = AppDelegateIPhone.AIphone.GetCurrentNavControler();
 			UpdateFromUserId (userId);
 		}
 		
@@ -346,17 +346,14 @@ namespace MSP.Client
 			if (_IsDialogView)
 			{
 				_MembersPhotoView.DismissModalViewControllerAnimated(true);
-				//prevController.DismissModalViewControllerAnimated(true);
 			}
 			else
 			{			
-				prevController = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
+				prevController = AppDelegateIPhone.tabBarController == null ? AppDelegateIPhone.AIphone.GetCurrentNavControler()
+					: (UINavigationController)AppDelegateIPhone.tabBarController.SelectedViewController;
 				
-				if (prevController == null)
-					return;
-				
-				//prevController.DismissModalViewControllerAnimated (true);			
-				prevController.PopViewControllerAnimated(false);
+				if (prevController != null)
+					prevController.PopViewControllerAnimated(false);
 			}
 		}
 		
@@ -485,12 +482,15 @@ namespace MSP.Client
 				
 				InvokeOnMainThread(()=>
 				{
-					var _MSP = AppDelegateIPhone.aroundNavigationController;
-					var headersInfos = new HeaderInfos() { SubTitle = user.Name, Title = "Posts" };					
-					var b = new PhotoMapViewController(_MSP.VisibleViewController, images, headersInfos);
+					var headersInfos = new HeaderInfos() { SubTitle = user.Name, Title = "Posts" };	
+					
+					UINavigationController navCont = AppDelegateIPhone.aroundNavigationController ?? AppDelegateIPhone.AIphone.GetCurrentNavControler();
+										
+					var b = new PhotoMapViewController(navCont, images, headersInfos);
 					b.View.Frame = UIScreen.MainScreen.Bounds;
 					
-					_MSP.VisibleViewController.PresentModalViewController(b, true);
+					if (navCont != null)
+						navCont.VisibleViewController.PresentModalViewController(b, true);
 				});
 			};
 			AppDelegateIPhone.ShowRealLoading(null, "Localizing photos", null, act);
@@ -510,7 +510,7 @@ namespace MSP.Client
 				}
 				root.UnevenRows = true;
 				
-				var selectedVC = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
+				var selectedVC = AppDelegateIPhone.AIphone.GetCurrentNavControler();
 				var rvc = new RelationsViewController(selectedVC, title, subTitle, root);
 				selectedVC.PushViewController (rvc, false);
 			}
@@ -531,7 +531,6 @@ namespace MSP.Client
 			{
 				Graphics.ConfigLayerHighRes(imageLayer);
 				imageLayer.Contents = UIImageUtils.resizeImage(profileImage, sizeProfile).CGImage;
-				//profilePic.Image = UIImageUtils.resizeImage(profileImage, sizeProfile);
 				SetNeedsDisplay();
 			}
 		}

@@ -4,12 +4,9 @@ using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using System.Collections.Generic;
-using MonoTouch.CoreGraphics;
-using System.Threading;
+using System.Linq;
 using MSP.Client.DataContracts;
 using Share;
-using System.Linq;
-using TweetStation;
 
 namespace MSP.Client
 {

@@ -179,7 +179,9 @@ namespace MSP.Client
 				FullUserResponse fullUser = AppDelegateIPhone.AIphone.UsersServ.GetFullUserById(photo.UserId, askerId);
 				InvokeOnMainThread(()=>				                   
 				{
-					var nav = (UINavigationController)AppDelegateIPhone.tabBarController.SelectedViewController;
+					var nav = AppDelegateIPhone.tabBarController == null ? AppDelegateIPhone.AIphone.GetCurrentNavControler() 
+								: (UINavigationController)AppDelegateIPhone.tabBarController.SelectedViewController;
+					
 					var a = new PhotoDetailsViewController(nav, fullUser, photo, false);
 					nav.PushViewController(a, true);
 				});
@@ -314,7 +316,8 @@ namespace MSP.Client
 				photosViews.Clear();
 				
 				MKAnnotation[] annotations = mapView.Annotations.Select(el => el as MKAnnotation).ToArray();
-				mapView.RemoveAnnotations(annotations);
+				if (annotations != null)
+					mapView.RemoveAnnotations(annotations);
 			}
 			catch (Exception ex)
 			{

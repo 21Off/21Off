@@ -96,6 +96,12 @@ namespace MSP.Client
 		public void Logout()
 		{
 		 	MainWnd.WillRemoveSubview(tabBarController.View);
+			
+			buzzNavigationController = null;
+			shareNavigationController = null;
+			meNavigationController = null;
+			aroundNavigationController = null;
+			
 			tabBarController.SetViewControllers(new UIViewController[0], true);
 			tabBarController = null;
 		}
@@ -104,9 +110,17 @@ namespace MSP.Client
 		{
 			var welcomePage = new WelcomePage(this);			
 			var nav = new UINavigationController(welcomePage) { NavigationBarHidden = true, };
+			_currentNavControler = nav;
 			welcomePage.Nav = nav;										
 			nav.Add(welcomePage.View);			
 			window.AddSubview(nav.View);
+		}
+		
+		private UINavigationController _currentNavControler;
+		
+		public UINavigationController GetCurrentNavControler()
+		{
+			return _currentNavControler;
 		}
 		
 		public override void DidEnterBackground (UIApplication application)
