@@ -93,11 +93,12 @@ namespace MSP.Client
 				Root = likedRootElement, 
 				ShowLoadMorePhotos = false,				
 			};
+			
+			likedMediaView.TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("pagedegarde"));
 			likedMediaView.View.Frame = new System.Drawing.RectangleF(new PointF(0, topY),  size);
-			//this.View.AddSubview(likedMediaView.View);
 			this.Add(likedMediaView.View);
 			
-			UIView bottomPanel = new UIView(new RectangleF(0, View.Bounds.Height - 48, width, 48));
+			var bottomPanel = new UIView(new RectangleF(0, View.Bounds.Height - 48, width, 48));
 			bottomPanel.DrawBorder(UIColor.LightGray);
 			
 			UIButton createAccountBtn = UIButton.FromType (UIButtonType.RoundedRect);
@@ -122,6 +123,10 @@ namespace MSP.Client
 			bottomPanel.Add(signInBtn);
 			bottomPanel.Add(signInWithFacebookBtn);
 			this.View.Add(bottomPanel);
+			
+			var imgViesw = new UIImageView(UIImage.FromBundle("Images/Icon.png"));
+			imgViesw.Frame = new RectangleF((320 - 26)/2, (topY - 26) / 2, 26, 26);
+			this.Add(imgViesw);
 		}
 
 		void HandleCreateAccountBtnTouchDown (object sender, EventArgs e)
@@ -288,13 +293,9 @@ namespace MSP.Client
 			return likedMediaView.GetLoadedImages();
 		}
 
-		public LocalisationType LocType {
-			get;set;
-		}
-
-		public MonoTouch.CoreLocation.CLLocation Location {
-			get;set;
-		}
+		public LocalisationType LocType { get;set; }
+		public MonoTouch.CoreLocation.CLLocation Location { get;set; }
+		
 		#endregion
 	}
 }

@@ -6,7 +6,7 @@ using TweetStation;
 
 namespace MSP.Client
 {
-	public class UserCell : UITableViewCell, IImageUpdated {
+	public class UserCell : UITableViewCell, ISizeImageUpdated {
 		User user;
 
 		public UserCell (NSString key) : base (UITableViewCellStyle.Subtitle, key)

@@ -1,13 +1,10 @@
-
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Threading;
 using MonoTouch.Foundation;
-using MonoTouch.UIKit;
 using MSP.Client;
+
 namespace TweetStation
 {
 	public static class Downloader
@@ -69,9 +66,9 @@ namespace TweetStation
 		
 		public static bool DownloadImage3(Uri url, string tempPath)
 		{		
-			bool res = true;
-			
+			bool res = true;			
 			var wait = new ManualResetEventSlim(false);
+			
 			JsonUtility.LaunchDown(url.OriginalString, false, rs =>
 			{
 				try

@@ -28,48 +28,7 @@ using MonoTouch.UIKit;
 using MSP.Client;
 
 namespace TweetStation
-{	
-	public static class UrlStore
-	{
-		public static Uri GetPicUrlFromId (long id, long userid, SizeDB sizeDB)
-		{
-			Uri res = null;
-			try
-			{
-				if (sizeDB == SizeDB.Size100)
-				{
-					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_100/{0}/{1}.jpg", userid, id)));
-				}
-				if (sizeDB == SizeDB.Size75)
-				{
-					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_75/{0}/{1}.jpg", userid, id)));
-				}
-				if (sizeDB == SizeDB.Size50)
-				{
-					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_50/{0}/{1}.jpg", userid, id)));
-				}
-				if (sizeDB == SizeDB.SizeMiniMap)
-				{
-					return (res = new Uri(string.Format("http://storage.21offserver.com/files/MapLocations/{0}.jpg", id)));
-				}
-				if (sizeDB == SizeDB.SizeProfil)
-				{
-					return (res = new Uri(string.Format("http://storage.21offserver.com/files/Profiles/{0}.jpg", userid)));
-				}
-				if (sizeDB == SizeDB.SizeFacebook)
-				{
-					string accessToken = NSUserDefaults.StandardUserDefaults.StringForKey("FacebookAccessToken");
-					return (res = new Uri(string.Format("https://graph.facebook.com/{0}/picture?access_token={1}", userid, accessToken)));
-				}				
-				return (res = new Uri(string.Format("http://storage.21offserver.com/files/Zoom_308_307/{0}/{1}.jpg", userid, id)));
-			}
-			finally
-			{
-				//idToUrl[new Tuple<long, SizeDB>(id, sizeDB)] = res.OriginalString;
-			}
-		}		
-	}
-	
+{		
 	//
 	// Provides an interface to download pictures in the background
 	// and keep a local cache of the original files + rounded versions
@@ -101,7 +60,7 @@ namespace TweetStation
 		static LRUCache<long,UIImage> DBcacheFacebook;
 				
 		// A list of requests that have been issues, with a list of objects to notify.
-		static Dictionary<Tuple<long, long, SizeDB>, List<IImageUpdated>> pendingRequests;
+		static Dictionary<Tuple<long, long, SizeDB>, List<ISizeImageUpdated>> pendingRequests;
 		
 #if DEBUGIMAGE
 		static Dictionary<long,long> pendingTimes;
@@ -173,7 +132,7 @@ namespace TweetStation
 			DBcacheProfiles = new LRUCache<long, MonoTouch.UIKit.UIImage>(200);
 			DBcacheFacebook = new LRUCache<long, MonoTouch.UIKit.UIImage>(200);
 			
-			pendingRequests = new Dictionary<Tuple<long, long, SizeDB>, List<IImageUpdated>>();
+			pendingRequests = new Dictionary<Tuple<long, long, SizeDB>, List<ISizeImageUpdated>>();
 #if DEBUGIMAGE
 			pendingTimes = new Dictionary<long, long> ();
 #endif
@@ -194,7 +153,7 @@ namespace TweetStation
 			lock (DBcacheProfiles.SyncValue) DBcacheProfiles.Purge();
 			lock (DBcacheFacebook.SyncValue) DBcacheFacebook.Purge();
 		}
-		
+				
 		public static LRUCache<long,UIImage> GetCache(SizeDB sizeDB)
 		{
 			LRUCache<long,UIImage> dbCache = DBcachefull;
@@ -224,20 +183,20 @@ namespace TweetStation
 			}
 			
 			return dbCache;
-		}
+		}		
 		
 		public static UIImage GetLocalFullPicture (long id, long userid, SizeDB sizeDB)
 		{
 			try
 			{
-				LRUCache<long,UIImage> dbCache = GetCache(sizeDB);
+				LRUCache<long,UIImage> dbCache = ImageStore.GetCache(sizeDB);
 				
 				lock (dbCache.SyncValue)
 				{
 					var ret = dbCache[id];
 					if (ret == null)
 					{
-						var path = GetDBImagePath(new Tuple<long, long, SizeDB>(id, userid, sizeDB));
+						var path = UrlStore.GetDBImagePath(new Tuple<long, long, SizeDB>(id, userid, sizeDB));
 						if (File.Exists(path))
 						{
 							UIImage image = UIImage.FromFile(path);
@@ -258,7 +217,7 @@ namespace TweetStation
 			}		
 		}
 		
-		public static UIImage RequestFullPicture (long id, long userid, SizeDB sizeDB, IImageUpdated notify)
+		public static UIImage RequestFullPicture (long id, long userid, SizeDB sizeDB, ISizeImageUpdated notify)
 		{
 			var pic = GetLocalFullPicture (id, userid, sizeDB);
 			if (pic == null){
@@ -275,7 +234,7 @@ namespace TweetStation
 		// Requests that the picture for "id" be downloaded, the optional url prevents
 		// one lookup, it can be null if not known
 		//
-		public static void QueueRequestForPicture (long id, long userid, SizeDB sizeDB, IImageUpdated notify)
+		public static void QueueRequestForPicture (long id, long userid, SizeDB sizeDB, ISizeImageUpdated notify)
 		{									
 			if (notify == null)
 			{
@@ -298,7 +257,7 @@ namespace TweetStation
 					pendingRequests [pendReq].Add (notify);
 					return;
 				}
-				var slot = new List<IImageUpdated> ();
+				var slot = new List<ISizeImageUpdated> ();
 				slot.Add (notify);
 				pendingRequests [pendReq] = slot;
 #if DEBUGIMAGE
@@ -375,7 +334,7 @@ namespace TweetStation
 		{
 			long id = -1;
 			do {
-				string picdir = GetDBImagePath(pendReq);
+				string picdir = UrlStore.GetDBImagePath(pendReq);
 				bool downloaded = false;
 				id = pendReq.Item1;				
 				
@@ -435,7 +394,7 @@ namespace TweetStation
 			{
 				lock (requestQueue){
 					foreach (var qid in queuedUpdates){
-						var list = new List<IImageUpdated>();
+						var list = new List<ISizeImageUpdated>();
 						if (pendingRequests.ContainsKey(qid))
 						{
 							list = pendingRequests [qid];
@@ -460,125 +419,5 @@ namespace TweetStation
 				Util.LogException("NotifyImageListeners", ex);
 			}
 		}
-		
-		public static string GetDBImagePath(Tuple<long, long, SizeDB> pendReq)
-		{
-			return GetDBImagePath(pendReq.Item1, pendReq.Item2,pendReq.Item3);		
-		}
-		
-		public static string GetDBImagePath(long id, long userid, SizeDB sizeDB)
-		{		
-			string path = ImageStore.FileDB;
-			
-			if (sizeDB == SizeDB.Size100)
-			{
-				path = ImageStore.FileDB100;
-			}
-			if (sizeDB == SizeDB.Size75)
-			{
-				path = ImageStore.FileDB75;
-			}
-			if (sizeDB == SizeDB.Size50)
-			{
-				path = ImageStore.FileDB50;
-			}
-			if (sizeDB == SizeDB.SizeFacebook)
-			{
-				return ImageStore.ProfilesFacebook + userid + ".png";
-			}
-			if (sizeDB == SizeDB.SizeProfil)
-			{
-				return ImageStore.Profiles + userid + ".png";
-			}			
-			if (sizeDB == SizeDB.SizeMiniMap)
-			{
-				return ImageStore.MapLocations + id + ".png";
-			}
-			
-			path += userid + "/";
-			return path + id + ".png";
-		}			
-		
-		public static bool DeleteDBPic (long id, long userid, SizeDB sizeDB)
-		{
-			try
-			{
-				LRUCache<long,UIImage> dbCache = GetCache(sizeDB);
-				string picfile = GetDBImagePath(id, userid, sizeDB);
-				
-				lock (dbCache.SyncValue)
-				{
-					dbCache.Remove(id);
-					
-					if (File.Exists (picfile))
-					{	
-						File.Delete(picfile);
-					}
-				}
-				return true;
-			}
-			catch (Exception ex)
-			{
-				Util.LogException("DeleteDBPic", ex);
-				return false;
-			}			
-		}
-		
-		public static UIImage SaveDBPic (string picfile, long id, long userid, SizeDB sizeDB)
-		{
-			LRUCache<long,UIImage> dbCache = GetCache(sizeDB);
-			
-			lock (dbCache.SyncValue){				
-				using (var pic = UIImage.FromFileUncached (picfile)){
-					if (pic == null)
-						return null;
-					
-					SizeF size = pic.Size;
-					string path = ImageStore.FileDB;
-					
-					if (sizeDB == SizeDB.Size100)
-					{
-						path = ImageStore.FileDB100;
-						size = new SizeF(100, 100);
-					}
-					if (sizeDB == SizeDB.Size75)
-					{
-						path = ImageStore.FileDB75;
-						size = new SizeF(75, 75);
-					}
-					if (sizeDB == SizeDB.Size50)
-					{
-						path = ImageStore.FileDB50;
-						size = new SizeF(50, 50);
-					}
-					
-					path = path + userid + "/";
-					if (!Directory.Exists(path))
-						Directory.CreateDirectory(path);
-					
-					UIImage cute = UIImageUtils.resizeImage(pic, size);
-
-					var bytes = cute.AsPNG ();
-					NSError err;
-					bytes.Save (path + id + ".png", false, out err);
-					
-					// we might as well add it to the cache
-					dbCache [id] = cute;
-					
-					return cute;
-				}
-			}
-		}		
-	}
-		
-	public enum SizeDB
-	{
-		SizeFull,
-		Size50,
-		Size75,
-		Size100,
-		SizeMiniMap,
-		SizeProfil,
-		SizeFacebook,
 	}
 }

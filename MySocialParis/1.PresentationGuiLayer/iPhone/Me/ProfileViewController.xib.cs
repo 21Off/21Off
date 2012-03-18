@@ -176,6 +176,7 @@ namespace MSP.Client
 			{								
 				var root = new RootElement("") { new Section() };
 				var dv = new DialogViewController(root, true);
+				var friendsFacebooksIds = new List<long>();
 				
 				foreach (User fuser in facebookFriends)
 				{
@@ -184,6 +185,9 @@ namespace MSP.Client
 				}
 				foreach (long socialId in socialIds)
 				{
+					if (friends.Contains(socialId))
+						continue;
+					
 					var guser = new GraphUser() { id = socialId };										
 					var fbUser = new FbUserElement(guser, u => 
                     {													
@@ -191,7 +195,7 @@ namespace MSP.Client
 						//facebookApp.HandleOpenURL(NSUrl.FromString(u));
 						//return;
 						
-						WebViewController.OpenUrl (dv, u);
+						//WebViewController.OpenUrl (dv, u);
 						return;
 						
 	  					var fac = new FacebookAuthorizationViewController("168889879843414", 

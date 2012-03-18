@@ -51,7 +51,7 @@ namespace MSP.Client
 			Util.Log (Environment.StackTrace);
 		}
 		
-		public class TweetCellView : UIView, IImageUpdated {
+		public class TweetCellView : UIView, ISizeImageUpdated {
 			UIActivity activity;
 			
 			UIButton imageBtn;

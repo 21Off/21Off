@@ -1,15 +1,14 @@
 ﻿<Properties GitUserInfo="UsingMD">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/1.PresentationGuiLayer/iPhone/Login/WelcomePage.cs">
+    <Files>
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/WelcomePage.cs" Line="127" Column="70" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" />
-          </Node>
-          <Node name="DialogExtension" expanded="True" selected="True" />
-          <Node name="MonoTouch.Dialog" expanded="True">
-            <Node name="Utilities" expanded="True" />
+            <Node name="21Off.Client" expanded="True" selected="True" />
           </Node>
         </State>
       </Pad>

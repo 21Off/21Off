@@ -13,7 +13,7 @@ using System.Web;
 
 namespace MSP.Client
 {
-	public class FbUserElement : CustomOwnerDrawnElement, IImageUpdated
+	public class FbUserElement : CustomOwnerDrawnElement, ISizeImageUpdated
 	{
 		private static object lock_graph = new object();
 		private static Dictionary<decimal, GraphUser> graph = new Dictionary<decimal, GraphUser>();

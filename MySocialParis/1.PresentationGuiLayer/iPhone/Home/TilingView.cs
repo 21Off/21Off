@@ -8,7 +8,7 @@ using TweetStation;
 
 namespace MSP.Client
 {
-	public class TilingView : UIButton, IImageUpdated
+	public class TilingView : UIButton, ISizeImageUpdated
 	{
 		[Export("layerClass")]
 		public static Class LayerClass ()

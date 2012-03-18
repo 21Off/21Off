@@ -31,7 +31,7 @@ namespace MSP.Client
 			Util.Log (Environment.StackTrace);
 		}
 		
-		public class ImagesCellView : UIView, IImageUpdated {
+		public class ImagesCellView : UIView, ISizeImageUpdated {
 			ImagesCellInfo imagesCellInfo;
 			ImagesCellInfo copy;
 			

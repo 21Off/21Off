@@ -48,7 +48,7 @@ namespace MSP.Client
 			Util.Log (Environment.StackTrace);
 		}
 		
-		public class CommentCellView : UIView, IImageUpdated {
+		public class CommentCellView : UIView, ISizeImageUpdated {
 			UIComment _comment;
 			
 			List<Block> blocks;

@@ -6,12 +6,25 @@ using MonoTouch.ObjCRuntime;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
 using TweetStation;
+using MonoTouch.Dialog.Utilities;
 
 namespace MSP.Client
 {
-
-	public class BuzzPhotoView : UIButton, IImageUpdated
+	public class BuzzPhotoView : UIButton, ISizeImageUpdated, IImageUpdated
 	{
+		#region Fields
+						
+		public UIImage photoImage;
+		private Image _Image;
+		private RectangleF imgSize;
+		private SizeF photoSize;		
+		public static UIImage Value;		
+		private bool picLoaded = false;
+		
+		#endregion
+		
+		#region Constructors
+		
 		[Export("layerClass")]
 		public static Class LayerClass ()
 		{
@@ -20,21 +33,6 @@ namespace MSP.Client
 
 		public BuzzPhotoView (Image image, SizeF size) : base(new RectangleF (new PointF(0, 0), size))
 		{
-/*			Layer.MasksToBounds = true;
-			Layer.CornerRadius = 8;
-			Layer.Opaque = true;
-			Layer.ContentsScale = UIScreen.MainScreen.Scale;
-			
-			Layer.BorderColor = UIColor.White.CGColor;
-			Layer.BorderWidth = 2F;
-			//Layer.BackgroundColor = UIColor.FromRGBA(1.0f, 1.0f, 1.0f, 1.0F).CGColor;
-			Layer.ShadowColor = UIColor.Black.CGColor;
-			Layer.ShadowOpacity = 0.5f;
-			Layer.ShadowRadius = 0.5f;
-			Layer.ShadowOffset = new SizeF(-1.0f, 1.0f);
-						 */
-			//Graphics.ConfigLayerHighRes(Layer);
-			
 			photoSize = size;
 			imgSize = new RectangleF (2 * 6, 2 * 6, 2 * (photoSize.Width - 2 * 6), 2 * (photoSize.Height- 2* 6));
 			
@@ -46,7 +44,9 @@ namespace MSP.Client
 			this.SetBackgroundImage (composite, UIControlState.Normal);
 			_Image = image;
 		}
-
+		
+		#endregion
+		
 		public override void Draw (RectangleF rect)
 		{			
 			//base.Draw (rect);
@@ -54,15 +54,18 @@ namespace MSP.Client
 				Update(_Image);
 				picLoaded = true;
 			}
+		}		
+
+		protected override void Dispose (bool disposing)
+		{
+			if (disposing) {
+				if (Value != null) {
+					Value.Dispose ();
+					Value = null;
+				}
+			}
+			base.Dispose (disposing);
 		}
-				
-		private Image _Image;
-		private RectangleF imgSize;
-		private SizeF photoSize;		
-		public static UIImage Value;
-		public UIImage photoImage;
-		
-		private bool picLoaded = false;
 		
 		public void Update(Image image)
 		{
@@ -81,7 +84,9 @@ namespace MSP.Client
 				}
 				else
 				{
-					photoImage = ImageStore.RequestFullPicture(image.Id, image.UserId, SizeDB.Size100, this);					
+					var url = UrlStore.GetPicUrlFromId (image.Id, image.UserId, SizeDB.Size100);
+					photoImage = ImageLoader.DefaultRequestImage(url, this);
+					//photoImage = ImageStore.RequestFullPicture(image.Id, image.UserId, SizeDB.Size100, this);					
 					if (photoImage != null)
 					{
 						InvokeOnMainThread (() => { RefreshImage(photoImage); });
@@ -113,17 +118,12 @@ namespace MSP.Client
 		{
 			if (image != null)
 			{
-				//UIView.BeginAnimations("imageThumbnailTransitionIn");
-			    //UIView.SetAnimationDuration(0.5f);
-//				this.SetBackgroundImage (image, UIControlState.Normal);			
-			    //UIView.CommitAnimations();
-		
 				UIImage frame = Graphics.GetImgResource("cadre200");
 				UIImage composite = GetCompImage(frame, image);			
-				this.SetBackgroundImage (composite, UIControlState.Normal);	
-			}
+				this.SetBackgroundImage (composite, UIControlState.Normal);				
 			
-			SetNeedsDisplay();
+				SetNeedsDisplay();
+			}
 		}
 		
 		private UIImage GetCompImage(UIImage frame, UIImage image)
@@ -139,6 +139,8 @@ namespace MSP.Client
 			
 			return composite;
 		}
+		
+		#region IImageUpdated implementation		
 
 		public void UpdatedImage (long id, long userId, SizeDB sizeDB)
 		{		
@@ -162,16 +164,19 @@ namespace MSP.Client
 				Util.LogException("UpdatedImage", ex);
 			}
 		}
-		
-		protected override void Dispose (bool disposing)
+
+		public void UpdatedImage (Uri uri)
 		{
-			if (disposing) {
-				if (Value != null) {
-					Value.Dispose ();
-					Value = null;
-				}
+			if (_Image == null)
+				return;
+			
+			var url = UrlStore.GetPicUrlFromId (_Image.Id, _Image.UserId, SizeDB.Size100);
+			if (uri.Equals(url))
+			{
+				photoImage = ImageLoader.DefaultRequestImage(url, this);
+				RefreshImage(photoImage);
 			}
-			base.Dispose (disposing);
 		}
+		#endregion
 	}
 }

@@ -86,6 +86,7 @@ namespace MSP.Client.DataContracts
 		Liked,
 		Friends,
 		All,
+		Events,
 	}
 	
 	[DataContract(Namespace = ExampleConfig.DefaultNamespace)]	
@@ -111,7 +112,8 @@ namespace MSP.Client.DataContracts
         }
 
         public ResponseStatus ResponseStatus { get; set; }
-
+		
+		public List<Image> EventsImages { get; set; }
         public List<Image> RecentImages { get; set; }
 		public List<Image> LikedImages { get; set; }
 		public List<Image> FriendsImages { get; set; }

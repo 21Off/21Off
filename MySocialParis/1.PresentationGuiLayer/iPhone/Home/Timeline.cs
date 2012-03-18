@@ -13,6 +13,8 @@ namespace MSP.Client
 	{
 		#region Members
 		
+		private int pageNumber = 0;		
+		private RequestInfo request;
 		private FilterType _FilterType;
 		private List<ImageInfo> _list;
 		private List<Image> previousList;
@@ -42,7 +44,7 @@ namespace MSP.Client
 		
 		#region Events
 		
-		void HandleOnSwipe (SwipeDirection obj)
+		private void HandleOnSwipe (SwipeDirection obj)
 		{
 			if (obj == SwipeDirection.Left)
 			{
@@ -87,9 +89,7 @@ namespace MSP.Client
 		
 		#endregion
 		
-		#region Overrides
-		
-		private RequestInfo request;
+		#region Overrides			
 		
 		public override void ReloadTimeline ()
 		{
@@ -203,9 +203,13 @@ namespace MSP.Client
 		
 		#endregion
 		
-		#region Private methods		
+		#region Properties
 		
-		private int pageNumber = 0;
+		public bool ShowLoadMorePhotos {get;set;}
+		
+		#endregion
+		
+		#region Private methods
 		
 		private void AddMorePhotoElements(CustomLoadMoreElement more, ManualResetEventSlim wait)
 		{						
@@ -250,9 +254,7 @@ namespace MSP.Client
 					{
 						Util.LogException("AddMorePhotoElements InsertElements", ex);
 					}					
-				});				
-							
-				
+				});
 				//TableView.ScrollToRow (NSIndexPath.FromRowSection (Root[0].Count - 1, 0), UITableViewScrollPosition.Middle, false);
 			}
 			catch (Exception ex)
@@ -261,18 +263,15 @@ namespace MSP.Client
 				pageNumber--;
 				
 				// Now make sure we invoke on the main thread the updates
-				this.BeginInvokeOnMainThread(delegate {		
-						
-					more.Animating = false;													
-					
-					});					
+				this.BeginInvokeOnMainThread(delegate {
+						more.Animating = false;					
+					});
 			}
 			finally
 			{
 				wait.Set();
 			}
-		}
-		public bool ShowLoadMorePhotos {get;set;}
+		}		
 		
 		private void DownloadTweets ()
 		{			
@@ -305,7 +304,6 @@ namespace MSP.Client
 					return;
 				}
 				
-				//NSTimer.CreateScheduledTimer (0, delegate {
 				for (int i = 0; i < 7; i++) {
 					Root[0].Add (new PhotosElement (this, i));
 				}
@@ -329,8 +327,7 @@ namespace MSP.Client
 					
 					try {
 						Root[0].Insert (Root[0].Count, UITableViewRowAnimation.None, more);
-					} catch {
-					}
+					}  catch { }
 				}
 			}
 			catch (Exception ex)

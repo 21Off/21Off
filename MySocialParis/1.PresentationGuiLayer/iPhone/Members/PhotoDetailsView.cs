@@ -150,10 +150,10 @@ namespace MSP.Client
 					{
 						section.Remove(element);
 						AppDelegateIPhone.AIphone.ImgServ.DeleteImage(tweet.Image);
-						ImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.Size100);
-						ImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.Size50);
-						ImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.Size75);
-						ImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.SizeFull);
+						DbImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.Size100);
+						DbImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.Size50);
+						DbImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.Size75);
+						DbImageStore.DeleteDBPic(tweet.Image.Id, tweet.Image.UserId, SizeDB.SizeFull);
 						
 						var nav = AppDelegateIPhone.tabBarController.SelectedViewController as UINavigationController;
 						nav.PopViewControllerAnimated(true);

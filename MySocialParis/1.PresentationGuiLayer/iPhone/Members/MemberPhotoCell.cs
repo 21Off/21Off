@@ -8,6 +8,7 @@ using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
 using TweetStation;
 using System.Linq;
+using MonoTouch.Dialog.Utilities;
 
 namespace MSP.Client
 {	
@@ -48,7 +49,7 @@ namespace MSP.Client
 			
 		}		
 				
-		public class MemberPhotoCellView : TapView, IImageUpdated {
+		public class MemberPhotoCellView : TapView, ISizeImageUpdated, IImageUpdated {
 			
 			#region Private members
 			
@@ -64,45 +65,12 @@ namespace MSP.Client
 			private static UIImage EmptyImage;
 			private UIButton keywordView, attentionView, addToEvent;
 			private DateTime lastPhotoClicked;
-			private int photoClickCnt = 0;
+			private int photoClickCnt;
 			private static UIImage googleLogo;
+			private List<UIButton> urls = new List<UIButton>();
+			public const string seeAllComments = "->see all comments";
 			
-			#endregion
-						
-			public event Action<string> UrlTapped;
-			
-			private UIButton CreateUrl(string text, RectangleF frame)
-			{				
-				var url = UIButton.FromType (UIButtonType.Custom);
-				url.Font = urlFont;
-				url.LineBreakMode = UILineBreakMode.TailTruncation;
-				url.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
-				url.TitleShadowOffset = new SizeF (0, 1);
-				url.SetTitleColor (UIColor.FromRGB (0x32, 0x4f, 0x85), UIControlState.Normal);
-				url.SetTitleColor (UIColor.Red, UIControlState.Highlighted);
-				url.SetTitleShadowColor (UIColor.White, UIControlState.Normal);
-				url.TouchUpInside += HandleUrlTouchUpInside;
-				//url.Frame = new RectangleF (frame.X, 70, frame.Width, urlSize);
-				
-				using (var nss = new NSString (text))
-				{
-					var dim = nss.StringSize (urlFont);
-					frame.Width = dim.Width;
-					url.Frame = frame;
-				}
-				
-				url.SetTitle (text, UIControlState.Normal);
-				url.SetTitle (text, UIControlState.Highlighted);
-				
-				return url;
-			}
-
-			void HandleUrlTouchUpInside (object sender, EventArgs e)
-			{
-				string text = ((UIButton)sender).Title(UIControlState.Normal);
-				if (UrlTapped != null) 
-					UrlTapped (text);
-			}			
+			#endregion		
 	
 			public MemberPhotoCellView (Tweet tweet, Action<int> goToMembersPhotoAction) : base ()
 			{
@@ -205,6 +173,41 @@ namespace MSP.Client
 			}
 							
 			#region Events
+								
+			public event Action<string> UrlTapped;
+			
+			private UIButton CreateUrl(string text, RectangleF frame)
+			{				
+				var url = UIButton.FromType (UIButtonType.Custom);
+				url.Font = urlFont;
+				url.LineBreakMode = UILineBreakMode.TailTruncation;
+				url.HorizontalAlignment = UIControlContentHorizontalAlignment.Left;
+				url.TitleShadowOffset = new SizeF (0, 1);
+				url.SetTitleColor (UIColor.FromRGB (0x32, 0x4f, 0x85), UIControlState.Normal);
+				url.SetTitleColor (UIColor.Red, UIControlState.Highlighted);
+				url.SetTitleShadowColor (UIColor.White, UIControlState.Normal);
+				url.TouchUpInside += HandleUrlTouchUpInside;
+				//url.Frame = new RectangleF (frame.X, 70, frame.Width, urlSize);
+				
+				using (var nss = new NSString (text))
+				{
+					var dim = nss.StringSize (urlFont);
+					frame.Width = dim.Width;
+					url.Frame = frame;
+				}
+				
+				url.SetTitle (text, UIControlState.Normal);
+				url.SetTitle (text, UIControlState.Highlighted);
+				
+				return url;
+			}
+
+			void HandleUrlTouchUpInside (object sender, EventArgs e)
+			{
+				string text = ((UIButton)sender).Title(UIControlState.Normal);
+				if (UrlTapped != null) 
+					UrlTapped (text);
+			}				
 			
 			private void HandleAddToEventTouchDown (object sender, EventArgs e)
 			{
@@ -464,7 +467,9 @@ namespace MSP.Client
 				if (mapPlanImage != null)
 					SetMiniMap(mapPlanImage);
 				
-				photoImage = ImageStore.RequestFullPicture(tweet.Image.Id, tweet.Image.UserId, SizeDB.SizeFull, this);
+				//photoImage = ImageStore.RequestFullPicture(tweet.Image.Id, tweet.Image.UserId, SizeDB.SizeFull, this);
+				var url = UrlStore.GetPicUrlFromId (tweet.Image.Id, tweet.Image.UserId, SizeDB.SizeFull);
+				photoImage = ImageLoader.DefaultRequestImage(url, this);
 				
 				if (photoImage == null)
 				{					
@@ -490,6 +495,24 @@ namespace MSP.Client
 			}
 			
 			#region IImageUpdated implementation
+			
+			public void UpdatedImage (Uri uri)
+			{
+				if (_Tweet == null)
+					return;
+				
+				var url = UrlStore.GetPicUrlFromId (_Tweet.Image.Id, _Tweet.Image.UserId, SizeDB.SizeFull);
+				if (uri.Equals(url))
+				{					
+					photoImage = ImageLoader.DefaultRequestImage(url, this);
+					if (photoImage != null)
+					{
+						photoBtn.SetBackgroundImage(photoImage, UIControlState.Normal);
+						spinner.StopAnimating();						
+					}					
+				}				
+				SetNeedsDisplay();
+			}
 			
 			public void UpdatedImage (long id, long userid, SizeDB sizeDB)
 			{
@@ -531,14 +554,12 @@ namespace MSP.Client
 			
 			#region Draw Methods
 			
-			int state;
 			public override void Draw (RectangleF rect)
 			{
 				try {
-					state = 0;
 					RealDraw (rect);
 				} catch (Exception e) {
-					Util.LogException ("State: " + state, e);
+					Util.LogException ("MemberPhotoCell", e);
 				}
 			}		
 			
@@ -669,10 +690,6 @@ namespace MSP.Client
 					}
 				}
 			}
-			
-			private List<UIButton> urls = new List<UIButton>();
-				
-			public const string seeAllComments = "->see all comments";
 				
 			public static float Layout(RectangleF bounds, Tweet tweet, List<Block> blocks, out float cellHeight)
 			{

@@ -63,10 +63,10 @@ namespace MSP.Client
 			{
 				Database.Main.RunInTransaction(()=>
                 {				
-					ImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.SizeFull);
-					ImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.Size50);
-					ImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.Size75);
-					ImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.Size100);							
+					DbImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.SizeFull);
+					DbImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.Size50);
+					DbImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.Size75);
+					DbImageStore.DeleteDBPic(image.Id, image.UserId, SizeDB.Size100);							
 					
 					Database.Main.Execute("delete from like where ParentId = ?", image.Id);
 					Database.Main.Execute("delete from comment where ParentId = ?", image.Id);
@@ -94,10 +94,10 @@ namespace MSP.Client
 					Database.Main.BeginTransaction();
 					if (Database.Main.Insert(image) == 1)
 					{	
-						ImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.SizeFull);
-						ImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.Size50);
-						ImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.Size75);
-						ImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.Size100);
+						DbImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.SizeFull);
+						DbImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.Size50);
+						DbImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.Size75);
+						DbImageStore.SaveDBPic(jpgstr, image.Id, mainUserID, SizeDB.Size100);
 						
 						var url = new Uri("http://www.univestu.com/MySocialParis/Profiles/" + string.Format("{0}.jpg", image.Id));			
 						foreach(Keyword keyword in Keywords)

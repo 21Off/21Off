@@ -12,7 +12,7 @@ using TweetStation;
 
 namespace MSP.Client
 {
-	public class MembersPhotoPanelView : TapView, IImageUpdated
+	public class MembersPhotoPanelView : TapView, ISizeImageUpdated
 	{
 		#region Members
 		

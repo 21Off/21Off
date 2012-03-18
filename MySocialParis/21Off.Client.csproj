@@ -244,7 +244,6 @@
     <Compile Include="1.PresentationGuiLayer\iPhone\Media\MembersPhotoViewControler.xib.designer.cs">
       <DependentUpon>MembersPhotoViewControler.xib</DependentUpon>
     </Compile>
-    <Compile Include="Data\IImageUpdated.cs" />
     <Compile Include="1.PresentationGuiLayer\iPhone\Photo\PhotoViewAdjustViewController.xib.cs">
       <DependentUpon>PhotoViewAdjustViewController.xib</DependentUpon>
     </Compile>
@@ -468,6 +467,10 @@
     <Compile Include="2.ApplicationServicesLayer\ConnexionDelegate.cs" />
     <Compile Include="1.PresentationGuiLayer\iPhone\Me\FbUserElement.cs" />
     <Compile Include="UI\FacebookAuthorizationViewController.cs" />
+    <Compile Include="Data\ISizeImageUpdated.cs" />
+    <Compile Include="Data\UrlStore.cs" />
+    <Compile Include="Data\DbImageStore.cs" />
+    <Compile Include="Data\SizeDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />
@@ -643,6 +646,8 @@
     <Content Include="Images\back%402x.png" />
     <Content Include="Images\forward.png" />
     <Content Include="Images\forward%402x.png" />
+    <Content Include="Images\Ver4\pagedegarde.png" />
+    <Content Include="Images\Ver4\pagedegarde%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Share\Share.csproj">
