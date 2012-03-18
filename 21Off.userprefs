@@ -1,9 +1,6 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/1.PresentationGuiLayer/iPhone/Login/WelcomePage.cs">
-    <Files>
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Login/WelcomePage.cs" Line="127" Column="70" />
-    </Files>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
@@ -22,6 +19,6 @@
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
-    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Add photo related to the curent&#xA;Add first comment on posting&#xA;Small refactoring ang bug fixes&#xA;Facebook app invitation" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
+    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Add photo related to the curent&#xA;Add first comment on posting&#xA;Small refactoring ang bug fixes&#xA;Facebook app invitation&#xA;Better image download system" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
   </MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
 </Properties>
