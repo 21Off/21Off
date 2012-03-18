@@ -20,7 +20,7 @@ namespace MSP.Client
 
 		public override UITableViewCell GetCell (UITableView tableView)
 		{									
-			List<ImageInfo> images = _Timeline.GetImages (_RowIndex);
+			List<ImageInfo> images = _Timeline.GetImages (_RowIndex);			
 
 			var cell = tableView.DequeueReusableCell (ikey) as PhotoCell;
 			if (cell == null)

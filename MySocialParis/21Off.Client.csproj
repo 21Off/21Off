@@ -204,7 +204,6 @@
     <Compile Include="Utilities\CustomViews\UILoadingView.cs" />
     <Compile Include="Utilities\CustomViews\LoadingHudView.cs" />
     <Compile Include="Utilities\CustomViews\Hud.cs" />
-    <Compile Include="1.PresentationGuiLayer\iPhone\Home\IPhotoUpdated.cs" />
     <Compile Include="1.PresentationGuiLayer\iPhone\Home\TilingView.cs" />
     <Compile Include="1.PresentationGuiLayer\iPhone\Home\PhotoCellView.cs" />
     <Compile Include="1.PresentationGuiLayer\iPhone\Home\PhotoCell.cs" />
@@ -471,6 +470,7 @@
     <Compile Include="Data\UrlStore.cs" />
     <Compile Include="Data\DbImageStore.cs" />
     <Compile Include="Data\SizeDB.cs" />
+    <Compile Include="AppDelegate.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />

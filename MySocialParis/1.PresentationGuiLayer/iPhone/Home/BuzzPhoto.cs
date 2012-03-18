@@ -1,12 +1,7 @@
 using System;
 using System.Drawing;
-using System.Collections.Generic;
-using MonoTouch.CoreAnimation;
-using MonoTouch.Foundation;
-using MonoTouch.ObjCRuntime;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
-using TweetStation;
 
 namespace MSP.Client
 {
@@ -44,7 +39,7 @@ namespace MSP.Client
 			
 			text.Text = title;			
 			buzz.Update(photo);
-		}
+		}		
 	}
 }
 

@@ -152,10 +152,6 @@ namespace MSP.Client
 				double last = Util.Defaults.DoubleForKey("LastUpdate");
 				long ticks = (long)last;
 				
-				//DateTime since = DateTime.MinValue;				
-				//if (ticks > 0)
-				//	since = new DateTime(ticks, DateTimeKind.Utc);
-				
 				var myId = MainUser.Id;
 				var count = AppDelegateIPhone.AIphone.ActivServ.GetNotificationsCountSince(myId, ticks);
 				

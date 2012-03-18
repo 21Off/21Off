@@ -8,14 +8,14 @@ namespace MSP.Client
 {
 	public class PhotoCellView : UIView
 	{
-		int _RowIndex= -1;
-
-		List<BuzzPhoto> photos;
+		private List<BuzzPhoto> photos;
 
 		public PhotoCellView (List<ImageInfo> fileNames, int rowIndex, Action<BuzzPhoto> onPhotoClicked) : base()
-		{				
-			_RowIndex = rowIndex;
+		{
 			photos = new List<BuzzPhoto> ();
+			
+			int space = 5;
+			int width = (320 - (fileNames.Count + 1) * space) / fileNames.Count;
 			
 			int i = 0;
 			foreach (ImageInfo imageInfo in fileNames) {
@@ -23,9 +23,9 @@ namespace MSP.Client
 					
 				Image image = imageInfo.Img;
 				string title = image == null ? "" : (image.Name ?? "No comment");
-				var buzzPhoto = new BuzzPhoto (image, title, new SizeF (100, 120), onPhotoClicked);
+				var buzzPhoto = new BuzzPhoto (image, title, new SizeF (width, 120), onPhotoClicked);
 				
-				buzzPhoto.Frame = new RectangleF ((i - 1) * (100 + 5) + 5, 5, 100, 120);
+				buzzPhoto.Frame = new RectangleF ((i - 1) * (width + space) + space, 5, width, 120);
 				photos.Add(buzzPhoto);
 				
 				this.AddSubview (buzzPhoto);
@@ -40,38 +40,13 @@ namespace MSP.Client
 		{
 			try
 			{
-				bool changed = false;
-				if (fileNames.Count != photos.Count)
-					changed = true;
-				
 				for (int i = 0; i < photos.Count; i++)
-				{
-					BuzzPhoto buzzPhoto = photos[i];//	drawed
-					var imageInfo = fileNames[i];//	to be drawn
+				{					
+					var imageInfo = fileNames[i];
+					string title = imageInfo.Img == null ? "" : (imageInfo.Img.Name ?? "No comment");					
 					
-					if (imageInfo.Img == null && buzzPhoto.Photo != null)
-						changed = true;
-					
-					if (imageInfo.Img != null && buzzPhoto.Photo == null)
-						changed = true;
-					
-					if (imageInfo.Img != null && buzzPhoto.Photo != null)
-					{
-						changed = imageInfo.Img.Id != buzzPhoto.Photo.Id;
-					}
-				}
-				
-				if (_RowIndex != rowIndex || changed)
-				{	
-					_RowIndex = rowIndex;
-					for (int i = 0; i < photos.Count; i++)
-					{					
-						var imageInfo = fileNames[i];
-						string title = imageInfo.Img == null ? "" : (imageInfo.Img.Name ?? "No comment");					
-						
-						BuzzPhoto buzzPhoto = photos[i];
-						buzzPhoto.Update(title, imageInfo.Img);
-					}				
+					BuzzPhoto buzzPhoto = photos[i];
+					buzzPhoto.Update(title, imageInfo.Img);
 				}
 			}
 			catch (Exception ex)

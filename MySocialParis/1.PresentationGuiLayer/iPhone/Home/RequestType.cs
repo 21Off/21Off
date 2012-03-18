@@ -1,4 +1,3 @@
-
 namespace MSP.Client
 {
 	public enum RequestType

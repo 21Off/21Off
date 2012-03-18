@@ -18,8 +18,7 @@ namespace MSP.Client
 		private Image _Image;
 		private RectangleF imgSize;
 		private SizeF photoSize;		
-		public static UIImage Value;		
-		private bool picLoaded = false;
+		private static UIImage Value;
 		
 		#endregion
 		
@@ -42,19 +41,17 @@ namespace MSP.Client
 			UIImage composite = GetCompImage(frame, Value);
 
 			this.SetBackgroundImage (composite, UIControlState.Normal);
-			_Image = image;
+			
+			Update(image);
 		}
 		
 		#endregion
 		
+		/*
 		public override void Draw (RectangleF rect)
-		{			
-			//base.Draw (rect);
-			if (!picLoaded) {
-				Update(_Image);
-				picLoaded = true;
-			}
-		}		
+		{
+		}
+		*/		
 
 		protected override void Dispose (bool disposing)
 		{
@@ -63,54 +60,32 @@ namespace MSP.Client
 					Value.Dispose ();
 					Value = null;
 				}
+				if (photoImage != null)
+				{
+					photoImage.Dispose();
+					photoImage = null;
+				}
 			}
 			base.Dispose (disposing);
 		}
 		
 		public void Update(Image image)
 		{
-			if (_Image != image || !picLoaded)
+			_Image = image;
+			
+			if (image != null)
 			{
-				_Image = image;
-				
-				photoImage = null;
-				
-				if (image == null)
-				{
-					InvokeOnMainThread (() =>
-					{
-						RefreshImage(Value);
-					});
-				}
-				else
-				{
-					var url = UrlStore.GetPicUrlFromId (image.Id, image.UserId, SizeDB.Size100);
-					photoImage = ImageLoader.DefaultRequestImage(url, this);
-					//photoImage = ImageStore.RequestFullPicture(image.Id, image.UserId, SizeDB.Size100, this);					
-					if (photoImage != null)
-					{
-						InvokeOnMainThread (() => { RefreshImage(photoImage); });
-					}
-					else
-					{
-						//Occurs when a new photo appers in the list
-						InvokeOnMainThread (() => { RefreshImage(Value); });
-					}
-				}
+				var url = UrlStore.GetPicUrlFromId (image.Id, image.UserId, SizeDB.Size100);
+				photoImage = ImageLoader.DefaultRequestImage(url, this);
+			}
+			
+			if (photoImage != null)
+			{
+				RefreshImage(photoImage);			
 			}
 			else
 			{
-				if (image == null)
-				{
-					InvokeOnMainThread (() => { RefreshImage(Value); });
-				}
-				else
-				{
-					if (photoImage != null)
-					{
-						InvokeOnMainThread (() => { RefreshImage(photoImage); });
-					}
-				}
+				RefreshImage(Value);
 			}
 		}
 		
@@ -120,7 +95,7 @@ namespace MSP.Client
 			{
 				UIImage frame = Graphics.GetImgResource("cadre200");
 				UIImage composite = GetCompImage(frame, image);			
-				this.SetBackgroundImage (composite, UIControlState.Normal);				
+				this.SetBackgroundImage (composite, UIControlState.Normal);
 			
 				SetNeedsDisplay();
 			}
