@@ -52,12 +52,98 @@ namespace MSP.Client
 			return image;
 		}
 		
+		public Image CreateAlbumWithImage(Image image, string filePath, string mapPath, 
+		                           List<Keyword> keywords, List<Comment> comments, string title, int idRelation = 0)
+		{	
+			var sni = new StoreNewImage()
+			{			
+				Image = image,
+				ImageFile = GetIOFile(filePath),
+				MapFile = mapPath == null ? null : GetIOFile(mapPath),
+				Keywords = keywords,
+				Comments = comments,
+				IdRelation = idRelation,
+			};
+			
+			var createAlbumWithImage = new CreateAlbumWithImage()
+			{
+				Image = sni,
+				Title = title ?? image.Name,
+			};			
+			
+			string uri = string.Format("http://storage.21offserver.com/json/syncreply/CreateAlbumWithImage");
+			
+			var we = new ManualResetEvent(false);
+			JsonUtility.Upload (uri, createAlbumWithImage, false, s =>
+			{
+				try
+				{
+					var json = JsonArray.Load (s);
+					int Id = json.ContainsKey("ImageId") ? Convert.ToInt32(json["ImageId"].ToString()) : 0;
+					int IdAlbum = json.ContainsKey("AlbumId") ? Convert.ToInt32(json["AlbumId"].ToString()) : 0;
+					image.Id = Id;
+					image.IdAlbum = IdAlbum;
+				}
+				catch (Exception ex)
+				{
+					Util.LogException("CreateAlbumWithImage", ex);
+				}
+				we.Set();
+			});
+			
+			we.WaitOne(10000);
+			
+			return image;
+		}		
+		
+		public Image AddNewImageToAlbum(Image image, string filePath, string mapPath, 
+		                           List<Keyword> keywords, List<Comment> comments, int idAlbum, int idRelation = 0)
+		{
+			var sni = new StoreNewImage()
+			{			
+				Image = image,
+				ImageFile = GetIOFile(filePath),
+				MapFile = mapPath == null ? null : GetIOFile(mapPath),
+				Keywords = keywords,
+				Comments = comments,
+				IdRelation = idRelation,
+			};
+			
+			var addNewImageToAlbum = new AddNewImageToAlbum()
+			{
+				Image = sni,
+				IdAlbum = idAlbum,
+			};
+			
+			string uri = string.Format("http://storage.21offserver.com/json/syncreply/AddNewImageToAlbum");
+			
+			var we = new ManualResetEvent(false);
+			JsonUtility.Upload (uri, addNewImageToAlbum, false, s =>
+			{
+				try
+				{
+					var json = JsonArray.Load (s);
+					int Id = json.ContainsKey("ImageId") ? Convert.ToInt32(json["ImageId"].ToString()) : 0;
+					image.Id = Id;
+				}
+				catch (Exception ex)
+				{
+					Util.LogException("AddNewImageToAlbum", ex);
+				}
+				we.Set();
+			});
+			
+			we.WaitOne(10000);
+			
+			return image;
+		}		
+		
 		public static IOFile GetIOFile(string filePath)
 		{
 			var fileToUpload = new FileInfo(filePath);						
 			using (FileStream fs = fileToUpload.OpenRead())
 			{
-				byte[] fbytes = new byte[fs.Length];
+				var fbytes = new byte[fs.Length];
 				fs.Read(fbytes, 0, (int)fs.Length);
 
 				return new IOFile()
@@ -195,8 +281,8 @@ namespace MSP.Client
 				Name = obj.ContainsKey("Name") ? obj["Name"].ToString().Replace("\"","") : null,
 				Latitude = Convert.ToDouble(obj["Latitude"].ToString(), System.Globalization.CultureInfo.InvariantCulture),
 				Longitude = Convert.ToDouble(obj["Longitude"].ToString(), System.Globalization.CultureInfo.InvariantCulture), 
-				UserId = Convert.ToInt32(obj["UserId"].ToString())
-				
+				UserId = Convert.ToInt32(obj["UserId"].ToString()),
+				IdAlbum = obj.ContainsKey("IdAlbum") ? Convert.ToInt32(obj["IdAlbum"].ToString()) : 0,				
 				//Time =  DateTime.ParseExact (obj ["Time"], "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture),
 			};
 			
@@ -434,6 +520,10 @@ namespace MSP.Client
 					{		
 					   	fullImgResp.LikedImages.Add(JsonToImage(obj));					
 					}
+					foreach (JsonObject obj in json["EventsImages"])
+					{		
+					   	fullImgResp.EventsImages.Add(JsonToImage(obj));					
+					}					
 					
 					return fullImgResp;
 				}

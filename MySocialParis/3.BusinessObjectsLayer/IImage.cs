@@ -26,7 +26,7 @@ namespace MSP.Client
 		double Longitude {set;get;}
 		
 		/// <summary>Image shot position altitude</summary>
-		double Altitude {set;get;}
+		//double Altitude {set;get;}
 		
 		#endregion Properties
 	}

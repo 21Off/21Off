@@ -155,9 +155,12 @@ namespace MSP.Client
 		{			
 			try
 			{
-				locationManager.StopUpdatingLocation();
-				locationManager.Dispose();
-				locationManager = null;
+				if (locationManager != null)
+				{
+					locationManager.StopUpdatingLocation();
+					locationManager.Dispose();
+					locationManager = null;
+				}
 			}
 			catch (Exception ex)
 			{

@@ -5,10 +5,6 @@ using MSP.Client.DataContracts;
 
 namespace TweetStation
 {
-	/// <summary>
-	///   Represents a tweet in memory.   Not all the data from the original tweet
-	///   is kept around, most of the data is discarded.
-	/// </summary>
 	public class Tweet {	
 		
 		public User User {get;set;}
@@ -20,6 +16,16 @@ namespace TweetStation
 
 		public Action<Tweet> DeleteAction {get;set;}
 		public Action<string> UrlTapAction {get;set;}
-	}	
+		
+		public PostOptions Options {get;set;}
+	}
+	
+	public enum PostOptions
+	{
+		CreateAlbum,
+		AddToAlbum,
+		ShareDescriptions,
+		PostNew,
+	}
 }
 

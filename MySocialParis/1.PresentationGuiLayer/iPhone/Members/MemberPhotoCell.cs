@@ -62,7 +62,7 @@ namespace MSP.Client
 			private Action<int> goToUserPhotos;
 			private UIActivityIndicatorView spinner;			
 			private static UIImage EmptyImage;
-			private static UIImage googleLogo;			
+			private static UIImage googleLogo;
 			private UIButton keywordView, attentionView, addToEvent;
 			private DateTime lastPhotoClicked;
 			private int photoClickCnt;
@@ -107,6 +107,7 @@ namespace MSP.Client
 				var img3 = Graphics.GetImgResource("keyword");
 				var img4 = Graphics.GetImgResource("alert");				
 				var img5 = Graphics.GetImgResource("alert");
+				var img6 = Graphics.GetImgResource("alert");
 				
 				var rect1 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect2 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
@@ -129,7 +130,7 @@ namespace MSP.Client
 				addToEvent = UIButton.FromType(UIButtonType.Custom);
 				addToEvent.BackgroundColor = UIColor.Clear;
 				addToEvent.Frame = rect5;
-				addToEvent.SetBackgroundImage(img5, UIControlState.Normal);
+				addToEvent.SetBackgroundImage(img5, UIControlState.Normal);				
 			
 				keywordView = UIButton.FromType (UIButtonType.Custom);
 				keywordView.BackgroundColor = UIColor.Clear;
@@ -210,9 +211,48 @@ namespace MSP.Client
 			
 			private void HandleAddToEventTouchDown (object sender, EventArgs e)
 			{
-				if (_Tweet != null && _Tweet.Image != null)
-					AppDelegateIPhone.AIphone.GotoToShare(_Tweet, AppDelegateIPhone.buzzNavigationController);
-			}			
+				if (AppDelegateIPhone.tabBarController == null)
+					return;
+				
+				var actionSheet = new UIActionSheet("New post options")
+				{
+					Style = UIActionSheetStyle.Default,
+				};				
+				//actionSheet.DestructiveButtonIndex = actionSheet.AddButton("Delete");
+				actionSheet.AddButton("Share descriptions");
+				if (_Tweet.Image.IdAlbum != 0)
+					actionSheet.AddButton("Add to album");
+				
+				actionSheet.CancelButtonIndex = actionSheet.AddButton("Cancel");
+				actionSheet.Clicked += delegate (object s, UIButtonEventArgs args)
+				{
+					switch (args.ButtonIndex)
+					{
+						case 0: // Share descriptions
+						{
+							_Tweet.Options = PostOptions.ShareDescriptions;
+							break;
+						}
+						case 1: // Add to album or Cancel
+						{
+							if (_Tweet.Image.IdAlbum == 0)
+								return;
+						
+							_Tweet.Options = PostOptions.AddToAlbum;
+							break;
+						}
+						case 2: // Cancel
+						{
+							return;
+						}
+					}
+					
+					if (_Tweet != null && _Tweet.Image != null)
+						AppDelegateIPhone.AIphone.GotoToShare(_Tweet, AppDelegateIPhone.buzzNavigationController);
+				};
+				
+				actionSheet.ShowFromTabBar (AppDelegateIPhone.tabBarController.TabBar);
+			}					
 			
 			private void SeeKeywords(object sender, EventArgs e)
 			{				
@@ -241,7 +281,7 @@ namespace MSP.Client
 			}
 			
 			private void LikeAction()
-			{
+			{				
 				try
 				{				
 					int imageID = _Tweet.Image.Id;
@@ -287,6 +327,9 @@ namespace MSP.Client
 			
 			private void GotoAttention(object sender, EventArgs e)
 			{
+				if (AppDelegateIPhone.tabBarController == null)
+					return;
+				
 				bool isPhotoOwner = _Tweet.Image.UserId == AppDelegateIPhone.AIphone.MainUser.Id;
 				
 				var actionSheet = new UIActionSheet("Post options")

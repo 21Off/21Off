@@ -21,9 +21,22 @@ namespace MSP.Client.DataContracts
         }
 
         public int ImageId { get; set; }
+        public int AlbumId { get; set; }
 
         public ResponseStatus ResponseStatus { get; set; }
     }
+	
+    public class AddNewImageToAlbum
+    {
+        public StoreNewImage Image { get; set; }
+        public int IdAlbum { get; set; }
+    }
+
+    public class CreateAlbumWithImage
+    {
+        public string Title { get; set; }
+        public StoreNewImage Image { get; set; }
+    }	
 
 
     [DataContract]

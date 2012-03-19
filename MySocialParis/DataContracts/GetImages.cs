@@ -50,8 +50,11 @@ namespace MSP.Client.DataContracts
         public double Longitude { set; get; }
 
         /// <summary>Image shot position altitude</summary>
+        //[DataMember]
+        //public double Altitude { set; get; }
+		
         [DataMember]
-        public double Altitude { set; get; }
+        public int IdAlbum { get; set; }	
 
 		#region IEqualityComparer implementation
 		public bool Equals (object x, object y)
@@ -64,6 +67,23 @@ namespace MSP.Client.DataContracts
 			return Id;
 		}
 		#endregion
+    }
+	
+   public class Albums
+    {
+        [AutoIncrement]
+        public int Id { get; set; }
+
+        public string Title { set; get; }
+    }
+
+    public class ImageAlbumRelation
+    {
+        [AutoIncrement]
+        public int Id { get; set; }
+
+        public int IdImage { set; get; }
+        public int IdAlbum { set; get; }
     }
 	
 	//[Description("Find images by geolocation and filter type")]
@@ -109,6 +129,7 @@ namespace MSP.Client.DataContracts
             this.RecentImages = new List<Image>();
 			this.FriendsImages = new List<Image>();
 			this.LikedImages = new List<Image>();
+			this.EventsImages = new List<Image>();
         }
 
         public ResponseStatus ResponseStatus { get; set; }

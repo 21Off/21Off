@@ -10,7 +10,7 @@ using System.Text;
 namespace MSP.Client
 {
 	public class JsonUtility
-	{
+	{				
 		internal struct Request {
 			public string Url;
 			public Action<Stream> Callback;
@@ -23,6 +23,9 @@ namespace MSP.Client
 				CallbackOnMainThread = callbackOnMainThread;
 			}
 		}
+		
+        private const string UserName = "user";
+        private const string Password = "pass";		
 		
 		const int MaxPending = 200;
 		static Queue<Request> queue = new Queue<Request> ();
@@ -199,6 +202,8 @@ namespace MSP.Client
 			request.AutomaticDecompression = DecompressionMethods.GZip;
 			request.Method = "PUT";
 			request.ContentType = "application/json";
+			request.PreAuthenticate = true;
+			request.Credentials = new NetworkCredential(UserName, Password);
 			
 			request.BeginGetRequestStream(ar => 
 			{

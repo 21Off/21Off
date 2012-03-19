@@ -31,9 +31,14 @@ namespace MSP.Client
 
 		}
 		
+		public PhotoPostViewController(): base("PhotoPostViewController", null)
+		{
+			postOptions = PostOptions.PostNew;
+		}
+		
 		public PhotoPostViewController (UINavigationController msp, UIImage image, CLLocation photoLocation, 
 		                                string locationMapPhotoCapture) 
-			: base("PhotoPostViewController", null)
+			: this()
 		{
 			this._image = image;
 			this._MSP = msp;
@@ -49,16 +54,17 @@ namespace MSP.Client
 		
 		
 		public PhotoPostViewController (UINavigationController msp, UIImage image, Tweet tweet) 
-						: base("PhotoPostViewController", null)
+						: this()
 		{
 			this._image = image;
 			this._MSP = msp;
 			this.eventImage = tweet.Image;
-			
-			PhotoLocation = new CLLocation(eventImage.Latitude, eventImage.Longitude);		
-			
-			this.root = CreateRoot ();
+			this.postOptions = tweet.Options;
 			isForEvent = true;
+			
+			PhotoLocation = new CLLocation(eventImage.Latitude, eventImage.Longitude);
+			
+			this.root = CreateRoot ();			
 			
 			Description.Value = eventImage.Name;
 			Keywords.AddRange(tweet.Keywords);
@@ -66,18 +72,21 @@ namespace MSP.Client
 		
 		#endregion	
 		
-		#region Members
+		#region Fields
 			
 		private List<Keyword> Keywords = new List<Keyword>();
 		private UINavigationController _MSP;
 		private RootElement root;
 		private UIImage _image;
 		private Image eventImage;
+		private PostOptions postOptions;
 		private bool isForEvent;
+		private bool isOnKeywordScreen = false;
 		
 		public MyEntryElement Description {get;set;}
 		public MyEntryElement FirstComment {get;set;}
 		public CLLocation PhotoLocation {get;set;}
+		private BooleanElement createAlbumCbx;
 		
 		private DialogViewController _dialogView;
 		private RectangleF mapFrame;
@@ -118,9 +127,7 @@ namespace MSP.Client
 			base.ViewDidAppear (animated);
 		}	
 				
-		#endregion
-		
-		private bool isOnKeywordScreen = false;
+		#endregion				
 		
 		#region Events
 				
@@ -149,6 +156,8 @@ namespace MSP.Client
 				
 				section.Clear();
 				root[1].Clear();
+				if (eventImage == null)
+					root[2].Clear();
 				
 				section.Add(CreateLoadMore(section));
 				SetTitleText("keywords", "enter keywords");
@@ -201,6 +210,8 @@ namespace MSP.Client
 				section.RemoveRange(0, section.Count);
 				section.Add(Description);
 				root[1].Add(FirstComment);
+				if (eventImage == null)
+					root[2].Add(createAlbumCbx);
 				SetTitleText("post", "describe your post");
 				
 				this.View.BringSubviewToFront(topBar);
@@ -290,6 +301,45 @@ namespace MSP.Client
 		{
 			// Activate row editing & deleting
 			//dvc.TableView.SetEditing (true, true);
+		}		
+		
+		private Image GetPhoto(AppDelegateIPhone AppDel, ref string jpgstr)
+		{			
+			string desc = Description == null ? null : Description.Value;
+			
+			var image = new Image() 
+			{
+				Name = desc, 
+				UserId = AppDel.MainUser.Id,
+				Longitude = PhotoLocation.Coordinate.Longitude,
+				Latitude = PhotoLocation.Coordinate.Latitude,
+				Time = DateTime.UtcNow,
+			};
+			
+			var err = new NSError(new NSString("Photo"), 1);				
+			jpgstr = Path.Combine(ImageStore.TmpDir, string.Format("{0}.jpg", image.Id));
+			int level = Util.Defaults.IntForKey ("sizeCompression");
+			
+			var size = _image.Size;
+			float maxWidth = 640;
+			switch (level){
+			case 0:
+				maxWidth = 640;
+				break;
+			case 1:
+				maxWidth = 1024;
+				break;
+			default:
+				maxWidth = size.Width;
+				break;
+			}
+			
+			if (size.Width > maxWidth || size.Height > maxWidth)
+				_image = GraphicsII.Scale (_image, new SizeF (maxWidth, maxWidth*size.Height/size.Width));				
+			
+			_image.AsJPEG((float)0.7).Save(jpgstr, true, out err);
+			
+			return image;
 		}
 				
 		private void SavePhoto()
@@ -301,41 +351,9 @@ namespace MSP.Client
 			
 			try
 			{
-				var AppDel = AppDelegateIPhone.AIphone;				
-				string desc = Description == null ? null : Description.Value;
-				
-				var image = new Image() 
-				{
-					Name = desc, 
-					UserId = AppDel.MainUser.Id,
-					Longitude = PhotoLocation.Coordinate.Longitude,
-					Latitude = PhotoLocation.Coordinate.Latitude,
-					Altitude = PhotoLocation.Altitude,
-					Time = DateTime.UtcNow,
-				};
-				
-				var err = new NSError(new NSString("Photo"), 1);				
-				var jpgstr = Path.Combine(ImageStore.TmpDir, string.Format("{0}.jpg", image.Id));
-				int level = Util.Defaults.IntForKey ("sizeCompression");
-				
-				var size = _image.Size;
-				float maxWidth = 640;
-				switch (level){
-				case 0:
-					maxWidth = 640;
-					break;
-				case 1:
-					maxWidth = 1024;
-					break;
-				default:
-					maxWidth = size.Width;
-					break;
-				}
-				
-				if (size.Width > maxWidth || size.Height > maxWidth)
-					_image = GraphicsII.Scale (_image, new SizeF (maxWidth, maxWidth*size.Height/size.Width));				
-				
-				_image.AsJPEG((float)0.7).Save(jpgstr, true, out err);				
+				var AppDel = AppDelegateIPhone.AIphone;
+				string jpgstr = null;
+				Image image = GetPhoto(AppDel, ref jpgstr);
 								
 				var comments = new List<Comment>();
 				if (!string.IsNullOrWhiteSpace(FirstComment.Value))
@@ -344,50 +362,39 @@ namespace MSP.Client
 		            { 
 						Name = FirstComment.Value, 
 						UserId = AppDel.MainUser.Id, 
-						Time = DateTime.UtcNow,
-						
+						Time = DateTime.UtcNow,						
 						// ParentId : Set this on server side on post time 
 					});
 				}
-				image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments, eventImage == null ? 0 : eventImage.Id);
 				
+				if (postOptions == PostOptions.PostNew)
+				{
+					image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments, 
+					                                     eventImage == null ? 0 : eventImage.Id);
+				}
+				if (postOptions == PostOptions.CreateAlbum)
+				{
+					image = AppDel.ImgServ.CreateAlbumWithImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments, 
+				                                    image.Name, eventImage == null ? 0 : eventImage.Id);					
+				}
+				if (postOptions == PostOptions.ShareDescriptions)
+				{
+					image = AppDel.ImgServ.StoreNewImage(image, jpgstr, LocationMapPhotoCapture, Keywords, comments, 
+                                    eventImage == null ? 0 : eventImage.Id);						
+				}
+				if (postOptions == PostOptions.AddToAlbum)
+				{
+					image = AppDel.ImgServ.AddNewImageToAlbum(image, jpgstr, LocationMapPhotoCapture, Keywords, 
+                              comments, eventImage.IdAlbum, eventImage == null ? 0 : eventImage.Id);
+				}
+								
 				InvokeOnMainThread(()=>
 				{
 					if (image.Id == 0)
 						return;
 					
-					string img = string.Format("http://storage.21offserver.com/files/{0}/{1}.jpg", image.UserId, image.Id);
-					if (_Settings.twitter.Value)
-					{
-						var twitterApp = new Twitter.TwitterApplication(this);
-						if (twitterApp.LoggedIn())
-						{
-							twitterApp.Publish("21Off", img, image.Name ?? "No comment" , img);
-						}
-						else
-						{
-							using(UIAlertView alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
-							{ alert.Show();}
-						}
-					}
-					
-					if (_Settings.facebook.Value)
-					{
-						var faceBookApp = new FaceBook.FaceBookApplication(this);
-						if (faceBookApp.LoggedIn())
-						{
-							faceBookApp.Publish("21Off", img, image.Name ?? "No comment", img);
-						}
-						else
-						{
-							using(UIAlertView alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
-							{ alert.Show();}
-						}
-					}
-				});
-				
-				InvokeOnMainThread(()=>
-				{
+					NetworkPost(image);
+
 					if (eventImage != null)
 					{
 						_MSP.PopViewControllerAnimated(true);
@@ -398,13 +405,13 @@ namespace MSP.Client
 						_MSP.PopViewControllerAnimated(true);
 						_MSP.SetViewControllers(new UIViewController[0], false);
 						
-						var aaa =  _MSP.TabBarController;			
+						var aaa =  _MSP.TabBarController;
 						aaa.SelectedViewController = aaa.ViewControllers[0];
 						
 						var rotatingTb = (RotatingTabBar)AppDelegateIPhone.tabBarController;
 						rotatingTb.SelectTab(0);
 					}
-				});				
+				});
 			}
 			catch (Exception ex)
 			{
@@ -412,24 +419,64 @@ namespace MSP.Client
 			}			
 		}
 		
+		private void NetworkPost(Image image)
+		{
+			string img = string.Format("http://storage.21offserver.com/files/{0}/{1}.jpg", image.UserId, image.Id);
+			if (_Settings.twitter.Value)
+			{
+				var twitterApp = new Twitter.TwitterApplication(this);
+				if (twitterApp.LoggedIn())
+				{
+					twitterApp.Publish("21Off", img, image.Name ?? "No comment" , img);
+				}
+				else
+				{
+					using(var alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
+					{ alert.Show();}
+				}
+			}
+			if (_Settings.facebook.Value)
+			{
+				var faceBookApp = new FaceBook.FaceBookApplication(this);
+				if (faceBookApp.LoggedIn())
+				{
+					faceBookApp.Publish("21Off", img, image.Name ?? "No comment", img);
+				}
+				else
+				{
+					using(var alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
+					{ alert.Show();}
+				}
+			}
+		}
+		
 		private RootElement CreateRoot ()
 		{
 			Description = new MyEntryElement ("title", null, false, UIReturnKeyType.Default);
 			FirstComment = new MyEntryElement ("first comment", null, false, UIReturnKeyType.Default);
 			
-			return new RootElement ("post") {
-				new Section ()
-				{ 
-					Description,
-				},
-				new Section()
+			if (eventImage != null)
+			{
+				return new RootElement ("post") {
+					new Section () {  Description, },
+					new Section() { FirstComment, }
+				};
+			}
+			else
+			{
+				createAlbumCbx = new BooleanElement (Locale.GetText ("create album"), false);
+				createAlbumCbx.ValueChanged += (sender, e) => 
 				{
-					FirstComment,
-				}
-			};
+					postOptions = createAlbumCbx.Value ? PostOptions.CreateAlbum : PostOptions.PostNew;
+				};
+				return new RootElement ("post") {
+					new Section () {  Description, },
+					new Section() { FirstComment, },
+					new Section() { createAlbumCbx }
+				};
+			}
 		}
-		
-		
+				
 		private List<Keyword> GetKeyword()
 		{
 			Section section = this.root.ElementAtOrDefault(0);
