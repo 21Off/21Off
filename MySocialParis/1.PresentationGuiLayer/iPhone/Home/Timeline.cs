@@ -54,28 +54,44 @@ namespace MSP.Client
 			{
 				ReloadTimeline();
 			}		
-		}		
-
-		public void OnPhotoClicked(BuzzPhoto photo)
-		{			
-			if (_MSP == null)
-				return;
+		}
+		
+		private void LoadAlbum(Image image)
+		{
+			Action act = () =>
+			{						
+				try
+				{
+					AlbumsResponse response = AppDelegateIPhone.AIphone.ImgServ.GetAlbum(0, image.IdAlbum);
+					InvokeOnMainThread(()=>
+                    {						
+						_MSP.PushViewController(new AlbumDetailsViewController(_MSP, AppDelegateIPhone.AIphone, response.Album), true);
+					});
+				}
+				catch (Exception ex)
+				{
+					Util.LogException("Initialize GetAlbum", ex);
+				}
+			};
 			
-			if (photo.Photo == null)
-				return;		
-			
+			AppDelegateIPhone.ShowRealLoading(View, "Loading album details", null, act);
+		}
+		
+		
+		private void LoadPhoto(Image image)
+		{
 			Action act = ()=>
 			{			
 				try
 				{
-					int askerId = AppDelegateIPhone.AIphone.MainUser.Id;
-					FullUserResponse fullUser = AppDelegateIPhone.AIphone.UsersServ.GetFullUserById(photo.Photo.UserId, askerId);					
+					int askerId = AppDelegateIPhone.AIphone.GetMainUserId();
+					FullUserResponse fullUser = AppDelegateIPhone.AIphone.UsersServ.GetFullUserById(image.UserId, askerId);					
 					if (fullUser == null)
 						return;
 					
 					BeginInvokeOnMainThread(()=>
 					{
-						var a = new PhotoDetailsViewController(_MSP, fullUser, photo.Photo, false);
+						var a = new PhotoDetailsViewController(_MSP, fullUser, image, false);
 						_MSP.PushViewController(a, true);
 					});
 				}
@@ -84,7 +100,21 @@ namespace MSP.Client
 					Util.LogException("OnPhotoClicked", ex);
 				}
 			};
-			AppDelegateIPhone.ShowRealLoading(View, "Loading photo details", null, act);
+			AppDelegateIPhone.ShowRealLoading(View, "Loading photo details", null, act);			
+		}
+
+		public void OnPhotoClicked(BuzzPhoto photo)
+		{			
+			if (_MSP == null)
+				return;
+			
+			if (photo.Photo == null)
+				return;
+			
+			if (_FilterType == FilterType.Events && photo.Photo.IdAlbum > 0)
+				LoadAlbum(photo.Photo);
+			else
+				LoadPhoto(photo.Photo);			
 		}
 		
 		#endregion

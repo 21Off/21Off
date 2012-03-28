@@ -92,6 +92,9 @@ namespace MSP.Client
 		
 		public override void CommitEditingStyle (UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
 		{
+			if (AppDelegateIPhone.AIphone.MainUser == null)
+				return;
+			
 			//
 			// In this method, we need to actually carry out the request
 			//

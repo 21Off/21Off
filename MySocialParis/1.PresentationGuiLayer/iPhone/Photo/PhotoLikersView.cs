@@ -59,7 +59,7 @@ namespace MSP.Client
 		{
 			try
 			{
-				bool isMyPost = AppDelegateIPhone.AIphone.MainUser.Id == _photo.UserId;
+				bool isMyPost = AppDelegateIPhone.AIphone.GetMainUserId() == _photo.UserId;
 				
 				var fullLikes = AppDelegateIPhone.AIphone.LikesServ.GetFullLikesOfImage(_photo.Id);
 				if (fullLikes == null)

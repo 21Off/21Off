@@ -421,7 +421,7 @@ namespace MSP.Client
 		{
 			try
 			{
-				User user = AppDelegateIPhone.AIphone.MainUser;
+				var userId = AppDelegateIPhone.AIphone.GetMainUserId();
 				GeoLoc geoLoc = LocType == LocalisationType.Global ? null : (Location == null ? null :
 					new GeoLoc()
 				{
@@ -429,7 +429,7 @@ namespace MSP.Client
 					Longitude = Location.Coordinate.Longitude,
 				});				
 				
-				return AppDelegateIPhone.AIphone.ImgServ.GetFullImageList(FilterType.All, geoLoc, 0, 21, user.Id);
+				return AppDelegateIPhone.AIphone.ImgServ.GetFullImageList(FilterType.All, geoLoc, 0, 21, userId);
 			}
 			catch (Exception ex)
 			{
@@ -440,7 +440,7 @@ namespace MSP.Client
 		
 		public IEnumerable<Image> GetDbImages(FilterType _FilterType, int start, int count)
 		{			
-			User user = AppDelegateIPhone.AIphone.MainUser;
+			var userId = AppDelegateIPhone.AIphone.GetMainUserId();
 			GeoLoc geoLoc = LocType == LocalisationType.Global ? null : (Location == null ? null :
 				new GeoLoc()
 			{
@@ -448,7 +448,7 @@ namespace MSP.Client
 				Longitude = Location.Coordinate.Longitude,
 			});				
 			
-			return AppDelegateIPhone.AIphone.ImgServ.GetImageList(_FilterType, geoLoc, start, count, user.Id);	
+			return AppDelegateIPhone.AIphone.ImgServ.GetImageList(_FilterType, geoLoc, start, count, userId);	
 		}		
 		
 		#endregion

@@ -166,7 +166,7 @@ namespace MSP.Client
 				});
 			}
 			
-			int mainUserID = AppDelegateIPhone.AIphone.MainUser.Id;
+			int mainUserID = AppDelegateIPhone.AIphone.GetMainUserId();
 				
 			if (user.Id != mainUserID)				
 			{			
@@ -242,7 +242,7 @@ namespace MSP.Client
 			if (user == null)
 				return;
 			
-			int mainUserID = AppDelegateIPhone.AIphone.MainUser.Id;
+			int mainUserID = AppDelegateIPhone.AIphone.GetMainUserId();
 				
 			if (user.Id == mainUserID)
 				return;
@@ -366,7 +366,7 @@ namespace MSP.Client
 		{
 			try
 			{
-				int askerId = AppDelegateIPhone.AIphone.MainUser.Id;
+				int askerId = AppDelegateIPhone.AIphone.GetMainUserId();
 				FullUserResponse fullUser = AppDelegateIPhone.AIphone.UsersServ.GetFullUserById(userId, askerId);
 				if (fullUser == null) return;				
 												

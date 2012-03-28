@@ -1,14 +1,12 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
   <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" selected="True" />
+            <Node name="21Off.Client" selected="True" />
           </Node>
-          <Node name="DialogExtension" expanded="True" />
-          <Node name="MonoTouch.Dialog" expanded="True" />
         </State>
       </Pad>
     </Pads>
@@ -17,6 +15,7 @@
     <BreakpointStore>
       <Breakpoint file="/Users/Valeriu/Projects/MySocialParis/Share/FaceBook/FacebookAuth.cs" line="191" />
       <Breakpoint file="/Users/Valeriu/Projects/21Off/Share/FaceBook/FaceBookApplication.cs" line="159" />
+      <Breakpoint file="/Users/Valeriu/Projects/21Off/MySocialParis/1.PresentationGuiLayer/iPhone/Photo/PhotoPostViewController.xib.cs" line="370" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

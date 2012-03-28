@@ -199,7 +199,7 @@ namespace MSP.Client
 		
 		private void GoToUserPhotos(int userId)
 		{			
-			if (userId == AppDelegateIPhone.AIphone.MainUser.Id)
+			if (userId == AppDelegateIPhone.AIphone.GetMainUserId())
 				return;
 			
 			Action act = ()=>
@@ -217,7 +217,7 @@ namespace MSP.Client
 		
 		private void DeleteAction(Tweet tweet)
 		{			
-			bool isPhotoOwner = tweet.Image.UserId == AppDelegateIPhone.AIphone.MainUser.Id;
+			bool isPhotoOwner = tweet.Image.UserId == AppDelegateIPhone.AIphone.GetMainUserId();
 			
 			var section = Root[0];
 			for (int i = 0; i < section.Elements.Count; i++)

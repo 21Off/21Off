@@ -125,7 +125,7 @@ namespace MSP.Client
 				{			
 					try
 					{
-						int askerId = AppDelegateIPhone.AIphone.MainUser.Id;
+						int askerId = AppDelegateIPhone.AIphone.GetMainUserId();
 						FullUserResponse fullUser = AppDelegateIPhone.AIphone.UsersServ.GetFullUserById(img.UserId, askerId);
 						if (fullUser == null)
 							return;

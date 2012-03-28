@@ -82,7 +82,7 @@ namespace MSP.Client
 				this.goToUserPhotos = goToMembersPhotoAction;
 				
 				blocks = new List<Block> ();
-				bool isMyImage = (tweet.User.Id == AppDelegateIPhone.AIphone.MainUser.Id);
+				bool isMyImage = (tweet.User.Id == AppDelegateIPhone.AIphone.GetMainUserId());
 				if (googleLogo == null)
 					googleLogo = UIImage.FromBundle("Images/googleLogo.PNG");
 				
@@ -285,7 +285,7 @@ namespace MSP.Client
 				try
 				{				
 					int imageID = _Tweet.Image.Id;
-					int likerID = AppDelegateIPhone.AIphone.MainUser.Id;
+					int likerID = AppDelegateIPhone.AIphone.GetMainUserId();
 
 					var like = new Like()
 					{ 
@@ -307,7 +307,7 @@ namespace MSP.Client
 			
 			private void PhotoClicked(object sender, EventArgs e)
 			{
-				if (_Tweet.User.Id == AppDelegateIPhone.AIphone.MainUser.Id)
+				if (_Tweet.User.Id == AppDelegateIPhone.AIphone.GetMainUserId())
 					return;
 				
 				photoClickCnt++;
@@ -330,7 +330,7 @@ namespace MSP.Client
 				if (AppDelegateIPhone.tabBarController == null)
 					return;
 				
-				bool isPhotoOwner = _Tweet.Image.UserId == AppDelegateIPhone.AIphone.MainUser.Id;
+				bool isPhotoOwner = _Tweet.Image.UserId == AppDelegateIPhone.AIphone.GetMainUserId();
 				
 				var actionSheet = new UIActionSheet("Post options")
 				{

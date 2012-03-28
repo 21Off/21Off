@@ -142,6 +142,9 @@ namespace MSP.Client
 		
 		private void GetNotifications(object o)
 		{
+			if (MainUser == null)
+				return;
+			
 			if (asking)
 				return;
 			
@@ -151,7 +154,7 @@ namespace MSP.Client
 			{
 				double last = Util.Defaults.DoubleForKey("LastUpdate");
 				long ticks = (long)last;
-				
+								
 				var myId = MainUser.Id;
 				var count = AppDelegateIPhone.AIphone.ActivServ.GetNotificationsCountSince(myId, ticks);
 				

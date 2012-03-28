@@ -18,6 +18,13 @@ namespace MSP.Client
 		public User MainUser {get;set;}
 		public static AppDelegateIPhone AIphone {get;set;}
 		
+		public int GetMainUserId()
+		{
+			if (MainUser != null)
+				return MainUser.Id;
+			return -1;
+		}
+		
 		// This method is invoked when the application has loaded its UI and its ready to run
 		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
 		{

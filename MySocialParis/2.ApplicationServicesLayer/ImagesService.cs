@@ -287,7 +287,16 @@ namespace MSP.Client
 			};
 			
 			return image;
-		}		
+		}	
+		
+		public static Albums JsonToAlbum(JsonObject obj)
+		{
+			return new Albums()
+			{
+				Id = Convert.ToInt32(obj["Id"].ToString()),
+				Title = obj.ContainsKey("Title") ? obj["Title"].ToString().Replace("\"","") : null,
+			};			
+		}	
 		
 		public IEnumerable<Image> GetImagesOfUser(int userId, DateTime since)
 		{
@@ -321,8 +330,119 @@ namespace MSP.Client
 			
 			we.WaitOne();
 			
-			return images;				
-		}				
+			return images;
+		}	
+		
+		public AlbumsResponse GetAlbum(int userId, int albumId)
+		{
+			try
+			{
+				var req = new GetAlbum() { Id = albumId };				
+				var uri = new Uri("http://storage.21offserver.com/json/syncreply/GetAlbum");
+				
+				var slim = new ManualResetEventSlim(false);
+				AlbumsResponse fullImgResp = null;
+				
+				ThreadPool.QueueUserWorkItem(o=> 
+                {			
+					try
+					{
+						var request = (HttpWebRequest) WebRequest.Create (uri);
+						request.Method = "PUT";
+						using (var reqStream = request.GetRequestStream())
+						{				
+							ServiceStack.Text.JsonSerializer.SerializeToStream(req, typeof(GetAlbum), reqStream);
+						};
+						using (var response = request.GetResponse())
+						{
+							using (var stream = response.GetResponseStream())
+							{
+								var json = JsonObject.Load(stream);
+								fullImgResp = new AlbumsResponse()
+								{
+									Album = JsonToAlbum((JsonObject)json["Album"]),
+								};
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						Util.LogException("GetAlbum", ex);
+					}
+					slim.Set();
+				});
+				
+				slim.Wait(6000);
+				
+				return fullImgResp;
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("GetAlbum", ex);
+				return null;
+			}
+		}		
+		
+		public ImagesResponse GetAlbumImages(int startIndex, int maximumImages, int userId, int albumId)
+		{
+			try
+			{
+				var req = new AlbumImages() { WhereMyId = userId, Max = maximumImages, Start = startIndex, AlbumId = albumId };				
+				var uri = new Uri("http://storage.21offserver.com/json/syncreply/AlbumImages");
+				
+				var slim = new ManualResetEventSlim(false);
+				ImagesResponse fullImgResp = null;
+				
+				ThreadPool.QueueUserWorkItem(o=> 
+                {			
+					try
+					{
+						var request = (HttpWebRequest) WebRequest.Create (uri);
+						request.Method = "PUT";
+						using (var reqStream = request.GetRequestStream())
+						{				
+							ServiceStack.Text.JsonSerializer.SerializeToStream(req, typeof(AlbumImages), reqStream);
+						};
+						using (var response = request.GetResponse())
+						{
+							using (var stream = response.GetResponseStream())
+							{
+								var json = JsonObject.Load(stream);
+								
+								var images = new List<Image>();
+								if (json.ContainsKey("Album"))
+								{
+									Albums albums = JsonToAlbum((JsonObject)json["Album"]);
+								}
+								
+								foreach (JsonObject obj in json["Images"])
+								{		
+								   	images.Add(JsonToImage(obj));
+								}
+								fullImgResp = new ImagesResponse();
+								fullImgResp.Images = images;
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+						Util.LogException("GetAlbumImages", ex);
+					}
+					slim.Set();
+				});
+				
+				slim.Wait(6000);
+				
+				return fullImgResp;
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("GetAlbumImages", ex);
+				return null;
+			}
+		}
+		
+		
 		
 		public AllImagesResponse GetFullImageList (FilterType filterType, GeoLoc geoLoc, int startIndex, 
 			int maximumImages, int userId)			

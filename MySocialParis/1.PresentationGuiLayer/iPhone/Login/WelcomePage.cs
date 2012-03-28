@@ -240,34 +240,21 @@ namespace MSP.Client
 		{
 			try
 			{
-				AllImagesResponse allImgResp = GetAllImages();
+				GeoLoc geoLoc = LocType == LocalisationType.Global ? null : (Location == null ? null :
+					new GeoLoc()
+				{
+					Latitude = Location.Coordinate.Latitude,
+					Longitude = Location.Coordinate.Longitude,
+				});
+				
+				AllImagesResponse allImgResp = AppDelegateIPhone.AIphone.ImgServ.GetFullImageList(FilterType.All, geoLoc, 0, 21, -1);
 				likedMediaView.ShowLoadedImages(allImgResp == null ? null : allImgResp.RecentImages, request);	
 			}
 			catch (Exception ex)
 			{
 				Util.LogException("LoadTimelineImages",ex);			
 			}
-		}
-		
-		public AllImagesResponse GetAllImages()
-		{
-			try
-			{
-				GeoLoc geoLoc = LocType == LocalisationType.Global ? null : (Location == null ? null :
-					new GeoLoc()
-				{
-					Latitude = Location.Coordinate.Latitude,
-					Longitude = Location.Coordinate.Longitude,
-				});				
-				
-				return AppDelegateIPhone.AIphone.ImgServ.GetFullImageList(FilterType.All, geoLoc, 0, 21, -1);
-			}
-			catch (Exception ex)
-			{
-				Util.LogException("GetAllImages", ex);
-				return null;
-			}
-		}		
+		}	
 
 		System.Collections.Generic.IEnumerable<Image> IMapLocationRequest.GetDbImages (FilterType filterType, int start, int count)
 		{

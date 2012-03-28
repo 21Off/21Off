@@ -471,6 +471,11 @@
     <Compile Include="Data\DbImageStore.cs" />
     <Compile Include="Data\SizeDB.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\AlbumDetailsViewController.cs" />
+    <Compile Include="1.PresentationGuiLayer\iPhone\Media\AlbumDetailsViewController.designer.cs">
+      <DependentUpon>AlbumDetailsViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="1.PresentationGuiLayer\iPhone\BaseMapViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />
@@ -502,6 +507,7 @@
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\PreferencesViewController.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Me\EmptyViewController.xib" xmlns="" />
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Login\WelcomePage.xib" />
+    <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\Media\AlbumDetailsViewController.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

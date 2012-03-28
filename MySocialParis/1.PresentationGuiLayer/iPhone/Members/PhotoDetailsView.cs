@@ -138,7 +138,7 @@ namespace MSP.Client
 		
 		private void DeleteAction(Tweet tweet)
 		{			
-			bool isPhotoOwner = tweet.Image.UserId == AppDelegateIPhone.AIphone.MainUser.Id;
+			bool isPhotoOwner = tweet.Image.UserId == AppDelegateIPhone.AIphone.GetMainUserId();
 			
 			var section = Root[0];
 			for (int i = 0; i < section.Elements.Count; i++)

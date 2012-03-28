@@ -175,7 +175,7 @@ namespace MSP.Client
 			
 			Action act = () =>
 			{
-				int askerId = AppDelegateIPhone.AIphone.MainUser.Id;
+				int askerId = AppDelegateIPhone.AIphone.GetMainUserId();
 				FullUserResponse fullUser = AppDelegateIPhone.AIphone.UsersServ.GetFullUserById(photo.UserId, askerId);
 				InvokeOnMainThread(()=>				                   
 				{

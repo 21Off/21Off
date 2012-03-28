@@ -69,12 +69,26 @@ namespace MSP.Client.DataContracts
 		#endregion
     }
 	
-   public class Albums
+   	public class Albums
     {
-        [AutoIncrement]
         public int Id { get; set; }
-
         public string Title { set; get; }
+    }
+	
+    public class GetAlbum
+    {
+        public int Id { get; set; }
+    }	
+	
+    public class AlbumsResponse
+    {
+        public AlbumsResponse()
+        {
+            ResponseStatus = new ResponseStatus();
+        }
+
+        public ResponseStatus ResponseStatus { get; set; }
+        public Albums Album { get; set; }
     }
 
     public class ImageAlbumRelation
@@ -86,7 +100,6 @@ namespace MSP.Client.DataContracts
         public int IdAlbum { set; get; }
     }
 	
-	//[Description("Find images by geolocation and filter type")]
     public class Images
     {
         public int? Id { get; set; }
@@ -98,6 +111,14 @@ namespace MSP.Client.DataContracts
 		public int Max {get;set;}
 		public int WhereMyId {get;set;}
     }
+	
+	public class AlbumImages
+	{
+		public int? Start {get;set;}
+		public int? Max {get;set;}
+		public int? WhereMyId {get;set;}
+		public int AlbumId {get;set;}
+	}	
 	
 	[DataContract(Namespace = ExampleConfig.DefaultNamespace)]
 	public enum FilterType : int

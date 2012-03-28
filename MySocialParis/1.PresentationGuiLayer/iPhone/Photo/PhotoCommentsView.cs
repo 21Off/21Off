@@ -85,7 +85,9 @@ namespace MSP.Client
 					
 					NSTimer.CreateScheduledTimer (0.1, delegate {
 						
-						Root[0].Add(CreateLoadMore(Root[0]));
+						if (AppDelegateIPhone.AIphone.MainUser != null)
+							Root[0].Add(CreateLoadMore(Root[0]));
+						
 						foreach (Comment comment in comments)
 						{
 							var uicomment = new UIComment()
@@ -109,6 +111,9 @@ namespace MSP.Client
 			}
 		}	
 		
+		/// <summary>
+		/// Called only on user authentification
+		/// </summary>
 		private void AddNewCommentAsync(AddLoadMoreWithImageElement lme, Section section)
 		{
 			try
@@ -144,6 +149,9 @@ namespace MSP.Client
 			}
 		}
 		
+		/// <summary>
+		/// Called only on user authentification
+		/// </summary>
 		private Element CreateLoadMore(Section section)
 		{
            var loadMore2 = new AddLoadMoreWithImageElement("Add comment", ImageStore.DefaultImage, lme => {
