@@ -654,6 +654,8 @@
     <Content Include="Images\forward%402x.png" />
     <Content Include="Images\Ver4\pagedegarde.png" />
     <Content Include="Images\Ver4\pagedegarde%402x.png" />
+    <Content Include="Images\Ver4\cadre100_album.png" />
+    <Content Include="Images\Ver4\cadre200_album.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Share\Share.csproj">

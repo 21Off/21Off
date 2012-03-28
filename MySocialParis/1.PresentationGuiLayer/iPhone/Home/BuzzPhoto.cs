@@ -39,7 +39,7 @@ namespace MSP.Client
 			
 			text.Text = title;			
 			buzz.Update(photo);
-		}		
+		}	
 	}
 }
 

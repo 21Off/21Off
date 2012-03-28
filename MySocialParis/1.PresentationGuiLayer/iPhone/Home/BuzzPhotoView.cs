@@ -1,12 +1,12 @@
 using System;
 using System.Drawing;
 using MonoTouch.CoreAnimation;
+using MonoTouch.Dialog.Utilities;
 using MonoTouch.Foundation;
 using MonoTouch.ObjCRuntime;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
 using TweetStation;
-using MonoTouch.Dialog.Utilities;
 
 namespace MSP.Client
 {
@@ -18,7 +18,8 @@ namespace MSP.Client
 		private Image _Image;
 		private RectangleF imgSize;
 		private SizeF photoSize;		
-		private static UIImage Value;
+		private static UIImage CompositeValue;
+		private static UIImage AlbumFond;
 		
 		#endregion
 		
@@ -33,14 +34,20 @@ namespace MSP.Client
 		public BuzzPhotoView (Image image, SizeF size) : base(new RectangleF (new PointF(0, 0), size))
 		{
 			photoSize = size;
-			imgSize = new RectangleF (2 * 6, 2 * 6, 2 * (photoSize.Width - 2 * 6), 2 * (photoSize.Height- 2* 6));
+			imgSize = new RectangleF (2 * 6, 2 * 6, 2 * (photoSize.Width - 2 * 6), 2 * (photoSize.Height- 2* 6));			
 			
-			Value = Value ?? UIImageUtils.MakeEmpty(new Size(2 * ((int)photoSize.Width - 2 * 6), 2 * ((int)photoSize.Height) - 2 * 6));
-						
-			UIImage frame = Graphics.GetImgResource("cadre200");
-			UIImage composite = GetCompImage(frame, Value);
+			if (CompositeValue == null)
+			{
+				var emptyImg = UIImageUtils.MakeEmpty(new Size(2 * ((int)photoSize.Width - 2 * 6), 2 * ((int)photoSize.Height) - 2 * 6));									
+				
+				UIImage frame = Graphics.GetImgResource("cadre200");
+				UIImage frameAlbum = Graphics.GetImgResource("cadre200_album");
+				
+				CompositeValue = GetCompImage(frame, emptyImg);				
+				AlbumFond = GetCompImage(frameAlbum, emptyImg);
+			}			
 
-			this.SetBackgroundImage (composite, UIControlState.Normal);
+			this.SetBackgroundImage (IsAlbum(image) ? AlbumFond : CompositeValue, UIControlState.Normal);
 			
 			Update(image);
 		}
@@ -56,10 +63,12 @@ namespace MSP.Client
 		protected override void Dispose (bool disposing)
 		{
 			if (disposing) {
-				if (Value != null) {
-					Value.Dispose ();
-					Value = null;
+				/*
+				if (CompositeValue != null) {
+					CompositeValue.Dispose ();
+					CompositeValue = null;
 				}
+				*/
 				if (photoImage != null)
 				{
 					photoImage.Dispose();
@@ -76,38 +85,41 @@ namespace MSP.Client
 			if (image != null)
 			{
 				var url = UrlStore.GetPicUrlFromId (image.Id, image.UserId, SizeDB.Size100);
-				photoImage = ImageLoader.DefaultRequestImage(url, this);
-			}
+				photoImage = ImageLoader.DefaultRequestImage(url, this);			
 			
-			if (photoImage != null)
-			{
-				RefreshImage(photoImage);			
+				RefreshImage(photoImage);
 			}
 			else
-			{
-				RefreshImage(Value);
-			}
+				RefreshImage(null);
 		}
 		
 		private void RefreshImage(UIImage image)
 		{
-			if (image != null)
-			{
-				UIImage frame = Graphics.GetImgResource("cadre200");
-				UIImage composite = GetCompImage(frame, image);			
-				this.SetBackgroundImage (composite, UIControlState.Normal);
+			bool isAlbum = IsAlbum(_Image);
 			
-				SetNeedsDisplay();
+			if (image != null)
+			{				
+				UIImage frame = Graphics.GetImgResource(isAlbum ? "cadre200_album" : "cadre200");
+				UIImage composite = GetCompImage(frame, image);			
+				this.SetBackgroundImage (composite, UIControlState.Normal);			
 			}
+			else
+				this.SetBackgroundImage (isAlbum ? AlbumFond : CompositeValue, UIControlState.Normal);
+			
+			SetNeedsDisplay();
+		}
+		
+		
+		private bool IsAlbum(Image image)
+		{
+			return image == null ? false : (image.IdAlbum > 0);
 		}
 		
 		private UIImage GetCompImage(UIImage frame, UIImage image)
 		{
 			UIImage composite = UIImageUtils.overlayImageWithPolaroid
 			(
-				image,
-				frame,
-				imgSize,
+				image, frame, imgSize,
 				new RectangleF (0, 0, 2 * photoSize.Width, 2 * photoSize.Height),
 				new SizeF (2 * photoSize.Width, 2 * photoSize.Height)
 			);

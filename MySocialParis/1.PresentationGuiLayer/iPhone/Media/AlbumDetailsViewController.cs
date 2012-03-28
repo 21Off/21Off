@@ -44,9 +44,8 @@ namespace MSP.Client
 			// Perform any additional setup after loading the view, typically from a nib.
 			Initialize();
 			
-			this.request = new RequestInfo(RequestType.FirstLoad);
-			
-			ThreadPool.QueueUserWorkItem(o => LoadTimelineImages());			
+			this.request = new RequestInfo(RequestType.FirstLoad);			
+			InitializeMap(request);			
 		}
 
 		void HandleBackBtnTouchDown (object sender, EventArgs e)
@@ -114,6 +113,8 @@ namespace MSP.Client
 		#region IMapLocationRequest implementation
 		public bool InitializeMap (RequestInfo request)
 		{
+			ThreadPool.QueueUserWorkItem(o => LoadTimelineImages());
+			
 			return true;
 		}
 

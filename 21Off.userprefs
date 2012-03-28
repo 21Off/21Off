@@ -1,11 +1,27 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/1.PresentationGuiLayer/iPhone/Home/BuzzPhotoView.cs">
+    <Files>
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/BuzzPhoto.cs" Line="42" Column="4" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/BuzzPhotoView.cs" Line="135" Column="24" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Photo/PhotoPostViewController.xib.cs" Line="370" Column="1" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" selected="True" />
+            <Node name="21Off.Client" expanded="True">
+              <Node name="1.PresentationGuiLayer" expanded="True">
+                <Node name="iPhone" expanded="True">
+                  <Node name="Home" expanded="True">
+                    <Node name="BuzzPhotoView.cs" selected="True" />
+                  </Node>
+                  <Node name="Photo" expanded="True">
+                    <Node name="PhotoPostViewController.xib" expanded="True" />
+                  </Node>
+                </Node>
+              </Node>
+            </Node>
           </Node>
         </State>
       </Pad>
@@ -15,7 +31,6 @@
     <BreakpointStore>
       <Breakpoint file="/Users/Valeriu/Projects/MySocialParis/Share/FaceBook/FacebookAuth.cs" line="191" />
       <Breakpoint file="/Users/Valeriu/Projects/21Off/Share/FaceBook/FaceBookApplication.cs" line="159" />
-      <Breakpoint file="/Users/Valeriu/Projects/21Off/MySocialParis/1.PresentationGuiLayer/iPhone/Photo/PhotoPostViewController.xib.cs" line="370" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

@@ -20,8 +20,11 @@ namespace MSP.Client
 		private List<Image> previousList;
 		private UINavigationController _MSP;
 		private IMapLocationRequest _MapLocationRequest;
+		private bool hasImage = false;
 		
 		#endregion
+		
+		#region Constructors
 		
 		public TimelineViewController (FilterType filterType, bool pushing, UINavigationController msp, 
 		                               IMapLocationRequest maplocationRequest) 
@@ -41,6 +44,8 @@ namespace MSP.Client
 			
 			OnGestSwipe += HandleOnSwipe;
 		}
+		
+		#endregion
 		
 		#region Events
 		
@@ -76,8 +81,7 @@ namespace MSP.Client
 			
 			AppDelegateIPhone.ShowRealLoading(View, "Loading album details", null, act);
 		}
-		
-		
+				
 		private void LoadPhoto(Image image)
 		{
 			Action act = ()=>
@@ -436,9 +440,7 @@ namespace MSP.Client
 			}
 			
 			return true;
-		}
-		
-		private bool hasImage = false;
+		}				
 		
 		#endregion
 	}
