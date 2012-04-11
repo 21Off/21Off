@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MSP.Client.DataContracts;
 using Share;
+using TweetStation;
 
 namespace MSP.Client
 {
@@ -182,8 +183,8 @@ namespace MSP.Client
 				}
 				foreach (long socialId in socialIds)
 				{
-					if (friends.Contains(socialId))
-						continue;
+					//if (friends.Contains(socialId))
+					//	continue;
 					
 					var guser = new GraphUser() { id = socialId };										
 					var fbUser = new FbUserElement(guser, u => 
@@ -192,7 +193,7 @@ namespace MSP.Client
 						//facebookApp.HandleOpenURL(NSUrl.FromString(u));
 						//return;
 						
-						//WebViewController.OpenUrl (dv, u);
+						WebViewController.OpenUrl (dv, "https://www.facebook.com/dialog/apprequests?app_id=168889879843414&message=Facebook%20Dialogs%20are%20so%20easy!&redirect_uri=http://www.21off.net");
 						return;
 						
 	  					var fac = new FacebookAuthorizationViewController("168889879843414", 

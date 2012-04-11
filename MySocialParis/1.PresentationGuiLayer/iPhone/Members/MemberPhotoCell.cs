@@ -106,14 +106,13 @@ namespace MSP.Client
 				var img2 = Graphics.GetImgResource("comment40");
 				var img3 = Graphics.GetImgResource("keyword");
 				var img4 = Graphics.GetImgResource("alert");				
-				var img5 = Graphics.GetImgResource("alert");
-				var img6 = Graphics.GetImgResource("alert");
+				var img5 = Graphics.GetImgResource("createalbum");
 				
 				var rect1 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect2 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight, 40, 40);
 				var rect3 = new RectangleF(2 * PicXPad, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);
 				var rect4 = new RectangleF(320 - 2 * PicXPad - 26, 5 * PicYPad + PicHeight + TitleHeight + 100, 26, 26);				
-				var rect5 = new RectangleF(320 - 2 * PicXPad - 26, PicYPad, 26, 26);
+				var rect5 = new RectangleF(320 - PicXPad - 26, PicYPad, 26, 26);
 				
 				var rectSpinner = new RectangleF((320 - 30)/2, 2 * PicYPad + TitleHeight + (PicHeight - 30) / 2, 30, 30);
 			
@@ -658,7 +657,9 @@ namespace MSP.Client
 					Util.LogException("MemberPhotoCell RealDraw", ex);
 				}
 				
-				titlePath = titlePath ?? GraphicsUtil.MakeRoundedRectPath(new RectangleF(PicXPad, 0, PicWidth, TitleHeight), 4);
+				titlePath = titlePath ?? GraphicsUtil.MakeRoundedRectPath(new RectangleF(PicXPad, 0, PicWidth - 2 * PicXPad - 26, 
+				                                                                         TitleHeight), 4);
+				
 				badgePath = GraphicsUtil.MakeRoundedRectPath(new RectangleF(PicXPad, 0, PicWidth, cellHeight), 4);
 				minimapPath = minimapPath ?? GraphicsUtil.MakeRoundedRectPath(rectMiniMap, 4);
 				imagePath = imagePath ?? GraphicsUtil.MakeRoundedRectPath(new RectangleF(0, 0, PicWidth, PicHeight), 8);
@@ -761,7 +762,7 @@ namespace MSP.Client
 				string imageName = tweet.Image.Name ?? "";
 				using (var nss = new NSString (imageName))
 				{
-					var dim = nss.StringSize (userFont, bounds.Width - 4 * PicXPad, UILineBreakMode.TailTruncation);
+					var dim = nss.StringSize (userFont, bounds.Width - 3 * PicXPad - 26, UILineBreakMode.TailTruncation);
 					var placement = new RectangleF (2 * PicXPad, PicYPad + (TitleHeight - dim.Height) / 2, dim.Width, dim.Height);
 					blocks.Add(new Block()
 		            {
@@ -818,8 +819,7 @@ namespace MSP.Client
 				UIColor color = UIColor.FromRGB(150, 150, 150);
 				color.SetColor();
 												
-				string s1 = _Tweet.LikesCount.ToString();
-				
+				string s1 = _Tweet.LikesCount.ToString();			
 				using (var nss = new NSString (s1))
 				{
 					var dim = nss.StringSize (userFont);

@@ -49,8 +49,7 @@ namespace MSP.Client
 		}
 		
 		void HandleOkBtnTouchUpInside (object sender, EventArgs e)
-		{
-			
+		{			
 			if (string.IsNullOrWhiteSpace(pseudo.Value))
 			{
 				Util.ShowAlertSheet("Le pseudo est invalide", View);
@@ -63,59 +62,59 @@ namespace MSP.Client
 				return;
 			}
 			
-			Action act = () =>
-			{		
-				try
+			AppDelegateIPhone.ShowRealLoading(View, "Connexion", null, Connect);
+		}
+		
+		private void Connect()
+		{
+			try
+			{
+				User user = _AppDel.UsersServ.Authentificate(pseudo.Value, pass.Value);
+				if (user == null)
 				{
-					User user = _AppDel.UsersServ.Authentificate(pseudo.Value, pass.Value);
-					if (user == null)
-					{
-						InvokeOnMainThread(()=>
-	                    {
-							Util.ShowAlertSheet("Authentification failed", View);
-						});
-						return;
-					}
-					if (user.Id == 0)
-					{
-						InvokeOnMainThread(()=>
-	                    {
-							Util.ShowAlertSheet("User or password is wrong", View);
-						});
-						return;						
-					}
-					
-					User dbUser = Database.Main.Table<User>().Where(el => el.Name == user.Name).FirstOrDefault();
-					if (dbUser == null)
-						Database.Main.Insert(user);
-					else
-					{
-						dbUser.Password = pass.Value;
-						Database.Main.Update(dbUser);
-					}
-					
-					LastUserLogged lastUser = Database.Main.Table<LastUserLogged>().LastOrDefault();
-					if (lastUser == null || lastUser.Id != user.Id)
-						Database.Main.Insert(new LastUserLogged(){ UserId = user.Id });
-					
-					_AppDel.MainUser = user;
-					
 					InvokeOnMainThread(()=>
                     {
-						_vc.PopViewControllerAnimated(false);
-						_AppDel.MainWnd.WillRemoveSubview(_vc.View);
-						_AppDel.InitApp();
+						Util.ShowAlertSheet("Authentification failed", View);
 					});
-				}
-				catch (Exception ex)
-				{
-					Util.LogException("Authentification error", ex);
-					Util.ShowAlertSheet(ex.Message, View);
 					return;
 				}
-			};
-			
-			AppDelegateIPhone.ShowRealLoading(View, "Connexion", null, act);
+				if (user.Id == 0)
+				{
+					InvokeOnMainThread(()=>
+                    {
+						Util.ShowAlertSheet("User or password is wrong", View);
+					});
+					return;						
+				}
+				
+				User dbUser = Database.Main.Table<User>().Where(el => el.Name == user.Name).FirstOrDefault();
+				if (dbUser == null)
+					Database.Main.Insert(user);
+				else
+				{
+					dbUser.Password = pass.Value;
+					Database.Main.Update(dbUser);
+				}
+				
+				LastUserLogged lastUser = Database.Main.Table<LastUserLogged>().LastOrDefault();
+				if (lastUser == null || lastUser.Id != user.Id)
+					Database.Main.Insert(new LastUserLogged(){ UserId = user.Id });
+				
+				_AppDel.MainUser = user;
+				
+				InvokeOnMainThread(()=>
+                {
+					_vc.PopViewControllerAnimated(false);
+					_AppDel.MainWnd.WillRemoveSubview(_vc.View);
+					_AppDel.InitApp();
+				});
+			}
+			catch (Exception ex)
+			{
+				Util.LogException("Authentification error", ex);
+				Util.ShowAlertSheet(ex.Message, View);
+				return;
+			}			
 		}
 		
 		#endregion	
@@ -128,17 +127,18 @@ namespace MSP.Client
 			
 			var _dialogView = new DialogViewController (root, true);
 			_dialogView.TableView.BackgroundColor = UIColor.Clear;
-			_dialogView.View.Frame = new System.Drawing.RectangleF(0, 120, 320, 480 - 140);
+			_dialogView.View.Frame = new RectangleF(0, 40, 320, 480 - 60); // RectangleF(0, 120, 320, 480 - 140);
 			this.View.Add(_dialogView.View);
 			
 			var view = new UIView(new RectangleF(0, 40 , 320, 1));
 			view.Layer.BackgroundColor = UIColor.LightGray.CGColor;
 			this.View.AddSubview(view);
 			
-			UIImage img = Graphics.HighRes ? UIImage.FromBundle("Images/21logo@2x.jpg") : UIImage.FromBundle("Images/21logo.jpg");
-			var imageVIew = new UIWebImageView(new RectangleF(0, 0, 320, 480), img);
+			/*
+			var imageVIew = new UIWebImageView(new RectangleF(0, 0, 320, 480), Graphics.GetImgResource("pagedegarde"));
 			View.AddSubview(imageVIew);
 			View.SendSubviewToBack(imageVIew);
+			*/
 			
 			var list = new List<Element> { pseudo, pass };			
 			this.root[0].Insert(0, UITableViewRowAnimation.Bottom, list);
@@ -147,7 +147,7 @@ namespace MSP.Client
 		private MyEntryElement pseudo;
 		private MyEntryElement pass;
 		
-		RootElement CreateRoot ()
+		private RootElement CreateRoot ()
 		{
 			pseudo = new MyEntryElement ("pseudo", null);
 			pass = new MyEntryElement ("mot de passe", null, true);

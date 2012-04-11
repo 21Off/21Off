@@ -199,14 +199,14 @@ namespace MSP.Client
 			{				
 				if (screen == 1) return "       trendy posts worldwide       >";
 				if (screen == 2) return "<       friend's posts worldwide     >";
-				if (screen == 3) return "<       recent posts worldwide";
+				if (screen == 3) return "<        recent posts worldwide      >";
 				if (screen == 4) return "<       recent events worldwide";
 			}
 			if (locType == LocalisationType.Local)
 			{
 				if (screen == 1) return "      trendy posts around you        >";
 				if (screen == 2) return "<     friend's posts around you    >";
-				if (screen == 3) return "<      recent posts around you";
+				if (screen == 3) return "<       recent posts around you     >";
 				if (screen == 4) return "<      recent events around you";
 			}
 			return string.Empty;

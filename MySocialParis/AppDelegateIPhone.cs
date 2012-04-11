@@ -7,6 +7,7 @@ using TweetStation;
 using System.Threading;
 using System.Collections.Generic;
 using MonoTouch.Dialog.Utilities;
+using System.Net;
 
 namespace MSP.Client
 {	
@@ -59,10 +60,38 @@ namespace MSP.Client
 				
 				if (MainUser != null)
 				{
-					window.AddSubview(new UIImageView(UIImage.FromBundle("Images/21logo.jpg")));
+					window.AddSubview(new UIImageView(Graphics.GetImgResource("pagedegarde")));
+					
 					ShowRealLoading(window, "Logging in ...", "", 
 					()=>
 					{
+						/*
+						var nvctest = new System.Collections.Specialized.NameValueCollection();
+						
+			            nvctest.Add("name", "test");
+			            nvctest.Add("start_time", "1272718027");
+			            nvctest.Add("end_time", "1272718027");
+			            nvctest.Add("location", "myhouse");
+			            
+						var wc = new WebClient();
+						string accessToken = NSUserDefaults.StandardUserDefaults.StringForKey("FacebookAccessToken");
+						accessToken = "AAACZAmr1LUlYBAOCcLsqV8Wu3r1dV0MvDZCi39b5fEwwPQ6TMVf872MUZBgZCbEl1db19qk8ZAnmrvVwLns8nxzWfZC96OyKM2kmBA38QOdcZAsGm3j8BwG";
+			            //byte[] r = wc.UploadValues("https://graph.facebook.com/me/events?" + "access_token=" + accessToken, nvctest);
+						byte[] r = wc.DownloadData("https://graph.facebook.com/me/events?" + "access_token=" + accessToken);
+						Console.WriteLine(System.Text.Encoding.UTF8.GetString(r));
+						
+						return;
+					    var fb = new Facebook.FacebookClient();
+						var js = new Facebook.JsonObject();
+						js.Add(new KeyValuePair<string, object>("appd", "168889879843414"));
+						js.Add(new KeyValuePair<string, object>("message", "Welcome"));
+						fb.PostTaskAsync("me/apprequests", js).ContinueWith(e =>
+                        {
+							Console.WriteLine(e.Id);
+						});
+					    */
+					
+						
 						//InstagramServ.GetPopular();
 						AuthSequence(MainUser);
 					});

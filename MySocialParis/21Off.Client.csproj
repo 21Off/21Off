@@ -75,7 +75,6 @@
     <CodesignProvision>58CB640A-2258-4139-AEC2-8AC65FC76ADA</CodesignProvision>
     <MtouchUseSGen>true</MtouchUseSGen>
     <BuildIpa>true</BuildIpa>
-    <MtouchArch>ARMv7</MtouchArch>
     <MtouchUseLlvm>true</MtouchUseLlvm>
     <IpaPackageName />
   </PropertyGroup>
@@ -116,7 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="en.lproj\Localizable.strings" />
-    <None Include="Images\app icon 512.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -548,7 +546,6 @@
     <Content Include="Images\Share\cadre.png" />
     <Content Include="Images\Share\icone_photo.png" />
     <Content Include="Images\Share\placerdimentionner.png" />
-    <Content Include="Images\Media\9A\image_plan.jpg" />
     <Content Include="Images\Login\emptyProfile.png" />
     <Content Include="Images\Ver4\activity%402x.png" />
     <Content Include="Images\Ver4\admirer%402x.png" />
@@ -639,15 +636,10 @@
     <Content Include="Images\texture.png" />
     <Content Include="Images\texture%402x.png" />
     <Content Include="Images\menu-shadow.png" />
-    <Content Include="Images\21logo.jpg" />
-    <Content Include="Images\21logo%402x.jpg" />
     <Content Include="Images\Icon.png" />
-    <Content Include="Images\Icon%40x2.png" />
     <Content Include="Images\googleLogo.PNG" />
     <Content Include="Images\signinFacebook.jpg" />
     <Content Include="Images\carre.png" />
-    <Content Include="Images\Ver4\Newlogo.png" />
-    <Content Include="Images\Ver4\Newlogo%402x.png" />
     <Content Include="Images\back.png" />
     <Content Include="Images\back%402x.png" />
     <Content Include="Images\forward.png" />
@@ -656,6 +648,14 @@
     <Content Include="Images\Ver4\pagedegarde%402x.png" />
     <Content Include="Images\Ver4\cadre100_album.png" />
     <Content Include="Images\Ver4\cadre200_album.png" />
+    <Content Include="Images\Ver4\createalbum.png" />
+    <Content Include="Images\Ver4\createalbum%402x.png" />
+    <Content Include="Images\logo512.png" />
+    <Content Include="Images\appicon.png" />
+    <Content Include="Images\appicon%402x.png" />
+    <Content Include="Images\Icon%402x.png" />
+    <Content Include="Images\Ver4\logo_FB%402x.png" />
+    <Content Include="Images\Ver4\logo_FB.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Share\Share.csproj">
@@ -665,6 +665,10 @@
     <ProjectReference Include="..\DialogExtension\DialogExtension.csproj">
       <Project>{F94A395E-5DF8-4A90-A84A-300CB86FFF49}</Project>
       <Name>DialogExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Documents\GitHub\facebook-csharp-sdk\Source\Facebook-Monotouch\Facebook-Monotouch.csproj">
+      <Project>{789B6E73-D8E7-448B-81D7-4CDC4E2BD5C6}</Project>
+      <Name>Facebook-Monotouch</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

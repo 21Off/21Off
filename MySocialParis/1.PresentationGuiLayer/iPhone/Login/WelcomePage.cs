@@ -1,13 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
-
+using System.Linq;
+using System.Threading;
+using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
-using MonoTouch.Dialog;
-using System.Threading;
 using Share;
-using System.Linq;
 
 namespace MSP.Client
 {
@@ -99,32 +99,43 @@ namespace MSP.Client
 			this.Add(likedMediaView.View);
 			
 			var bottomPanel = new UIView(new RectangleF(0, View.Bounds.Height - 48, width, 48));
-			bottomPanel.DrawBorder(UIColor.LightGray);
+			//bottomPanel.DrawBorder(UIColor.LightGray);
+			bottomPanel.BackgroundColor = UIColor.White;
 			
 			UIButton createAccountBtn = UIButton.FromType (UIButtonType.RoundedRect);
 			createAccountBtn.Frame = new RectangleF(4, 2, 120, 44);
 			createAccountBtn.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
 			createAccountBtn.SetTitle("create account", UIControlState.Normal);
-			createAccountBtn.TouchDown += HandleCreateAccountBtnTouchDown;
+			createAccountBtn.TouchUpInside += HandleCreateAccountBtnTouchDown;
 			
 			UIButton signInBtn = UIButton.FromType (UIButtonType.RoundedRect);
 			signInBtn.Frame = new RectangleF(128, 2, 60, 44);
 			signInBtn.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
 			signInBtn.SetTitle("sign in", UIControlState.Normal);
-			signInBtn.TouchDown += HandleSignInBtnTouchDown;			
+			signInBtn.TouchUpInside += HandleSignInBtnTouchDown;			
 			
 			UIButton signInWithFacebookBtn = UIButton.FromType (UIButtonType.RoundedRect);
-			signInWithFacebookBtn.Frame = new RectangleF(192, 7, 320 - 192 - 4, 34);
-			signInWithFacebookBtn.SetTitleColor(UIColor.LightGray, UIControlState.Normal);
-			signInWithFacebookBtn.SetImage(UIImage.FromFile("Images/signinFacebook.jpg"), UIControlState.Normal);
-			signInWithFacebookBtn.TouchDown += HandleSignInWithFacebookBtnTouchDown;
+			float w = 320 - 192 - 4;
+			signInWithFacebookBtn.Frame = new RectangleF(192, 7, w, 34);
+			signInWithFacebookBtn.SetTitleColor(UIColor.LightGray, UIControlState.Normal);			
+			signInWithFacebookBtn.ImageEdgeInsets = new UIEdgeInsets(5, w - 26 - 5, 5, 5);
+			signInWithFacebookBtn.TitleEdgeInsets = new UIEdgeInsets(0, - 26, 0, 26 + 5);
+			
+			//signInWithFacebookBtn.ContentMode = UIViewContentMode.Left;
+			//signInWithFacebookBtn.ImageView = new UIImageView(new RectangleF(192 + 50, 7, 320 - 192 - 4 - 50, 34));
+			//signInWithFacebookBtn.ImageView.Image = IImage.FromFile("Images/signinFacebook.jpg").resizeImage(new SizeF(50, 34));
+			//signInWithFacebookBtn.ImageView.Frame = new RectangleF(0, (40 - 26) / 2, 26, 26);
+			
+			signInWithFacebookBtn.SetTitle("sign in with", UIControlState.Normal);
+			signInWithFacebookBtn.SetImage(Graphics.GetImgResource("logo_FB"), UIControlState.Normal);
+			signInWithFacebookBtn.TouchUpInside += HandleSignInWithFacebookBtnTouchDown;
 									
 			bottomPanel.Add(createAccountBtn);
 			bottomPanel.Add(signInBtn);
 			bottomPanel.Add(signInWithFacebookBtn);
 			this.View.Add(bottomPanel);
 			
-			var imgViesw = new UIImageView(UIImage.FromBundle("Images/Icon.png"));
+			var imgViesw = new UIImageView(UIImage.FromBundle("Images/Icon"));
 			imgViesw.Frame = new RectangleF((320 - 26)/2, (topY - 26) / 2, 26, 26);
 			this.Add(imgViesw);
 		}
@@ -228,6 +239,7 @@ namespace MSP.Client
 		private RequestInfo request;
 
 		#region IMapLocationRequest implementation
+		
 		bool IMapLocationRequest.InitializeMap (RequestInfo request)
 		{
 			this.request = request;
@@ -256,7 +268,7 @@ namespace MSP.Client
 			}
 		}	
 
-		System.Collections.Generic.IEnumerable<Image> IMapLocationRequest.GetDbImages (FilterType filterType, int start, int count)
+		IEnumerable<Image> IMapLocationRequest.GetDbImages (FilterType filterType, int start, int count)
 		{
 			User user = AppDelegateIPhone.AIphone.MainUser;
 			GeoLoc geoLoc = LocType == LocalisationType.Global ? null : (Location == null ? null :
@@ -274,7 +286,7 @@ namespace MSP.Client
 			return FilterType.Recent;
 		}
 
-		System.Collections.Generic.List<ImageInfo> IMapLocationRequest.GetCurrentLoadedImages ()
+		List<ImageInfo> IMapLocationRequest.GetCurrentLoadedImages ()
 		{
 			return likedMediaView.GetLoadedImages();
 		}
@@ -285,4 +297,3 @@ namespace MSP.Client
 		#endregion
 	}
 }
-

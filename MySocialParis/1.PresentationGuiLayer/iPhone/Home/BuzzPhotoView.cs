@@ -46,7 +46,7 @@ namespace MSP.Client
 				CompositeValue = GetCompImage(frame, emptyImg);				
 				AlbumFond = GetCompImage(frameAlbum, emptyImg);
 			}			
-
+			
 			this.SetBackgroundImage (IsAlbum(image) ? AlbumFond : CompositeValue, UIControlState.Normal);
 			
 			Update(image);
@@ -106,9 +106,9 @@ namespace MSP.Client
 			else
 				this.SetBackgroundImage (isAlbum ? AlbumFond : CompositeValue, UIControlState.Normal);
 			
+			//this.Enabled = _Image != null || isAlbum;
 			SetNeedsDisplay();
-		}
-		
+		}		
 		
 		private bool IsAlbum(Image image)
 		{
@@ -128,7 +128,8 @@ namespace MSP.Client
 		}
 		
 		#region IImageUpdated implementation		
-
+		
+		[Obsolete()]
 		public void UpdatedImage (long id, long userId, SizeDB sizeDB)
 		{		
 			if (_Image == null || _Image.Id != id)

@@ -23,7 +23,7 @@ namespace MSP.Client
 		};
 		public const string AUTHORIZE = "https://graph.facebook.com/oauth/authorize";
 		public const string ACCESS_TOKEN = "https://graph.facebook.com/oauth/access_token";
-		public const string CALLBACK_URL = "http://www.blahblah.com/facebookcallback.aspx";
+		public const string CALLBACK_URL = "http://www.21off.net/facebookcallback.aspx";
 		private string _consumerKey = "";
 		private string _consumerSecret = "";
 		private string _token = "";
@@ -33,7 +33,7 @@ namespace MSP.Client
 		public string ConsumerKey {
 			get {
 				if (_consumerKey.Length == 0) {
-					_consumerKey = "1111111111111"; //Your application ID
+					_consumerKey = "168889879843414"; //Your application ID
 				}
 				return _consumerKey;
 			}
@@ -43,7 +43,7 @@ namespace MSP.Client
 		public string ConsumerSecret {
 			get {
 				if (_consumerSecret.Length == 0) {
-					_consumerSecret = "11111111111111111111111111111111"; //Your application secret
+					_consumerSecret = "904270b68a2cc3d54485323652da4d14"; //Your application secret
 				}
 				return _consumerSecret;
 			}
@@ -102,7 +102,7 @@ namespace MSP.Client
 			webRequest = System.Net.WebRequest.Create (url) as HttpWebRequest;
 			webRequest.Method = method.ToString ();
 			webRequest.ServicePoint.Expect100Continue = false;
-			webRequest.UserAgent = "[You user agent]";
+			//webRequest.UserAgent = "[You user agent]";
 			webRequest.Timeout = 20000;
 	
 			if (method == Method.POST) {

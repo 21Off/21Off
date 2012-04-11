@@ -136,7 +136,6 @@ namespace MSP.Client
 				{
 					Util.LogException("Authentification error", ex);
 					Util.ShowAlertSheet(ex.Message, View);
-					return;
 				}
 			};
 			
@@ -155,22 +154,12 @@ namespace MSP.Client
 			
 			var view = new UIView (new RectangleF (0, 40, 320, 1));
 			view.Layer.BackgroundColor = UIColor.LightGray.CGColor;
-			this.View.AddSubview (view);
-			
-			//imageVIew = new UIWebImageView(new RectangleF(0, 40, 320, 480 - 40), "Images/21logo.jpg");
-			
-			UIImage img = Graphics.HighRes ? UIImage.FromBundle ("Images/21logo@2x.jpg") : UIImage.FromBundle ("Images/21logo.jpg");
-			imageVIew = new UIWebImageView (new RectangleF (0, 0, 320, 480), img);
-			View.Add (imageVIew);			
-			View.SendSubviewToBack (imageVIew);
+			this.View.AddSubview (view);		
 			
 			/*
-			imageVIew.AnimationImages = new UIImage [] {
-				UIImage.FromBundle ("Images/texture"),
-				UIImage.FromBundle ("Images/menu-shadow"),			
-			};
-			imageVIew.AnimationDuration = 5;
-			imageVIew.StopAnimating ();
+			imageVIew = new UIWebImageView (new RectangleF (0, 0, 320, 480), Graphics.GetImgResource("pagedegarde"));
+			View.Add (imageVIew);			
+			View.SendSubviewToBack (imageVIew);
 			*/
 		}
 		
@@ -192,7 +181,5 @@ namespace MSP.Client
 			//imageVIew.StartAnimating ();
 		}
 	}
-	
-	
 }
 

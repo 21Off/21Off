@@ -6,7 +6,6 @@ using MonoTouch.Dialog;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MSP.Client.DataContracts;
-using TweetStation;
 
 namespace MSP.Client
 {
@@ -95,36 +94,37 @@ namespace MSP.Client
 				return;
 			}
 			
-			Action act = ()=>
-			{			
-				User user = null;
-				try {
-					user = _AppDel.UsersServ.CreateUser (pseudo.Value, pass.Value, email.Value, png);
-				} catch (Exception ex) {
-					Util.ShowAlertSheet ("La creation de l'utilisateur a echouée: " + ex.Message, View);
-					return;
-				}
-				
-				User dbUser = Database.Main.Table<User>().Where(el => el.Name == user.Name).FirstOrDefault();
-				if (dbUser == null)
-					Database.Main.Insert(user);
-				
-				LastUserLogged lastUser = Database.Main.Table<LastUserLogged>().LastOrDefault();
-				if (lastUser == null || lastUser.Id != user.Id)
-					Database.Main.Insert(new LastUserLogged(){ UserId = user.Id });
-				
-				_AppDel.MainUser = user;
-				
-				InvokeOnMainThread(()=>
-                {
-					_vc.PopViewControllerAnimated (true);
-					_AppDel.MainWnd.WillRemoveSubview (_vc.View);
-					_AppDel.InitApp ();
-				});
-			};
-			AppDelegateIPhone.ShowRealLoading(View, "Creating user", null, act);			
+			AppDelegateIPhone.ShowRealLoading(View, "Creating user", null, () => CreateUser(png));			
 		}
-
+		
+		private void CreateUser(string png)
+		{
+			User user = null;
+			try {
+				user = _AppDel.UsersServ.CreateUser (pseudo.Value, pass.Value, email.Value, png);
+			} catch (Exception ex) {
+				Util.ShowAlertSheet ("La creation de l'utilisateur a echouée: " + ex.Message, View);
+				return;
+			}
+			
+			User dbUser = Database.Main.Table<User>().Where(el => el.Name == user.Name).FirstOrDefault();
+			if (dbUser == null)
+				Database.Main.Insert(user);
+			
+			LastUserLogged lastUser = Database.Main.Table<LastUserLogged>().LastOrDefault();
+			if (lastUser == null || lastUser.Id != user.Id)
+				Database.Main.Insert(new LastUserLogged(){ UserId = user.Id });
+			
+			_AppDel.MainUser = user;
+			
+			InvokeOnMainThread(()=>
+            {
+				_vc.PopViewControllerAnimated (true);
+				_AppDel.MainWnd.WillRemoveSubview (_vc.View);
+				_AppDel.InitApp ();
+			});			
+		}
+		
 		#endregion
 
 		public override void ViewDidLoad ()
@@ -143,10 +143,9 @@ namespace MSP.Client
 			lineView.Layer.BackgroundColor = UIColor.LightGray.CGColor;
 			this.View.AddSubview(lineView);
 						
-			UIImage img = Graphics.HighRes ? UIImage.FromBundle("Images/21logo@2x.jpg") : UIImage.FromBundle("Images/21logo.jpg");
-			var imageVIew = new UIWebImageView(new RectangleF(0, 0, 320, 480), img);
-			View.AddSubview(imageVIew);
-			View.SendSubviewToBack(imageVIew);			
+			//var imageVIew = new UIWebImageView(new RectangleF(0, 0, 320, 480), Graphics.GetImgResource("pagedegarde"));
+			//View.AddSubview(imageVIew);
+			//View.SendSubviewToBack(imageVIew);			
 		}
 		
 		private UIView lineView;

@@ -9,19 +9,20 @@
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Images/Icon.png</string>
-		<string>Images/Icon@x2.png</string>
-		<string>Images/app icon 512.png</string>
+		<string>Images/Icon@2x.png</string>
+		<string>Images/logo512.png</string>
+		<string>Images/appicon.png</string>
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>net.21Off.21Off</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.1.6</string>
 	<key>CFBundleSupportedPlatforms</key>
 	<array>
 		<string>iPhoneOS</string>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.1.1</string>
+	<string>1.1.6</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>4.0</string>
 	<key>LSRequiresIPhoneOS</key>
