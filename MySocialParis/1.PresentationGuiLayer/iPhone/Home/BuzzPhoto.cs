@@ -25,7 +25,7 @@ namespace MSP.Client
 			{ 
 				Text = title,
 				TextColor = UIColor.FromRGBA(0.5f,0.5f,0.5f,1.0f), 
-				Font = UIFont.FromName ("HelveticaNeue-Bold", 13),
+				Font = UIFont.FromName ("HelveticaNeue-Bold", 12),
 				BackgroundColor = UIColor.FromHSBA (0, 0, 0, 0),
 			};
 			

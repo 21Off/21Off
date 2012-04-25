@@ -17,9 +17,6 @@ namespace MSP.Client
 	{
 		#region Constructors
 
-		// The IntPtr and initWithCoder constructors are required for items that need 
-		// to be able to be created from a xib rather than from managed code
-
 		public PhotoPostViewController (IntPtr handle) : base(handle)
 		{
 
@@ -51,16 +48,14 @@ namespace MSP.Client
 			
 			this.root = CreateRoot ();
 		}
-		
-		
-		public PhotoPostViewController (UINavigationController msp, UIImage image, Tweet tweet) 
-						: this()
+				
+		public PhotoPostViewController (UINavigationController msp, UIImage image, Tweet tweet) : this()
 		{
 			this._image = image;
 			this._MSP = msp;
 			this.eventImage = tweet.Image;
 			this.postOptions = tweet.Options;
-			isForEvent = true;
+			this.isForEvent = true;
 			
 			PhotoLocation = new CLLocation(eventImage.Latitude, eventImage.Longitude);
 			
@@ -83,17 +78,16 @@ namespace MSP.Client
 		private bool isForEvent;
 		private bool isOnKeywordScreen = false;
 		
-		public MyEntryElement Description {get;set;}
-		public MyEntryElement FirstComment {get;set;}
-		public CLLocation PhotoLocation {get;set;}
-		private BooleanElement createAlbumCbx;
-		
-		private DialogViewController _dialogView;
-		private RectangleF mapFrame;
-		
-		private UIView topBar;
-		private Settings _Settings;
+		public MyEntryElement Description {get; set;}
+		public MyEntryElement FirstComment {get; set;}
+		public CLLocation PhotoLocation {get; set;}
 		public string LocationMapPhotoCapture {get;set;}
+		
+		private BooleanElement createAlbumCbx;		
+		private DialogViewController _dialogView;
+		private RectangleF mapFrame;		
+		private UIView topBar;
+		private Settings _Settings;		
 		
 		#endregion
 		
@@ -121,11 +115,6 @@ namespace MSP.Client
 			topBar.Layer.BackgroundColor = UIColor.LightGray.CGColor;
 			this.View.AddSubview(topBar);
 		}
-		
-		public override void ViewDidAppear (bool animated)
-		{
-			base.ViewDidAppear (animated);
-		}	
 				
 		#endregion				
 		
@@ -245,8 +234,7 @@ namespace MSP.Client
 		
 		private SizeF GetTextSize (string text, UILabel label)
 		{
-			return new NSString (text).StringSize (label.Font, UIScreen.MainScreen.Bounds.Width, 
-			                                       UILineBreakMode.TailTruncation);
+			return new NSString (text).StringSize (label.Font, UIScreen.MainScreen.Bounds.Width, UILineBreakMode.TailTruncation);
 		}		
 		
 		private void SetTitleText(string text, string subTitle)

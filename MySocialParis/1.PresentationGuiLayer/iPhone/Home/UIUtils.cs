@@ -24,16 +24,14 @@ namespace MSP.Client
 				point = worldTxt.Frame.Location;
 				point.X = (UIScreen.MainScreen.Bounds.Width - sizeF.Width) / 2;
 				point.Y = 25;
-				
-				
+					
 				worldTxt.Frame = new RectangleF(point, sizeF);
 			}
 		}
-		
+
 		public static SizeF GetTextSize (string text, UILabel label)
 		{
-			return new NSString (text).StringSize (label.Font, UIScreen.MainScreen.Bounds.Width, 
-			                                       UILineBreakMode.CharacterWrap);
+			return new NSString (text).StringSize (label.Font, UIScreen.MainScreen.Bounds.Width, UILineBreakMode.CharacterWrap);
 		}
 	}
 }

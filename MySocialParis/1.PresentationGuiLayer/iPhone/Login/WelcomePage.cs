@@ -116,15 +116,10 @@ namespace MSP.Client
 			
 			UIButton signInWithFacebookBtn = UIButton.FromType (UIButtonType.RoundedRect);
 			float w = 320 - 192 - 4;
-			signInWithFacebookBtn.Frame = new RectangleF(192, 7, w, 34);
+			signInWithFacebookBtn.Frame = new RectangleF(192, 2, w, 44);
 			signInWithFacebookBtn.SetTitleColor(UIColor.LightGray, UIControlState.Normal);			
 			signInWithFacebookBtn.ImageEdgeInsets = new UIEdgeInsets(5, w - 26 - 5, 5, 5);
-			signInWithFacebookBtn.TitleEdgeInsets = new UIEdgeInsets(0, - 26, 0, 26 + 5);
-			
-			//signInWithFacebookBtn.ContentMode = UIViewContentMode.Left;
-			//signInWithFacebookBtn.ImageView = new UIImageView(new RectangleF(192 + 50, 7, 320 - 192 - 4 - 50, 34));
-			//signInWithFacebookBtn.ImageView.Image = IImage.FromFile("Images/signinFacebook.jpg").resizeImage(new SizeF(50, 34));
-			//signInWithFacebookBtn.ImageView.Frame = new RectangleF(0, (40 - 26) / 2, 26, 26);
+			signInWithFacebookBtn.TitleEdgeInsets = new UIEdgeInsets(0, - 26, 0, 26 + 5);					
 			
 			signInWithFacebookBtn.SetTitle("sign in with", UIControlState.Normal);
 			signInWithFacebookBtn.SetImage(Graphics.GetImgResource("logo_FB"), UIControlState.Normal);

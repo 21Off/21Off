@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using MonoTouch.CoreLocation;
@@ -8,7 +9,7 @@ using MonoTouch.UIKit;
 
 namespace MSP.Client
 {
-	public partial class PhotoLocationViewController : UIViewController
+	public partial class PhotoLocationViewController : UIViewController, IReverseGeo
 	{		
 		#region Members
 		
@@ -293,11 +294,28 @@ namespace MSP.Client
 
 		#endregion
 		
-		private GeoCoderDelegate geoCoderDel;
+		//private GeoCoderDelegate geoCoderDel;
 		
+		private void SetAddress(string address)
+		{
+			UnHandleGeocode();
+			
+			InvokeOnMainThread(()=>
+            {
+				if (ann != null)
+					ann.Subtitle = address;
+			});
+		}
+				
 		public void ReverseGeocode (CLLocationCoordinate2D coord)
 		{
-			geolocalisationDone = false;			
+			geolocalisationDone = false;
+			
+			string address = ReverseGeocoder.ReverseGeocode(coord, this);
+			if (!string.IsNullOrWhiteSpace(address))
+				SetAddress(address);
+			
+			/*
 				
 			try
 			{
@@ -316,6 +334,7 @@ namespace MSP.Client
 			{
 				Util.LogException("ReverseGeocode", ex);
 			}
+			*/
 		}
 		
 		private void UnHandleGeocode()
@@ -425,6 +444,24 @@ namespace MSP.Client
 		private bool geolocalisationDone = false;
 		private CLLocation PhotoLocation { get; set; }
 		private string LocationMapPhotoCapture {get;set;}		
+
+		#region IReverseGeo implementation
+		public void OnFoundAddress (string address)
+		{
+			SetAddress(address);
+		}
+		
+		void IReverseGeo.HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)
+		{
+			throw new NotImplementedException ();
+		}
+
+		void IReverseGeo.HandleGeoCoderDelOnFoundWithPlacemark (MKReverseGeocoder arg1, MKPlacemark placemark)
+		{
+			throw new NotImplementedException ();
+		}
+		#endregion
 	}
+
 }
 

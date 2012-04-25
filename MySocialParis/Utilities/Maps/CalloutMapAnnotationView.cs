@@ -88,23 +88,28 @@ namespace MSP.Client
 		
 		public void ReverseGeocode (CLLocationCoordinate2D coord)
 		{
+			/*
 			MKPlacemark placemark = ReverseGeocoder.ReverseGeocode(coord, this);
 			if (placemark != null)
 				SetPlacemark(placemark);
+			*/
+			
+			string address = ReverseGeocoder.ReverseGeocode(coord, this);
+			if (!string.IsNullOrWhiteSpace(address))
+				SetAddress(address);
 		}
 
 		#region IReverseGeo implementation
 		
+		public void OnFoundAddress(string address)
+		{
+			SetAddress(address);
+		}
+		
 		public void HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)
 		{
-			string address = "No address available";
-			if (this.Annotation == null)
-				return;
-			
-			(this.Annotation as CalloutMapAnnotation).SetSubtitle(address);
-			//Frame = GetSize(this.Annotation as MKAnnotation);
-			
-			InvokeOnMainThread(() => SetNeedsDisplay());
+			string address = "No address available";						
+			SetAddress(address);
 			
 			//Util.LogException("HandleGeoCoderDelOnFailedWithError", new Exception(arg2.ToString()));
 		}
@@ -127,14 +132,22 @@ namespace MSP.Client
 		private void SetPlacemark(MKPlacemark placemark)
 		{
 			string address = placemark.SubThoroughfare + " " + placemark.Thoroughfare;
+			SetAddress(address);			
+		}
+		
+		private void SetAddress(string address)
+		{
 			if (string.IsNullOrWhiteSpace(address))
-				address = "No address available";					
+				address = "No address available";	
+			
+			if (this.Annotation == null)
+				return;
 			
 			(this.Annotation as CalloutMapAnnotation).SetSubtitle(address);
 			//Frame = GetSize(this.Annotation as MKAnnotation);
 			
-			InvokeOnMainThread(() => SetNeedsDisplay());			
-		}		
+			InvokeOnMainThread(() => SetNeedsDisplay());
+		}
 		
 		private void PrepareFrameSize()
 		{

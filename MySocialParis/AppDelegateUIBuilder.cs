@@ -55,7 +55,7 @@ namespace MSP.Client
 			meNavigationController = new MSPNavigationController (this) { NavigationBarHidden = true };			
 			me = new ProfileViewController (meNavigationController);			
 			
-			meNavigationController.TabBarItem = new UITabBarItem("me", Graphics.GetImgResource("me"), 3);
+			meNavigationController.TabBarItem = new UITabBarItem("tools", Graphics.GetImgResource("me"), 3);
 			meNavigationController.PushViewController (me, false);
 		}
 

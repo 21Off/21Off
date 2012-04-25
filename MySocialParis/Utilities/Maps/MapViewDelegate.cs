@@ -1,10 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.MapKit;
 using MonoTouch.UIKit;
-using MSP.Client.DataContracts;
-using System.Collections.Generic;
 
 namespace MSP.Client
 {

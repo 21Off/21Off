@@ -5,11 +5,15 @@
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True" selected="True">
-              <Node name="Images" expanded="True">
-                <Node name="Ver4" expanded="True" />
+            <Node name="21Off.Client" expanded="True">
+              <Node name="1.PresentationGuiLayer" expanded="True">
+                <Node name="iPhone" expanded="True" />
               </Node>
+              <Node name="AppDelegateUIBuilder.cs" selected="True" />
             </Node>
+          </Node>
+          <Node name="Share" expanded="True">
+            <Node name="FaceBook" expanded="True" />
           </Node>
         </State>
       </Pad>

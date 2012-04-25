@@ -4,13 +4,14 @@ using System.Threading;
 using MonoTouch.CoreLocation;
 using MonoTouch.Foundation;
 using MonoTouch.MapKit;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace MSP.Client
-{
-	
+{	
 	public static class ReverseGeocoder
 	{
-		public static Dictionary<CLLocationCoordinate2D, MKPlacemark> coordinates;
+		public static Dictionary<CLLocationCoordinate2D, string> addressHist;
 		public static Dictionary<CLLocationCoordinate2D, List<IReverseGeo>> pendingRequests;
 		// A queue used to avoid flooding the network stack with HTTP requests
 		static Stack<CLLocationCoordinate2D> requestQueue;
@@ -22,7 +23,7 @@ namespace MSP.Client
 		
 		static ReverseGeocoder()
 		{
-			coordinates = new Dictionary<CLLocationCoordinate2D, MKPlacemark>();
+			addressHist = new Dictionary<CLLocationCoordinate2D, string>();			
 			pendingRequests = new Dictionary<CLLocationCoordinate2D, List<IReverseGeo>>();
 			requestQueue = new Stack<CLLocationCoordinate2D>();
 			
@@ -31,12 +32,12 @@ namespace MSP.Client
 			geoCoderDel.OnFailedWithError+= HandleGeoCoderDelOnFailedWithError;			
 		}
 		
-		public static MKPlacemark ReverseGeocode (CLLocationCoordinate2D coord, IReverseGeo reverseGeo)
+		public static string ReverseGeocode (CLLocationCoordinate2D coord, IReverseGeo reverseGeo)
 		{
 			lock (lockGeocoder)
 			{
-				if (coordinates.ContainsKey(coord))
-					return coordinates[coord];
+				if (addressHist.ContainsKey(coord))
+					return addressHist[coord];			
 				
 				if (pendingRequests.ContainsKey(coord))
 				{
@@ -66,7 +67,20 @@ namespace MSP.Client
 			
 			Interlocked.Increment (ref geoCoderDownloaders);
 			try
-			{				
+			{
+				waitEnd.Reset();
+				
+				Task.Factory.StartNew(()=>
+                {
+					var res = GetCoordinates(coord);
+					
+					if (res != null && res.results != null && res.results.Count > 0)
+						OnFoundAddress(coord, res.results[0].formatted_address);
+				});
+				
+				
+				return;
+								
 				geoCoder = new MKReverseGeocoder (coord);
 				geoCoder.Delegate = geoCoderDel;
 				waitEnd.Reset();
@@ -80,11 +94,33 @@ namespace MSP.Client
 				Util.LogException("ReverseGeocode", ex);
 			}			
 		}
+		
+		public static Geo GetCoordinates(CLLocationCoordinate2D coord)
+		{
+			using (var client = new WebClient())
+			{
+				Uri uri = new Uri(string.Format("http://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&sensor=false", coord.Latitude, coord.Longitude));
+		
+				/* The first number is the status code,
+				* the second is the accuracy,
+				* the third is the latitude,
+				* the fourth one is the longitude.
+				*/
+				string geocodeInfo = client.DownloadString(uri);
+		
+				return Des<Geo>(geocodeInfo);
+			}
+		}
+		
+		public static T Des<T>(string s)
+		{
+			return ServiceStack.Text.JsonSerializer.DeserializeFromString<T>(s);
+		}		
 				
 		private static void WaitGeolocCallback(object state)
 		{
 			try
-			{
+			{								
 				MKReverseGeocoder g = (MKReverseGeocoder)state;
 				bool endedRight = waitEnd.WaitOne(5000);
 				if (!endedRight)
@@ -141,37 +177,35 @@ namespace MSP.Client
 			{
 			}
 		}
-
-		static void HandleGeoCoderDelOnFoundWithPlacemark (MKReverseGeocoder arg1, MKPlacemark placemark)
+		
+		static void OnFoundAddress(CLLocationCoordinate2D coordinate, string address)
 		{
 			try
 			{
-				var coordinate = arg1.coordinate;
 				waitEnd.Set();
 				
 				//Dont take in account the geolocalisations that arrive after x seconds
+				/*
 				if (arg1 != geoCoder)
 					return;
+				*/					
 				
-				//Util.Log("FoundWithPlacemark for coord: Lat-{0}, Long-{1}", coordinate.Latitude, coordinate.Longitude);
-				
-				if (arg1 == geoCoder)
-					Interlocked.Decrement (ref geoCoderDownloaders);
+				Interlocked.Decrement (ref geoCoderDownloaders);
 				
 				var list = new List<IReverseGeo>();
 				lock (lockGeocoder)
 				{
-					coordinates[arg1.coordinate] = placemark;
+					addressHist[coordinate] = address;
 					
-					list = pendingRequests[arg1.coordinate];
-					pendingRequests.Remove(arg1.coordinate);
+					list = pendingRequests[coordinate];
+					pendingRequests.Remove(coordinate);
 				}
 				
 				nsDispatcher.BeginInvokeOnMainThread(()=>
 	            {
 					foreach (IReverseGeo reverseGeo in list)
 					{
-						reverseGeo.HandleGeoCoderDelOnFoundWithPlacemark(arg1, placemark);
+						reverseGeo.OnFoundAddress(address);
 					}
 				});
 							
@@ -187,8 +221,28 @@ namespace MSP.Client
 			}
 			catch (Exception ex)
 			{
+			}			
+		}		                           
+		
+		static void HandleGeoCoderDelOnFoundWithPlacemark (MKReverseGeocoder arg1, MKPlacemark placemark)
+		{
+			if (placemark != null)
+			{
+				string address = placemark.SubThoroughfare + " " + placemark.Thoroughfare;
+				OnFoundAddress(arg1.coordinate, address);
 			}
-		}		
+		}
+	}
+			
+	public class Geo
+	{
+		public string status {get;set;}
+		public List<Result>results {get;set;}
+	}
+	
+	public class Result
+	{
+		public string formatted_address {get;set;}
 	}
 }
 
