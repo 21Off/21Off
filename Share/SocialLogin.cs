@@ -99,7 +99,7 @@ namespace SocialLogin
 									OnSuccess();
 								});
 							}
-							catch
+							catch (Exception ex)
 							{
 								OnFailure();
 							}

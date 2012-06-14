@@ -132,13 +132,7 @@ namespace MSP.Client
 			
 			var view = new UIView(new RectangleF(0, 40 , 320, 1));
 			view.Layer.BackgroundColor = UIColor.LightGray.CGColor;
-			this.View.AddSubview(view);
-			
-			/*
-			var imageVIew = new UIWebImageView(new RectangleF(0, 0, 320, 480), Graphics.GetImgResource("pagedegarde"));
-			View.AddSubview(imageVIew);
-			View.SendSubviewToBack(imageVIew);
-			*/
+			this.View.AddSubview(view);			
 			
 			var list = new List<Element> { pseudo, pass };			
 			this.root[0].Insert(0, UITableViewRowAnimation.Bottom, list);

@@ -52,7 +52,7 @@ namespace MSP.Client.DataContracts
 			get;set;
 		}		
 	}
-
+	
 	public class GetUsers
 	{
 		public long? UserId {get;set;}
@@ -78,7 +78,7 @@ namespace MSP.Client.DataContracts
 		public int InRelation {get;set;}
 		
 
-		public ResponseStatus ResponseStatus { get; set; }		
+		public ResponseStatus ResponseStatus { get; set; }
 	}
 	
 	public enum Relation

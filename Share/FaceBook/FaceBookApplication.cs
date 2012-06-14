@@ -39,7 +39,7 @@ namespace FaceBook
 			_dialogDelegate = new DialogDelegate(this);
 		}
 		
-		#endregion Constructors
+		#endregion
 		
 		#region Public Methods
 		/// <summary>
@@ -106,7 +106,7 @@ namespace FaceBook
 		
 		public void Login()
 		{
-			//_facebook.Authorize(new string[]{"publish_stream", "offline_access"}, _sessionDelegate);
+			//_facebook.Authorize(new string[]{"publish_stream", "offline_access"}, _sessionDelegate);			
 			var socialLogin = new SocialLogin.SocialLogin(new SocialLogin.FacebookConfig(){
 				AppID = _appId,
 				Permissions = new string[] { "publish_stream" }

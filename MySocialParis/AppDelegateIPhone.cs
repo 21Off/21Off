@@ -49,6 +49,11 @@ namespace MSP.Client
 			
 			InitializeWindow ();
 			
+//			ServicePointManager.ServerCertificateValidationCallback = (sender, cert, chain, ssl) => 
+//			{
+//				return true;
+//			};
+			
 			var mainDB = Database.Main;
 			try
 			{
@@ -60,38 +65,13 @@ namespace MSP.Client
 				
 				if (MainUser != null)
 				{
-					window.AddSubview(new UIImageView(Graphics.GetImgResource("pagedegarde")));
+					_welcomePage = new UIImageView(Graphics.GetImgResource("pagedegarde"));
+					_welcomePage.Tag = 666;
+					window.AddSubview(_welcomePage);
 					
 					ShowRealLoading(window, "Logging in ...", "", 
 					()=>
-					{
-						/*
-						var nvctest = new System.Collections.Specialized.NameValueCollection();
-						
-			            nvctest.Add("name", "test");
-			            nvctest.Add("start_time", "1272718027");
-			            nvctest.Add("end_time", "1272718027");
-			            nvctest.Add("location", "myhouse");
-			            
-						var wc = new WebClient();
-						string accessToken = NSUserDefaults.StandardUserDefaults.StringForKey("FacebookAccessToken");
-						accessToken = "AAACZAmr1LUlYBAOCcLsqV8Wu3r1dV0MvDZCi39b5fEwwPQ6TMVf872MUZBgZCbEl1db19qk8ZAnmrvVwLns8nxzWfZC96OyKM2kmBA38QOdcZAsGm3j8BwG";
-			            //byte[] r = wc.UploadValues("https://graph.facebook.com/me/events?" + "access_token=" + accessToken, nvctest);
-						byte[] r = wc.DownloadData("https://graph.facebook.com/me/events?" + "access_token=" + accessToken);
-						Console.WriteLine(System.Text.Encoding.UTF8.GetString(r));
-						
-						return;
-					    var fb = new Facebook.FacebookClient();
-						var js = new Facebook.JsonObject();
-						js.Add(new KeyValuePair<string, object>("appd", "168889879843414"));
-						js.Add(new KeyValuePair<string, object>("message", "Welcome"));
-						fb.PostTaskAsync("me/apprequests", js).ContinueWith(e =>
-                        {
-							Console.WriteLine(e.Id);
-						});
-					    */
-					
-						
+					{											
 						//InstagramServ.GetPopular();
 						AuthSequence(MainUser);
 					});
@@ -111,9 +91,11 @@ namespace MSP.Client
 			return true;
 		}
 		
+		private UIImageView _welcomePage;
+		private UINavigationController _currentNavControler;
+		
 		private void AuthSequence(User user)
 		{
-			//UsersServ.GetSocialIds(new List<long>()  {1, 2, 3}, 1);
 			User authUser = UsersServ.Authentificate(user.Name, user.Password);
 			if (authUser == null || user.Id == 0)
 			{
@@ -126,6 +108,14 @@ namespace MSP.Client
 				
 				return;
 			}
+			
+			if (_welcomePage != null)
+			{
+				_welcomePage.Image = null;
+				_welcomePage.RemoveFromSuperview();
+				_welcomePage = null;
+			}
+			
 			InvokeOnMainThread(InitApp);
 		}
 		
@@ -150,9 +140,10 @@ namespace MSP.Client
 			welcomePage.Nav = nav;										
 			nav.Add(welcomePage.View);			
 			window.AddSubview(nav.View);
-		}
-		
-		private UINavigationController _currentNavControler;
+			
+			if (_welcomePage != null)
+				window.WillRemoveSubview(_welcomePage);
+		}			
 		
 		public UINavigationController GetCurrentNavControler()
 		{

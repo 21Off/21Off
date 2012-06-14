@@ -92,7 +92,6 @@ namespace MSP.Client
 				ShowLoadMorePhotos = false,				
 			};
 			
-			//likedMediaView.TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("pagedegarde"));
 			likedMediaView.View.Frame = new System.Drawing.RectangleF(new PointF(0, topY),  size);
 			this.Add(likedMediaView.View);
 		}

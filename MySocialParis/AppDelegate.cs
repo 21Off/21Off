@@ -45,7 +45,7 @@ namespace MSP.Client
 			
 		}		
 		
-		public static void ShowRealLoading(UIView view, string title, string message, Action action)
+		public static void ShowRealLoading(UIView view, string title, string message, Action action, Action mainThreadAction = null)
 		{
 			var hud = new LoadingHUDView(title, message);
 			//view.AddSubview(hud);
@@ -81,6 +81,9 @@ namespace MSP.Client
 					hud.StopAnimating ();
 					hud.RemoveFromSuperview ();
 					hud = null;
+					
+					if (mainThreadAction != null)
+						mainThreadAction();
 				});
 			});
 			

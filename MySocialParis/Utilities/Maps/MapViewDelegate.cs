@@ -4,6 +4,7 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.MapKit;
 using MonoTouch.UIKit;
+using MSP.Client.DataContracts;
 
 namespace MSP.Client
 {

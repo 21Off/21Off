@@ -80,6 +80,8 @@ namespace MSP.Client
 		
 		public MyEntryElement Description {get; set;}
 		public MyEntryElement FirstComment {get; set;}
+		private AddLoadMoreElement addLoadMore {get; set;}
+		
 		public CLLocation PhotoLocation {get; set;}
 		public string LocationMapPhotoCapture {get;set;}
 		
@@ -123,7 +125,7 @@ namespace MSP.Client
 		private void KeyboardWillShow (NSNotification notification)
 		{
 			var kbdBounds = (notification.UserInfo.ObjectForKey (UIKeyboard.BoundsUserInfoKey) as NSValue).RectangleFValue;
-			//Console.WriteLine(kbdBounds);
+			Console.WriteLine(kbdBounds);
 			//composerView.Frame = ComputeComposerSize (kbdBounds);
 		}			
 		
@@ -140,7 +142,7 @@ namespace MSP.Client
 			
 			// We are in the first screen (POST) and we click on Ok button to go to Keyboard screen
 			if (section.Elements[0].GetType() == typeof(MyEntryElement))
-			{				
+			{
 				mapFrame = new RectangleF(0, 45, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height - 50 - 5);
 				
 				section.Clear();
@@ -148,7 +150,8 @@ namespace MSP.Client
 				if (eventImage == null)
 					root[2].Clear();
 				
-				section.Add(CreateLoadMore(section));
+				addLoadMore = CreateLoadMore(section);
+				section.Add(addLoadMore);
 				SetTitleText("keywords", "enter keywords");
 				
 				Keywords.ForEach(el => section.Add(new StringElement(el.Name)));
@@ -191,6 +194,7 @@ namespace MSP.Client
 		private void HandleBackBtnTouchUpInside (object sender, EventArgs e)
 		{
 			Section section = this.root.ElementAtOrDefault(0);
+			
 			// We go back to the first screen, at the Post initialization
 			if (isOnKeywordScreen && _Settings == null)
 			{
@@ -201,6 +205,7 @@ namespace MSP.Client
 				root[1].Add(FirstComment);
 				if (eventImage == null)
 					root[2].Add(createAlbumCbx);
+				
 				SetTitleText("post", "describe your post");
 				
 				this.View.BringSubviewToFront(topBar);
@@ -262,13 +267,8 @@ namespace MSP.Client
 				lme.FetchValue();
 				if (!string.IsNullOrWhiteSpace(lme.Value))
 				{			
-					// Launch a thread to do some work
-					ThreadPool.QueueUserWorkItem (delegate {
-						
-						// We just wait for 2 seconds.
-						System.Threading.Thread.Sleep(200);
-					
-						// Now make sure we invoke on the main thread the updates
+					ThreadPool.QueueUserWorkItem (delegate {						
+						System.Threading.Thread.Sleep(200);					
 						this.BeginInvokeOnMainThread(delegate {
 							lme.Animating = false;
 							section.Insert(1, new StringElement(lme.Value));							
@@ -293,6 +293,9 @@ namespace MSP.Client
 		
 		private Image GetPhoto(AppDelegateIPhone AppDel, ref string jpgstr)
 		{			
+			if (Description != null)
+				Description.FetchValue();
+			
 			string desc = Description == null ? null : Description.Value;
 			
 			var image = new Image() 
@@ -342,7 +345,8 @@ namespace MSP.Client
 				var AppDel = AppDelegateIPhone.AIphone;
 				string jpgstr = null;
 				Image image = GetPhoto(AppDel, ref jpgstr);
-								
+				
+				FirstComment.FetchValue();
 				var comments = new List<Comment>();
 				if (!string.IsNullOrWhiteSpace(FirstComment.Value))
 				{
@@ -375,9 +379,11 @@ namespace MSP.Client
 					image = AppDel.ImgServ.AddNewImageToAlbum(image, jpgstr, LocationMapPhotoCapture, Keywords, 
                               comments, eventImage.IdAlbum, eventImage == null ? 0 : eventImage.Id);
 				}
-								
+				
+				Thread.Sleep(200);
+				
 				InvokeOnMainThread(()=>
-				{
+				{					
 					if (image.Id == 0)
 						return;
 					
@@ -409,32 +415,39 @@ namespace MSP.Client
 		
 		private void NetworkPost(Image image)
 		{
-			string img = string.Format("http://storage.21offserver.com/files/{0}/{1}.jpg", image.UserId, image.Id);
-			if (_Settings.twitter.Value)
-			{
-				var twitterApp = new Twitter.TwitterApplication(this);
-				if (twitterApp.LoggedIn())
+			try
+			{			
+				string img = string.Format("http://storage.21offserver.com/files/{0}/{1}.jpg", image.UserId, image.Id);
+				if (_Settings.twitter.Value)
 				{
-					twitterApp.Publish("21Off", img, image.Name ?? "No comment" , img);
+					var twitterApp = new Twitter.TwitterApplication(this);
+					if (twitterApp.LoggedIn())
+					{
+						twitterApp.Publish("21Off", img, image.Name ?? "No comment" , img);
+					}
+					else
+					{
+						using(var alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
+						{ alert.Show();}
+					}
 				}
-				else
+				if (_Settings.facebook.Value)
 				{
-					using(var alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
-					{ alert.Show();}
+					var faceBookApp = new FaceBook.FaceBookApplication(this);
+					if (faceBookApp.LoggedIn())
+					{
+						faceBookApp.Publish(image.Name ?? "No comment", img, "Posted with 21Off", img);
+					}
+					else
+					{
+						using(var alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
+						{ alert.Show();}
+					}
 				}
 			}
-			if (_Settings.facebook.Value)
+			catch (Exception ex)
 			{
-				var faceBookApp = new FaceBook.FaceBookApplication(this);
-				if (faceBookApp.LoggedIn())
-				{
-					faceBookApp.Publish("21Off", img, image.Name ?? "No comment", img);
-				}
-				else
-				{
-					using(var alert = new UIAlertView("Warning","Not logged in",null,"OK",null))
-					{ alert.Show();}
-				}
+				Util.LogException("NetworkPost", ex);
 			}
 		}
 		
@@ -473,12 +486,25 @@ namespace MSP.Client
 			{
 				if (section.Elements[i] is StringElement)
 				{
-					var strElement = (StringElement)section.Elements[i];
+					var strElement = (StringElement)section.Elements[i];					
 					var keyword = new Keyword()
 					{
 						Name = strElement.Caption
 					};
 					keywords.Add(keyword);
+				}
+				if (addLoadMore != null)
+				{
+					addLoadMore.FetchValue();
+					
+					if (!keywords.Any(e => e.Name == addLoadMore.Value))
+					{
+						var keyword = new Keyword()
+						{
+							Name = addLoadMore.Value,
+						};
+						keywords.Add(keyword);
+					}
 				}
 			}
 			

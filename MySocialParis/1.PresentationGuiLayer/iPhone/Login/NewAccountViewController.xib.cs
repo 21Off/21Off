@@ -142,10 +142,6 @@ namespace MSP.Client
 			lineView.Tag = 1;
 			lineView.Layer.BackgroundColor = UIColor.LightGray.CGColor;
 			this.View.AddSubview(lineView);
-						
-			//var imageVIew = new UIWebImageView(new RectangleF(0, 0, 320, 480), Graphics.GetImgResource("pagedegarde"));
-			//View.AddSubview(imageVIew);
-			//View.SendSubviewToBack(imageVIew);			
 		}
 		
 		private UIView lineView;

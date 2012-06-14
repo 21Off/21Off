@@ -474,6 +474,8 @@
       <DependentUpon>AlbumDetailsViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="1.PresentationGuiLayer\iPhone\BaseMapViewController.cs" />
+    <Compile Include="2.ApplicationServicesLayer\JsonExtensions.cs" />
+    <Compile Include="DataContracts\GetUserInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="1.PresentationGuiLayer\iPhone\MainWindowIPhone.xib" xmlns="" />
@@ -650,7 +652,6 @@
     <Content Include="Images\Ver4\cadre200_album.png" />
     <Content Include="Images\Ver4\createalbum.png" />
     <Content Include="Images\Ver4\createalbum%402x.png" />
-    <Content Include="Images\logo512.png" />
     <Content Include="Images\appicon.png" />
     <Content Include="Images\appicon%402x.png" />
     <Content Include="Images\Icon%402x.png" />
@@ -673,5 +674,8 @@
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="Info.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <ITunesArtwork Include="Images\logo512.png" />
   </ItemGroup>
 </Project>

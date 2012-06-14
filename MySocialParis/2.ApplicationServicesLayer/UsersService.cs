@@ -3,6 +3,8 @@ using System.Json;
 using System.Threading;
 using MSP.Client.DataContracts;
 using System.Collections.Generic;
+using System.Reflection;
+using MonoTouch.Foundation;
 
 namespace MSP.Client
 {
@@ -146,40 +148,35 @@ namespace MSP.Client
 			we.WaitOne(5000);
 			
 			return user;
-		}		
+		}
+		
+		public GetUserInfoResponse GetUserInfo(int userId)
+		{
+			return GetServiceResponse<GetUserInfoResponse>(new GetUserInfo() { UserId = userId });
+		}
 		
 		public User Authentificate (string userName, string password)
 		{
-			var authUser = new AuthUser() { Password = password, UserName = userName, Version = "1.1.6" };
+		    var bundleVersion = NSBundle.MainBundle.ObjectForInfoDictionary("CFBundleVersion").ToString();
+			var authUser = new AuthUser() { Password = password, UserName = userName, Version = bundleVersion };
 			
-			User user = null;
-			
-			var we = new ManualResetEvent(false);			
-			string uri = string.Format("http://storage.21offserver.com/json/syncreply/AuthUser");
-			
-			JsonUtility.Upload (uri, authUser, false, s =>
-			{
-				try
-				{
-					var json = JsonArray.Load (s);
-					int Id = json.ContainsKey("UserId") ? Convert.ToInt32(json["UserId"].ToString()) : 0;
-					user = new User(){ Id = Id, Name = userName };
-				}
-				catch (Exception ex)
-				{
-					Util.LogException("Authentificate", ex);
-				}
-				we.Set();
-			});
-			
-			we.WaitOne(20000);
-			
-			return user;
+			return GetServiceResponse(authUser, json=>
+            {
+				int Id = json.TryGetInt("UserId");
+				return new User(){ Id = Id, Name = userName };
+			});		
 		}
 		
 		public User AuthentificateFacebook (string userName, decimal userId, string signedRequest = "password")
 		{
-			var authUser = new AuthFacebookUser() { SignedRequest = signedRequest, UserName = userName, Version = "1.0.1", UserId = userId, };
+			var bundleVersion = NSBundle.MainBundle.ObjectForInfoDictionary("CFBundleVersion").ToString();
+			var authUser = new AuthFacebookUser() 
+			{ 
+				SignedRequest = signedRequest, 
+				UserName = userName, 
+				Version = bundleVersion, 
+				UserId = userId, 
+			};
 			
 			User user = null;
 			
@@ -318,5 +315,5 @@ namespace MSP.Client
 			};
 			return user;
 		}		
-	}
+	}	
 }

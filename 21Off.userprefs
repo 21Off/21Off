@@ -5,12 +5,26 @@
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="Client" expanded="True">
-            <Node name="21Off.Client" expanded="True">
+            <Node name="21Off.Client" expanded="True" selected="True">
               <Node name="1.PresentationGuiLayer" expanded="True">
-                <Node name="iPhone" expanded="True" />
+                <Node name="iPhone" expanded="True">
+                  <Node name="Me" expanded="True">
+                    <Node name="ProfileViewController.xib" expanded="True" />
+                  </Node>
+                  <Node name="Photo" expanded="True">
+                    <Node name="PhotoLocationViewController.xib" expanded="True" />
+                  </Node>
+                </Node>
               </Node>
-              <Node name="AppDelegateUIBuilder.cs" selected="True" />
+              <Node name="4.DataAccessLayer" expanded="True" />
+              <Node name="DataContracts" expanded="True" />
+              <Node name="Utilities" expanded="True">
+                <Node name="Maps" expanded="True" />
+              </Node>
             </Node>
+          </Node>
+          <Node name="DialogExtension" expanded="True">
+            <Node name="Elements" expanded="True" />
           </Node>
           <Node name="Share" expanded="True">
             <Node name="FaceBook" expanded="True" />
@@ -23,6 +37,7 @@
     <BreakpointStore>
       <Breakpoint file="/Users/Valeriu/Projects/MySocialParis/Share/FaceBook/FacebookAuth.cs" line="191" />
       <Breakpoint file="/Users/Valeriu/Projects/21Off/MySocialParis/1.PresentationGuiLayer/iPhone/Login/oAuthFacebook.cs" line="80" />
+      <Breakpoint file="/Users/Valeriu/Projects/21Off/MySocialParis/1.PresentationGuiLayer/iPhone/Login/WelcomePage.cs" line="165" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />

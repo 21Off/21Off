@@ -6,6 +6,7 @@ using MonoTouch.CoreLocation;
 using MonoTouch.Foundation;
 using MonoTouch.MapKit;
 using MonoTouch.UIKit;
+using System.Threading;
 
 namespace MSP.Client
 {
@@ -86,10 +87,7 @@ namespace MSP.Client
 				locationManager.StartUpdatingLocation();
 			*/
 				
-			locationManager.StartUpdatingLocation();
-			
-			//var locMapViewDel = new LocationMapViewDelegate();
-			//mapView.Delegate = locMapViewDel;
+			locationManager.StartUpdatingLocation();					
 		}
 		
 		private void ShowLocalisationFailedMessage()
@@ -177,14 +175,10 @@ namespace MSP.Client
 		
 		#region Events
 		
-		void HandleMapViewDidUpdateUserLocation (object sender, MKUserLocationEventArgs e)
-		{
-			if (!loaded)
-				HandleUpdatedLocation(e.UserLocation.Location);
-		}		
-
 		void HandleMapViewOnTouchEnded (PointF obj)
 		{
+			ignoreMapUpdate = true;
+			
 			if (!loaded || !geolocalisationDone)
 				return;
 			
@@ -205,16 +199,35 @@ namespace MSP.Client
 		}		
 		
 		private bool firstUpdate = true;
+		private bool ignoreMapUpdate;
+		private int localisationRetryCount = 0;
 		
 		void HandleUpdatedLocation (CLLocation newLocation)
 		{
+			if (ignoreMapUpdate)
+				return;
+			
 			if (newLocation == null)
 			{
-				Action action = () =>
+				if (localisationRetryCount == 0)
 				{
+					localisationRetryCount++;
+					
+					Action action = () =>
+					{
+						Util.RequestLocation(HandleUpdatedLocation);
+					};
+					Util.ShowAlertSheet("No reply from network! Give another try? :)", View, action);				
+				}
+				else
+				{
+					localisationRetryCount++;
+					Thread.Sleep(300);					
 					Util.RequestLocation(HandleUpdatedLocation);
-				};
-				Util.ShowAlertSheet("No reply from network! Give another try? :)", View, action);				
+					
+					if (localisationRetryCount == 4)
+						localisationRetryCount = 0;
+				}		
 			}
 			else
 			{
@@ -238,46 +251,6 @@ namespace MSP.Client
 			}
 		}
 		
-		void HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)
-		{
-			UnHandleGeocode();
-			
-			if (PhotoLocation != null)
-			{
-				if (PhotoLocation.Coordinate.Latitude != arg1.coordinate.Latitude ||
-					PhotoLocation.Coordinate.Longitude != arg1.coordinate.Longitude)
-					return;
-			}
-			
-			Action action = () =>
-			{
-				this.BeginInvokeOnMainThread(delegate { ReverseGeocode (arg1.coordinate); });
-			};
-			Util.ShowAlertSheet("No reply from network! Give another try? :)", View, action);
-		}
-
-		void HandleGeoCoderDelOnFoundWithPlacemark (MKReverseGeocoder geocoder, MKPlacemark placemark)
-		{
-			UnHandleGeocode();
-			
-			if (PhotoLocation != null)
-			{
-				if (PhotoLocation.Coordinate.Latitude != geocoder.coordinate.Latitude ||
-					PhotoLocation.Coordinate.Longitude != geocoder.coordinate.Longitude)
-					return;
-			}
-				
-			try 
-			{
-				if (ann != null)
-					ann.Subtitle = placemark.Thoroughfare + " " + placemark.SubThoroughfare;
-			} 
-			catch (Exception ex) 
-			{
-				Util.LogException("HandleGeoCoderDelOnFoundWithPlacemark", ex);
-			}
-		}
-		
 		void HandleOkBtnTouchUpInside (object sender, EventArgs e)
 		{			
 			if (PhotoLocation != null)
@@ -292,9 +265,7 @@ namespace MSP.Client
 			AppDelegateIPhone.AIphone.GotoToShare();
 		}	
 
-		#endregion
-		
-		//private GeoCoderDelegate geoCoderDel;
+		#endregion		
 		
 		private void SetAddress(string address)
 		{
@@ -313,55 +284,39 @@ namespace MSP.Client
 			
 			string address = ReverseGeocoder.ReverseGeocode(coord, this);
 			if (!string.IsNullOrWhiteSpace(address))
-				SetAddress(address);
-			
-			/*
-				
-			try
-			{
-				if (geoCoderDel == null)
-				{
-					geoCoderDel = new GeoCoderDelegate ();
-					geoCoderDel.OnFoundWithPlacemark += HandleGeoCoderDelOnFoundWithPlacemark;
-					geoCoderDel.OnFailedWithError += HandleGeoCoderDelOnFailedWithError;
-				}
-				
-				var geoCoder = new MKReverseGeocoder (coord);
-				geoCoder.Delegate = geoCoderDel;				
-				geoCoder.Start ();
-			}
-			catch (Exception ex)
-			{
-				Util.LogException("ReverseGeocode", ex);
-			}
-			*/
+				InvokeOnMainThread(()=> SetAddress(address));
 		}
 		
 		private void UnHandleGeocode()
 		{
 			geolocalisationDone = true;
-			//geoCoderDel.OnFoundWithPlacemark -= HandleGeoCoderDelOnFoundWithPlacemark;
-			//geoCoderDel.OnFailedWithError -= HandleGeoCoderDelOnFailedWithError;			
 		}
 		
-		private void RepositionAnnotation(CLLocationCoordinate2D newLocation)
-		{
+		private void RepositionAnnotation(CLLocationCoordinate2D location)
+		{			
 			string desc = "Your photo is here";
 			
 			if (ann == null)
 			{
-				ann = new MKPointAnnotation { Title = desc, Coordinate = newLocation };				
+				ann = new MKPointAnnotation { Title = desc, Coordinate = location };				
 			}
 			else
 			{
 			 	mapView.RemoveAnnotation (ann);
-				ann.Coordinate = newLocation;
+				ann.Coordinate = location;
+				SetAddress("...");
 			}
 			
-			mapView.AddAnnotationObject (ann);			
-			LocationMapPhotoCapture = ScreenCapture ();			
-			mapView.SelectAnnotation (ann, false);			
-			ReverseGeocode(newLocation);
+			LocationMapPhotoCapture = ScreenCapture ();
+			
+			mapView.AddAnnotationObject (ann);	
+			
+			Action act = () => 
+			{				
+				ReverseGeocode(location);			                   
+			};
+			
+			AppDelegateIPhone.ShowRealLoading(null, "Getting location", null, act, () => mapView.SelectAnnotation (ann, false));
 		}		
 
 		public override void ViewDidLoad ()

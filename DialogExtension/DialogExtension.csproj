@@ -50,6 +50,8 @@
     <Compile Include="Utilities\ImageButton.cs" />
     <Compile Include="Utilities\GraphicsUtil.cs" />
     <Compile Include="Elements.cs" />
+    <Compile Include="Elements\CustomTableViewCell.cs" />
+    <Compile Include="Elements\CustomImageStringElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Elements\" />

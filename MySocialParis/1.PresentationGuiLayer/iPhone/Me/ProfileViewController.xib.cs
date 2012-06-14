@@ -39,8 +39,8 @@ namespace MSP.Client
 		
 		#endregion
 		
-		private RootElement root;
-		private DialogViewController mainDv;
+		private RootElement root;		
+		private FaceBook.FaceBookApplication facebookApp;
 		
 		public override void ViewDidLoad ()
 		{
@@ -49,7 +49,6 @@ namespace MSP.Client
 			var dv = new DialogViewController (root, true);			
 			dv.TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("fond"));
 			dv.View.Frame = new RectangleF(0, 45, 320, 480 - 40 - 25);
-			mainDv = dv;
 			
 			this.View.WillRemoveSubview(mainView);
 			this.View.AddSubview(dv.View);
@@ -58,7 +57,7 @@ namespace MSP.Client
 			view.Layer.BackgroundColor = UIColor.LightGray.CGColor;
 			this.View.AddSubview(view);
 			
-			Initialize();
+			//Initialize();
 		}
 		
 		private void Initialize()
@@ -67,7 +66,7 @@ namespace MSP.Client
 			this.searchBtn.TouchDown += HandleSearchBtnhandleTouchDown;
 		}
 
-		void HandleSearchBtnhandleTouchDown (object sender, EventArgs e)
+		private void HandleSearchBtnhandleTouchDown (object sender, EventArgs e)
 		{
 			_MSP.DismissModalViewControllerAnimated(true);
 			
@@ -75,10 +74,22 @@ namespace MSP.Client
 			_MSP.PushViewController(search, true);
 		}
 				
-		RootElement CreateRoot ()
+		private RootElement CreateRoot ()
 		{
+			var searchElement = new CustomImageStringElement("search", ()=>
+			{
+				_MSP.DismissModalViewControllerAnimated(true);
+			
+				var search = new SearchViewController(_MSP);
+				_MSP.PushViewController(search, true);
+			}, Graphics.GetImgResource("search"));
+			
 			return new RootElement ("Settings") {
-				new Section (){
+				new Section()
+				{
+					searchElement
+				},
+				new Section (){					
 					new StringElement ("my posts", ()=>
 	                   {
 							Action act = ()=>
@@ -91,7 +102,7 @@ namespace MSP.Client
 								});
 							};
 							AppDelegateIPhone.ShowRealLoading(View, "Loading posts", null, act);
-						}
+						} 
 					),
 					new StringElement("facebook friends", ()=>
 					{
@@ -100,8 +111,19 @@ namespace MSP.Client
 					}),
 					new StringElement ("my profile", ()=>
 					{
-						var pref = new PreferencesViewController(_MSP);
-						_MSP.PushViewController(pref, true);
+						Action act = ()=>
+						{
+							var userInfo = AppDelegateIPhone.AIphone.UsersServ.GetUserInfo(AppDelegateIPhone.AIphone.MainUser.Id);
+							if (userInfo != null)
+							{							
+								InvokeOnMainThread(()=>
+			                    {
+									var pref = new PreferencesViewController(_MSP, userInfo);
+									_MSP.PushViewController(pref, true);
+								});
+							}
+						};
+						AppDelegateIPhone.ShowRealLoading(View, "Loading my profile", null, act);
 					}),					
 					new StringElement ("other networks", ()=>
 					{
@@ -220,6 +242,6 @@ namespace MSP.Client
 			});		
 		}
 		
-		private FaceBook.FaceBookApplication facebookApp;
 	}
+	
 }

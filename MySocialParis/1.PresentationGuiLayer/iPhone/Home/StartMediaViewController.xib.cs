@@ -234,7 +234,7 @@ namespace MSP.Client
 			var likedRootElement = new RootElement ("liked") { UnevenRows = true };
 			var recentRootElement = new RootElement ("recent") { UnevenRows = true };
 			var friendsRootElement = new RootElement ("friends") { UnevenRows = true };
-			var eventsRootElement = new RootElement ("events") { UnevenRows = true };
+			var eventsRootElement = new RootElement ("events") { UnevenRows = true };			
 				
 			var likedSection = new Section(GetSubTitle(LocType, 1));
 			var friendsSection = new Section(GetSubTitle(LocType, 2));

@@ -154,13 +154,7 @@ namespace MSP.Client
 			
 			var view = new UIView (new RectangleF (0, 40, 320, 1));
 			view.Layer.BackgroundColor = UIColor.LightGray.CGColor;
-			this.View.AddSubview (view);		
-			
-			/*
-			imageVIew = new UIWebImageView (new RectangleF (0, 0, 320, 480), Graphics.GetImgResource("pagedegarde"));
-			View.Add (imageVIew);			
-			View.SendSubviewToBack (imageVIew);
-			*/
+			this.View.AddSubview (view);
 		}
 		
 		public override void ViewDidUnload ()
