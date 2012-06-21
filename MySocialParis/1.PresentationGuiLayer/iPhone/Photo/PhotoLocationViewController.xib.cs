@@ -89,6 +89,11 @@ namespace MSP.Client
 				
 			locationManager.StartUpdatingLocation();					
 		}
+
+		void HandleOnRegionChanged ()
+		{
+			
+		}
 		
 		private void ShowLocalisationFailedMessage()
 		{
@@ -179,7 +184,7 @@ namespace MSP.Client
 		{
 			ignoreMapUpdate = true;
 			
-			if (!loaded || !geolocalisationDone)
+			if (!loaded)
 				return;
 			
 			mapView.ExclusiveTouch = true;
@@ -278,18 +283,21 @@ namespace MSP.Client
 			});
 		}
 				
+		private CLLocationCoordinate2D actualCoord;
 		public void ReverseGeocode (CLLocationCoordinate2D coord)
 		{
-			geolocalisationDone = false;
+			actualCoord = coord;
 			
 			string address = ReverseGeocoder.ReverseGeocode(coord, this);
 			if (!string.IsNullOrWhiteSpace(address))
-				InvokeOnMainThread(()=> SetAddress(address));
+				SetAddress(address);
+			else
+				SetAddress("Not found");
 		}
 		
 		private void UnHandleGeocode()
 		{
-			geolocalisationDone = true;
+			
 		}
 		
 		private void RepositionAnnotation(CLLocationCoordinate2D location)
@@ -304,19 +312,13 @@ namespace MSP.Client
 			{
 			 	mapView.RemoveAnnotation (ann);
 				ann.Coordinate = location;
-				SetAddress("...");
 			}
-			
+						
+			mapView.AddAnnotationObject (ann);
 			LocationMapPhotoCapture = ScreenCapture ();
+			mapView.SelectAnnotation (ann, false);
 			
-			mapView.AddAnnotationObject (ann);	
-			
-			Action act = () => 
-			{				
-				ReverseGeocode(location);			                   
-			};
-			
-			AppDelegateIPhone.ShowRealLoading(null, "Getting location", null, act, () => mapView.SelectAnnotation (ann, false));
+			ReverseGeocode(location);
 		}		
 
 		public override void ViewDidLoad ()
@@ -401,9 +403,10 @@ namespace MSP.Client
 		private string LocationMapPhotoCapture {get;set;}		
 
 		#region IReverseGeo implementation
-		public void OnFoundAddress (string address)
+		public void OnFoundAddress (CLLocationCoordinate2D coord, string address)
 		{
-			SetAddress(address);
+			if (coord.Equals(actualCoord))
+				SetAddress(address);
 		}
 		
 		void IReverseGeo.HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)

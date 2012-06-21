@@ -40,7 +40,6 @@ namespace MSP.Client
 		#endregion
 		
 		private RootElement root;		
-		private FaceBook.FaceBookApplication facebookApp;
 		
 		public override void ViewDidLoad ()
 		{
@@ -175,7 +174,9 @@ namespace MSP.Client
 			{
 				socialIds.Add((long)d);
 			}
-			List<User> facebookFriends = AppDelegateIPhone.AIphone.UsersServ.GetSocialIds(socialIds, 1);
+			var fBresp = AppDelegateIPhone.AIphone.UsersServ.GetSocialIds(socialIds, 1);
+
+			List<User> facebookFriends = fBresp.Subscribers;
 			if (facebookFriends == null)
 			{
 				Util.LogException("facebookFriends", new Exception());
@@ -196,40 +197,18 @@ namespace MSP.Client
 			{								
 				var root = new RootElement("") { new Section() };
 				var dv = new DialogViewController(root, true);
-				var friendsFacebooksIds = new List<long>();
 				
 				foreach (User fuser in facebookFriends)
 				{
 					var user = new UserElementII(fuser, RelationType.Friends);
 					root[0].Add(user);
 				}
-				foreach (long socialId in socialIds)
-				{
-					//if (friends.Contains(socialId))
-					//	continue;
-					
+				foreach (long socialId in fBresp.Others)
+				{					
 					var guser = new GraphUser() { id = socialId };										
 					var fbUser = new FbUserElement(guser, u => 
                     {													
-						//facebookApp.HandleOpenURL(new NSUrl(u));
-						//facebookApp.HandleOpenURL(NSUrl.FromString(u));
-						//return;
-						
-						WebViewController.OpenUrl (dv, "https://www.facebook.com/dialog/apprequests?app_id=168889879843414&message=Facebook%20Dialogs%20are%20so%20easy!&redirect_uri=http://www.21off.net");
-						return;
-						
-	  					var fac = new FacebookAuthorizationViewController("168889879843414", 
-                             new string[] {"read_stream", "publish_stream", "user_groups"}, FbDisplayType.Touch);
-						
-					    fac.AccessToken += delegate(string accessToken, DateTime expires) {
-						   //Logged in, got your accessToken here and when it expires!
-						   //_MSP.PopViewControllerAnimated(true);
-							fac.OpenUrl(u);
-						 
-						   //Do something else here (eg: Save the accessToken and expiry date to be used in your Graph API calls)
-						 };
-	 
-	 					_MSP.PushViewController(fac, true);						 
+						WebViewController.OpenUrl (dv, "https://www.facebook.com/dialog/apprequests?app_id=168889879843414&message=Welcome to 21Off!&redirect_uri=http://www.21off.net");					 
 					});
 					root[0].Add(fbUser);
 				}				

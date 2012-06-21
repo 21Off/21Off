@@ -145,6 +145,9 @@ namespace MSP.Client
 			{
 				mapFrame = new RectangleF(0, 45, UIScreen.MainScreen.Bounds.Width, UIScreen.MainScreen.Bounds.Height - 50 - 5);
 				
+				Description.FetchValue();
+				FirstComment.FetchValue();
+				
 				section.Clear();
 				root[1].Clear();
 				if (eventImage == null)
@@ -296,7 +299,9 @@ namespace MSP.Client
 			if (Description != null)
 				Description.FetchValue();
 			
-			string desc = Description == null ? null : Description.Value;
+			string desc = null;
+			if (Description != null && !string.IsNullOrWhiteSpace(Description.Value))
+				desc = Description.Value;
 			
 			var image = new Image() 
 			{
@@ -417,7 +422,7 @@ namespace MSP.Client
 		{
 			try
 			{			
-				string img = string.Format("http://storage.21offserver.com/files/{0}/{1}.jpg", image.UserId, image.Id);
+				string img = string.Format("{0}/{1}/{2}.jpg", UrlStore.streamingUrl, image.UserId, image.Id);
 				if (_Settings.twitter.Value)
 				{
 					var twitterApp = new Twitter.TwitterApplication(this);
@@ -486,25 +491,34 @@ namespace MSP.Client
 			{
 				if (section.Elements[i] is StringElement)
 				{
-					var strElement = (StringElement)section.Elements[i];					
-					var keyword = new Keyword()
+					var strElement = (StringElement)section.Elements[i];
+					if (!string.IsNullOrWhiteSpace(strElement.Caption))
 					{
-						Name = strElement.Caption
-					};
-					keywords.Add(keyword);
+						var keyword = new Keyword()
+						{
+							Name = strElement.Caption
+						};
+						keywords.Add(keyword);
+					}
 				}
 				if (addLoadMore != null)
 				{
 					addLoadMore.FetchValue();
 					
-					if (!keywords.Any(e => e.Name == addLoadMore.Value))
+					if (!string.IsNullOrWhiteSpace(addLoadMore.Value))
 					{
-						var keyword = new Keyword()
-						{
-							Name = addLoadMore.Value,
-						};
-						keywords.Add(keyword);
+						if (!keywords.Any(e => e.Name == addLoadMore.Value))
+						{						
+							var keyword = new Keyword()
+							{
+								Name = addLoadMore.Value,
+							};
+							keywords.Add(keyword);
+						}
 					}
+					
+					addLoadMore.Value = "";
+					addLoadMore.FetchValue();
 				}
 			}
 			

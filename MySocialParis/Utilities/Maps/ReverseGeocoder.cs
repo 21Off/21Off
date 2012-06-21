@@ -205,7 +205,7 @@ namespace MSP.Client
 	            {
 					foreach (IReverseGeo reverseGeo in list)
 					{
-						reverseGeo.OnFoundAddress(address);
+						reverseGeo.OnFoundAddress(coordinate, address);
 					}
 				});
 							

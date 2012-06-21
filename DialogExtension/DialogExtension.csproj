@@ -46,12 +46,12 @@
     <Compile Include="Elements\PhotoElement.cs" />
     <Compile Include="OldElements\AddLoadMoreWithImageElement.cs" />
     <Compile Include="Elements\OwnerDrawnElement.cs" />
-    <Compile Include="OldElements\LoadMoreElement.cs" />
     <Compile Include="Utilities\ImageButton.cs" />
     <Compile Include="Utilities\GraphicsUtil.cs" />
     <Compile Include="Elements.cs" />
     <Compile Include="Elements\CustomTableViewCell.cs" />
     <Compile Include="Elements\CustomImageStringElement.cs" />
+    <Compile Include="OldElements\CustomLoadMoreElement.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Elements\" />

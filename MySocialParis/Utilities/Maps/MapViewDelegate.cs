@@ -10,17 +10,38 @@ namespace MSP.Client
 {
 	public class LocationMapViewDelegate : MKMapViewDelegate
 	{
+		public event Action OnRegionChanged;
+		public event Action<MKUserLocation> OnUpdateUserLocation;
 		
+		public override void RegionChanged (MKMapView mapView, bool animated)
+		{
+			if (OnRegionChanged != null)
+				OnRegionChanged();
+		}
+		
+		public override void DidUpdateUserLocation (MKMapView mapView, MKUserLocation userLocation)
+		{
+			if (OnUpdateUserLocation != null)
+				OnUpdateUserLocation(userLocation);
+		}
 	}
 	
-	public class MapViewDelegate : MKMapViewDelegate
+	public class MapViewDelegate : LocationMapViewDelegate
 	{
 		private MKAnnotationView selectedAnnotationView;
 		private AnnotationBtnAssoc _Association;
 		public event Action<Image> OnPhotoClicked;
 		
-		public MapViewDelegate () : base()
+		public override void RegionChanged (MKMapView mapView, bool animated)
 		{
+			Console.WriteLine("RegionChanged");
+			// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
+		}
+		
+		public override void DidUpdateUserLocation (MKMapView mapView, MKUserLocation userLocation)
+		{
+			Console.WriteLine("DidUpdateUserLocation");
+			// TODO: Implement - see: http://go-mono.com/docs/index.aspx?link=T%3aMonoTouch.Foundation.ModelAttribute
 		}
 		
 		public override void DidSelectAnnotationView (MKMapView mapView, MKAnnotationView view)

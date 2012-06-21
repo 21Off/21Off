@@ -33,46 +33,17 @@ namespace MSP.Client
 			
 			we.WaitOne(5000);
 		}
-		
-		public List<User> GetSocialIds (List<long> socialIds, int socialType)
+
+		public GetSubscribersBySocialIdsResponse GetSocialIds (List<long> socialIds, int socialType)
 		{			
 			var request = new GetSubscribersBySocialIds()
 			{
 				SocialIds = string.Join(",", socialIds),
 				SocialType = socialType,
-			};			
-				
-			List<User> res = null;
-			
-			var we = new ManualResetEvent(false);			
-			string uri = string.Format("http://storage.21offserver.com/json/syncreply/GetSubscribersBySocialIds");
-			
-			JsonUtility.Upload (uri, request, false, s =>
-			{
-				try
-				{
-					var json = JsonArray.Load (s);
-					JsonArray subscribersObj = json.ContainsKey("Subscribers") ? (JsonArray)json["Subscribers"] : null;
-					if (subscribersObj != null)
-					{						
-						res = new List<User>();
-						foreach (JsonObject obj in subscribersObj)
-						{
-							res.Add(JsonToUser(obj));
-						}
-					}
-				}
-				catch (Exception ex)
-				{
-					Util.LogException("GetSocialIds", ex);
-				}
-				we.Set();
-			});
-			
-			we.WaitOne(15000);
-			
-			return res;
-		}		
+			};
+
+			return GetServiceResponse<GetSubscribersBySocialIdsResponse>(request);
+		}
 		
 		public User CreateUser (string userName, string password, string emailAddress, string profileImagePath)
 		{
@@ -205,45 +176,7 @@ namespace MSP.Client
 		
 		public FullUserResponse GetFullUserById(int id, int userId)
 		{
-			
-			FullUserResponse fullUser = null;			
-			var we = new ManualResetEvent(false);
-			string uri = string.Format("http://storage.21offserver.com/json/syncreply/GetUsers?FullUserId={0}&AskerId={1}", id, userId);
-			
-			JsonUtility.Launch(uri, false, s =>
-	        {				
-				try
-				{
-					var json = (JsonObject)JsonObject.Load (s);
-					var obj = (JsonObject)json["User"];					
-					
-					User user =  JsonToUser(obj);
-				 	int friendsCount = Convert.ToInt32(json["FriendsCount"].ToString());
-					int followersCount = Convert.ToInt32(json["FollowersCount"].ToString());
-					int followedCount = Convert.ToInt32(json["FollowedCount"].ToString());
-					int imagesCount = Convert.ToInt32(json["ImagesCount"].ToString());
-					int inRelation = Convert.ToInt32(json["InRelation"].ToString());
-					
-					fullUser = new FullUserResponse()
-					{
-						User = user,
-						FriendsCount = friendsCount,
-						FollowedCount = followedCount,
-						FollowersCount = followersCount,
-						ImagesCount = imagesCount,
-						InRelation = inRelation,
-					};
-				}
-				catch (Exception ex)
-				{
-					Util.LogException("GetFullUserById", ex);
-				}
-				we.Set();
-			});
-			
-			we.WaitOne(10000);
-			
-			return fullUser;			
+			return GetServiceResponse<FullUserResponse>(new GetUsers() {FullUserId = id, AskerId = userId });				
 		}
 		
 		public List<User> GetAllUsersByName(string name)

@@ -193,7 +193,7 @@ namespace MSP.Client
 						return;						
 					}					
 					
-					string img = string.Format("http://storage.21offserver.com/files/21OffFB.jpg");
+					string img = string.Format("{0}/21OffFB.jpg", UrlStore.streamingUrl);
 					
 					if (facebookApp != null)
 						facebookApp.Publish("21Off", img, "21Off subscription", img);

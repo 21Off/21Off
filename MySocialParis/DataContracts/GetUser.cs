@@ -30,7 +30,7 @@ namespace MSP.Client.DataContracts
 		
 		public string Password {get;set;}
 						
-		public bool FBUser { get;set; }	
+		public bool FBUser { get;set; }
 		
 		[Ignore()]
 		public long FriendsCount {
@@ -97,7 +97,6 @@ namespace MSP.Client.DataContracts
 		}
 
 		public User User { get; set; }
-
 		public ResponseStatus ResponseStatus { get; set; }
 	}
 	
@@ -106,21 +105,20 @@ namespace MSP.Client.DataContracts
 		public string SocialIds {get;set;}
 		public int SocialType {get;set;}
 	}
-	
-	public class GetSubscribersBySocialIdsResponse
-	{
-		public GetSubscribersBySocialIdsResponse()
-		{
-			this.ResponseStatus = new ResponseStatus();
-			Subscribers = new List<long>();
-		}
 
-		public List<long> Subscribers { get; set; }
+    public class GetSubscribersBySocialIdsResponse
+    {
+        public GetSubscribersBySocialIdsResponse()
+        {
+            ResponseStatus = new ResponseStatus();
+            Subscribers = new List<User>();
+			Others = new List<long>();
+        }
 
-		public ResponseStatus ResponseStatus { get; set; }
-	}	
-	
-
+        public ResponseStatus ResponseStatus { get; set; }
+        public List<User> Subscribers { get; set; }
+		public List<long> Others {get;set;}
+    }
 	
     public class UpdateNewUser
     {

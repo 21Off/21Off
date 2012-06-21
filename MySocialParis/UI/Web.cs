@@ -116,6 +116,7 @@ namespace TweetStation
 				UpdateNavButtons ();
 				
 				title.Text = UpdateTitle ();
+				Console.WriteLine(title.Text);
 			};
 			WebView.LoadError += delegate(object sender, UIWebErrorArgs e) {
 				stopButton.Enabled = false;

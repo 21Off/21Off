@@ -101,7 +101,7 @@ namespace MSP.Client
 
 		#region IReverseGeo implementation
 		
-		public void OnFoundAddress(string address)
+		public void OnFoundAddress(CLLocationCoordinate2D coord, string address)
 		{
 			SetAddress(address);
 		}

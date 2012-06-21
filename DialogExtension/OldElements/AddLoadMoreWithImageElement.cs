@@ -119,10 +119,12 @@ namespace MonoTouch.Dialog
 							break;
 						}
 					}
-					if (focus != this)
-						focus.entry.BecomeFirstResponder ();
-					else 
-						focus.entry.ResignFirstResponder ();
+					
+					if (focus != null && focus.entry != null)
+						if (focus != this)
+							focus.entry.BecomeFirstResponder ();
+						else 
+							focus.entry.ResignFirstResponder ();
 					
 					if (Tapped != null)
 					{

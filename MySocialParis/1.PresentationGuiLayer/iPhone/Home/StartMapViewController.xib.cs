@@ -107,7 +107,7 @@ namespace MSP.Client
 			scrollView = new UIScrollView (new RectangleF (0, this.View.Bounds.Height - h, 320, h));												
 			this.View.AddSubview (scrollView);
 			
-			mapView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+			mapView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;			
 			
 			foreach (var subView in mapView.Subviews)
 			{
@@ -383,7 +383,7 @@ namespace MSP.Client
 			
 			//if (image == null && _MaplocationRequest.LocType == LocalisationType.Local)
 			//	mapView.ShowsUserLocation = true;
-			mapView.ShowsUserLocation = true;
+			//mapView.ShowsUserLocation = true;
 			
 			//Set up the text attributes for the user location annotation callout
 			//mapView.UserLocation.Title = "You are here";
@@ -391,10 +391,16 @@ namespace MSP.Client
 			
 			mapView.MapType = MKMapType.Standard;
 			var mapViewDel = new MapViewDelegate ();
+			mapViewDel.OnRegionChanged += HandleOnRegionChanged;
 			mapViewDel.OnPhotoClicked += OnPhotoClicked;
 			mapView.Delegate = mapViewDel;
 			
 			SetPosition();
+		}
+
+		void HandleOnRegionChanged ()
+		{
+			
 		}
 		
 		public void SetPosition()
