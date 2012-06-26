@@ -4,7 +4,7 @@ namespace MSP.Client
 {
 	public class HorizontalScrollView : UIScrollView
 	{
-		public HorizontalScrollView(TimelineViewController timeline)
+		public HorizontalScrollView()
 		{
 			AutoresizingMask = UIViewAutoresizing.FlexibleHeight | UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin;
 			AutosizesSubviews = true;
@@ -17,7 +17,7 @@ namespace MSP.Client
 			ScrollEnabled = true;
 			PagingEnabled = true;
 			Bounces = true;		
-			DelaysContentTouches = false;				
+			DelaysContentTouches = false;
 		}
 	}
 }

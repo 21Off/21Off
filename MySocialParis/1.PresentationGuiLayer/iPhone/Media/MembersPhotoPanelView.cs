@@ -470,7 +470,7 @@ namespace MSP.Client
 			Action act = () =>
 			{
 				//var fullImages = AppDelegateIPhone.AIphone.ImgServ.GetImagesOfUser(user.Id, DateTime.MaxValue).ToList();
-				List<Image> images = new List<Image>();
+				var images = new List<Image>();
 				foreach (var element in MemberRoot[0])
 				{
 					if (element is MemberPhotoElement)

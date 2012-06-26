@@ -89,11 +89,6 @@ namespace MSP.Client
 				
 			locationManager.StartUpdatingLocation();					
 		}
-
-		void HandleOnRegionChanged ()
-		{
-			
-		}
 		
 		private void ShowLocalisationFailedMessage()
 		{
@@ -301,7 +296,7 @@ namespace MSP.Client
 		}
 		
 		private void RepositionAnnotation(CLLocationCoordinate2D location)
-		{			
+		{
 			string desc = "Your photo is here";
 			
 			if (ann == null)
@@ -398,7 +393,6 @@ namespace MSP.Client
 			}
 		}
 				
-		private bool geolocalisationDone = false;
 		private CLLocation PhotoLocation { get; set; }
 		private string LocationMapPhotoCapture {get;set;}		
 
@@ -409,15 +403,16 @@ namespace MSP.Client
 				SetAddress(address);
 		}
 		
-		void IReverseGeo.HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)
+		void IReverseGeo.HandleGeoCoderDelOnFailedWithError (CLLocationCoordinate2D coordinate, NSError arg2)
 		{
-			throw new NotImplementedException ();
+
 		}
 
 		void IReverseGeo.HandleGeoCoderDelOnFoundWithPlacemark (MKReverseGeocoder arg1, MKPlacemark placemark)
 		{
-			throw new NotImplementedException ();
+
 		}
+
 		#endregion
 	}
 

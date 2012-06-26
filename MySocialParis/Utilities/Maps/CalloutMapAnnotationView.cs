@@ -106,7 +106,7 @@ namespace MSP.Client
 			SetAddress(address);
 		}
 		
-		public void HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)
+		public void HandleGeoCoderDelOnFailedWithError (CLLocationCoordinate2D coordinate, NSError arg2)
 		{
 			string address = "No address available";						
 			SetAddress(address);

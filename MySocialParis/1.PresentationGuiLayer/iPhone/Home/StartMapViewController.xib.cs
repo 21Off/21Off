@@ -391,16 +391,10 @@ namespace MSP.Client
 			
 			mapView.MapType = MKMapType.Standard;
 			var mapViewDel = new MapViewDelegate ();
-			mapViewDel.OnRegionChanged += HandleOnRegionChanged;
 			mapViewDel.OnPhotoClicked += OnPhotoClicked;
 			mapView.Delegate = mapViewDel;
 			
 			SetPosition();
-		}
-
-		void HandleOnRegionChanged ()
-		{
-			
 		}
 		
 		public void SetPosition()

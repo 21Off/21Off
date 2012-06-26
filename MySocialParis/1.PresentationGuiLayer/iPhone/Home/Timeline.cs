@@ -34,12 +34,25 @@ namespace MSP.Client
 			_MapLocationRequest = maplocationRequest;
 			
 			ShowLoadMorePhotos = true;
-			
+
 			this.TableView.SeparatorStyle = UITableViewCellSeparatorStyle.None;
 			this.TableView.BackgroundColor = new UIColor (226f, 231f, 237f, 1f);
-			this.TableView.AllowsSelection = false;	
-						
-			_list = new List<ImageInfo> ();
+			this.TableView.AllowsSelection = false;
+
+			switch(filterType)
+			{
+				case FilterType.Friends:
+					TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("fond1"));
+					break;
+				case FilterType.Recent:
+					TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("fond2"));
+					break;
+				case FilterType.All:
+					TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("fond3"));
+					break;
+			}
+
+			_list = new List<ImageInfo>();
 			_MSP = msp;
 			
 			OnGestSwipe += HandleOnSwipe;
@@ -157,7 +170,7 @@ namespace MSP.Client
 			var sizable = element as UIViewElement;
 			if (sizable != null)
 			{
-				return 	sizable.GetHeight(tableView, indexPath);
+				return sizable.GetHeight(tableView, indexPath);
 			}
 			
 			if (indexPath.Row == Root[0].Count - 1)
@@ -271,6 +284,7 @@ namespace MSP.Client
 						imgInfo.Img = resa[i - 1];
 					}
 					_list.Add(imgInfo);
+					previousList.Add(imgInfo.Img);
 				}				
 				
 				// Now make sure we invoke on the main thread the updates
@@ -386,14 +400,9 @@ namespace MSP.Client
 				return false;
 			}
 		}
-		
-		private bool InitList(List<Image> resa)
+
+		private bool Compare(List<Image> resa, List<Image> previousList)
 		{
-			if (resa == null)
-				return false;
-			
-			hasImage = !(_FilterType == FilterType.Friends && resa.Count == 0);
-			
 			bool diff = false;
 			if (previousList != null)
 			{
@@ -414,15 +423,25 @@ namespace MSP.Client
 					}
 				}
 				if (previousList.Count != resa.Count)
-					diff = true;			
+					diff = true;
 			}
 			else
 			{
 				previousList = new List<Image>();
 				diff = true;
 			}
+
+			return diff;
+		}
+		
+		private bool InitList(List<Image> resa)
+		{
+			if (resa == null)
+				return false;
 			
-			if (!diff)
+			hasImage = !(_FilterType == FilterType.Friends && resa.Count == 0);
+
+			if (!Compare(resa, previousList))
 				return false;
 			
 			previousList = resa;

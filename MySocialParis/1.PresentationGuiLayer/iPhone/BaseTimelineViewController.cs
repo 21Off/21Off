@@ -22,12 +22,10 @@ namespace MSP.Client
 				return new Selector("HandleSwipe");
 			}
 		}
-		
+
+		/*
 		public override void ViewDidLoad ()
-		{
-			base.ViewDidLoad ();
-			return;
-			
+		{			
 			var swipe = new UISwipeGestureRecognizer();
 			swipe.AddTarget(this, MySelector);
 			swipe.Direction = UISwipeGestureRecognizerDirection.Left;
@@ -36,6 +34,7 @@ namespace MSP.Client
 			// and last, add the recognizer to this view to take actions
 			this.View.AddGestureRecognizer(swipe);			
 		}
+		*/
 		
 		/*
 		[Export("HandleSwipe")]
@@ -90,7 +89,8 @@ namespace MSP.Client
 		{
 			return 120;
 		}		
-		
+
+
 		public override Source CreateSizingSource (bool unevenRows)
 		{
 			// we are always uneven for TimelineViewControllers
@@ -106,6 +106,7 @@ namespace MSP.Client
 				parent = dvc as BaseTimelineViewController;
 			}
 
+			/*
 			public override void Scrolled (UIScrollView scrollView)
 			{
 				try {
@@ -116,7 +117,8 @@ namespace MSP.Client
 				}
 				
 				base.Scrolled (scrollView);
-			}			
+			}
+			*/
 			
 			public override float GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
 			{

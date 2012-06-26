@@ -13,16 +13,11 @@ namespace MSP.Client
 	public partial class StartMediaViewController : UIViewController, IMapLocationRequest
 	{		
 		#region Private members
-		
-		private TimelineViewController likedMediaView;
-		private TimelineViewController friendsMediaView;
-		private TimelineViewController recentMediaView;
-		private TimelineViewController eventsMediaView;
-		
+
 		private ManualResetEventSlim loadWaitHandle = new ManualResetEventSlim(true);
 		private MSPNavigationController _MSP;
 		private CLLocationManager locationManager;		
-		private double _CurrentPage;
+		private int _CurrentPage;
 		
 		#endregion
 
@@ -77,7 +72,7 @@ namespace MSP.Client
 		{
 			var hsv = (HorizontalScrollView)sender;
 			double page = Math.Floor((hsv.ContentOffset.X - hsv.Frame.Width / 2) / hsv.Frame.Width) + 1;
-			_CurrentPage = page;
+			_CurrentPage = (int)Math.Round(page);
 		}
 
 		private void HandleLocalBtnTouchUpInside (object sender, EventArgs e)
@@ -149,12 +144,6 @@ namespace MSP.Client
 					{	
 						loadWaitHandle.Set();						
 						LoadImagesOnTimelines(null);
-						/*
-						BeginInvokeOnMainThread(()=>
-						{
-							AppDelegateIPhone.ShowMessage(View, "image stream loading failed", null);
-						});
-						*/
 					}				
 					return;
 				}								
@@ -178,10 +167,24 @@ namespace MSP.Client
 		{
 			try
 			{
-				likedMediaView.ShowLoadedImages(allImgResp == null ? null : allImgResp.LikedImages, request);
-				friendsMediaView.ShowLoadedImages(allImgResp == null ? null : allImgResp.FriendsImages, request);
-				recentMediaView.ShowLoadedImages(allImgResp == null ? null : allImgResp.RecentImages, request);
-				eventsMediaView.ShowLoadedImages(allImgResp == null ? null : allImgResp.EventsImages, request);
+				for (int i = 0; i < mediaViews.Count; i++)
+				{
+					var mediaView = mediaViews[i];
+					List<Image> images = null;
+					if (allImgResp != null)
+					{
+						if (i == 0)
+							images = allImgResp.LikedImages;
+						if (i == 1)
+							images = allImgResp.FriendsImages;
+						if (i == 2)
+							images = allImgResp.RecentImages;
+						if (i == 3)
+							images = allImgResp.EventsImages;
+					}
+
+					mediaView.ShowLoadedImages(images, request);
+				}
 			}
 			catch (Exception ex)
 			{
@@ -216,12 +219,8 @@ namespace MSP.Client
 		{			
 			locationManager = new CLLocationManager();
 			locationManager.DesiredAccuracy = -1;
-			//Be as accurate as possible
 			locationManager.DistanceFilter = 50;
-			//Update when we have moved 50 m
 			locationManager.HeadingFilter = 1;
-			//Update when heading changes 1 degree 
-			//locationManager.UpdatedHeading += UpdatedHeading;
 			locationManager.UpdatedLocation += UpdatedLocation;		
 			
 			globalBtn.SetImage(Graphics.GetImgResource("global"), UIControlState.Normal);
@@ -230,52 +229,47 @@ namespace MSP.Client
 			
 			globalBtn.TouchUpInside += HandleGlobalBtnTouchUpInside;
 			localBtn.TouchUpInside += HandleLocalBtnTouchUpInside;
-			
-			var likedRootElement = new RootElement ("liked") { UnevenRows = true };
-			var recentRootElement = new RootElement ("recent") { UnevenRows = true };
-			var friendsRootElement = new RootElement ("friends") { UnevenRows = true };
-			var eventsRootElement = new RootElement ("events") { UnevenRows = true };			
-				
-			var likedSection = new Section(GetSubTitle(LocType, 1));
-			var friendsSection = new Section(GetSubTitle(LocType, 2));
-			var recentSection = new Section(GetSubTitle(LocType, 3));
-			var eventSection = new Section(GetSubTitle(LocType, 4));
-			
-			likedRootElement.Add(likedSection);
-			recentRootElement.Add(recentSection);
-			friendsRootElement.Add(friendsSection);
-			eventsRootElement.Add(eventSection);
-			
+
 			float width = UIScreen.MainScreen.Bounds.Width;
 			float topY = 42;
 			SizeF size = new SizeF(width, 480 - topY);
-			
-			likedMediaView = new TimelineViewController(FilterType.Liked, true, _MSP, this) { Root = likedRootElement, };
-			friendsMediaView = new TimelineViewController(FilterType.Friends, true, _MSP, this) { Root = friendsRootElement, };			
-			recentMediaView = new TimelineViewController(FilterType.Recent, true, _MSP, this) { Root = recentRootElement, };
-			eventsMediaView = new TimelineViewController(FilterType.Events, true, _MSP, this) { Root = eventsRootElement, };
-			
-			likedMediaView.View.Frame = new System.Drawing.RectangleF(new PointF(0, 0),  size);
-			friendsMediaView.View.Frame = new System.Drawing.RectangleF(new PointF(width, 0),  size);
-			recentMediaView.View.Frame = new System.Drawing.RectangleF(new PointF(2 * width, 0),  size);
-			eventsMediaView.View.Frame = new System.Drawing.RectangleF(new PointF(3 * width, 0),  size);
 						
-			var hsv = new HorizontalScrollView(likedMediaView)
+			var hsv = new HorizontalScrollView()
 			{
 				Frame = new RectangleF(new PointF(0, topY), size),
 				ContentSize = new SizeF(width * 4, size.Height - 20 - topY),				
 			};
 			hsv.Scrolled += HandleHsvScrolled;
-			
-			hsv.Add(likedMediaView.View);
-			hsv.Add(friendsMediaView.View);
-			hsv.Add(recentMediaView.View);
-			hsv.Add(eventsMediaView.View);
-			
+
+			CreateMediaView(1, "liked", hsv);
+			CreateMediaView(2, "recent", hsv);
+			CreateMediaView(3, "friends", hsv);
+			CreateMediaView(4, "events", hsv);
+
 			this.View.AddSubview(hsv);
 			
 			UpdateLabels(LocalisationType.Global);
-		}		
+		}
+
+		private void CreateMediaView(int pos, string title, HorizontalScrollView hsv)
+		{
+			float width = UIScreen.MainScreen.Bounds.Width;
+			float topY = 42;
+			SizeF size = new SizeF(width, 480 - topY);
+
+			var rootElement = new RootElement (title) { UnevenRows = true };
+			var section = new Section(GetSubTitle(LocType, pos));
+			rootElement.Add(section);
+
+			FilterType filter = GetFilter(pos);
+
+			var mediaView = new TimelineViewController(filter, true, _MSP, this) { Root = rootElement, };
+		 	mediaView.View.Frame = new System.Drawing.RectangleF(new PointF((pos - 1)* width, 0),  size);
+			hsv.Add(mediaView.View);
+			mediaViews.Add(mediaView);
+		}
+
+		private List<TimelineViewController> mediaViews = new List<TimelineViewController>();
 		
 		private void UpdateLabels(LocalisationType locType)
 		{
@@ -284,11 +278,18 @@ namespace MSP.Client
             {
 				globalBtn.Hidden = locType == LocalisationType.Global;
 				localBtn.Hidden = locType == LocalisationType.Local;
-				
+
+				for (int i = 0; i < mediaViews.Count; i++)
+				{
+					mediaViews[i].Root[0].Caption = GetSubTitle(LocType, i + 1);
+				}
+
+				/*
 				likedMediaView.Root[0].Caption = GetSubTitle(LocType, 1);
 				friendsMediaView.Root[0].Caption = GetSubTitle(LocType, 2);
 				recentMediaView.Root[0].Caption = GetSubTitle(LocType, 3);
 				eventsMediaView.Root[0].Caption = GetSubTitle(LocType, 4);
+				*/
 			});
 			
 			if (locType == LocalisationType.Global)
@@ -331,9 +332,10 @@ namespace MSP.Client
 		
 		private void SetEmptyImages()
 		{
-			likedMediaView.SetEmptyImages();
-			friendsMediaView.SetEmptyImages();
-			recentMediaView.SetEmptyImages();
+			foreach (var mediaView in mediaViews)
+			{
+				mediaView.SetEmptyImages();
+			}
 		}		
 		
 		/// <summary>
@@ -364,30 +366,27 @@ namespace MSP.Client
 		
 		public FilterType GetFilterType()
 		{
-			if (_CurrentPage == 0)
-				return FilterType.Liked;
-			if (_CurrentPage == 1)
-				return FilterType.Friends;
-			if (_CurrentPage == 2)
-				return FilterType.Recent;
-			if (_CurrentPage == 3)
-				return FilterType.Events;			
-			
-			return FilterType.Liked;
+			return GetFilter(_CurrentPage + 1);
+		}
+
+		private FilterType GetFilter(int pos)
+		{
+			FilterType filter = FilterType.All;
+			if (pos == 1)
+				filter = FilterType.Liked;
+			if (pos == 2)
+				filter = FilterType.Friends;
+			if (pos == 3)
+				filter = FilterType.Recent;
+			if (pos == 4)
+				filter = FilterType.Events;
+
+			return filter;
 		}
 					
 		public List<ImageInfo> GetCurrentLoadedImages()
 		{
-			if (_CurrentPage == 0)
-				return likedMediaView.GetLoadedImages();
-			if (_CurrentPage == 1)
-				return friendsMediaView.GetLoadedImages();
-			if (_CurrentPage == 2)
-				return recentMediaView.GetLoadedImages();
-			if (_CurrentPage == 3)
-				return eventsMediaView.GetLoadedImages();			
-			
-			return null;
+			return (mediaViews[_CurrentPage]).GetLoadedImages();
 		}
 		
 		private RequestInfo request;

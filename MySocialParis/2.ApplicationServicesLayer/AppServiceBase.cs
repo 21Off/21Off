@@ -62,8 +62,7 @@ namespace MSP.Client
 			string uri = string.Format("{0}/json/syncreply/{1}", WebServiceHostUrl, operationName);
 			
 			JsonUtility.Upload (uri, request, false, s =>
-			{
-				
+			{				
 				try
 				{
 					var json = JsonArray.Load (s);

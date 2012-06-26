@@ -1,16 +1,50 @@
 ﻿<Properties GitUserInfo="UsingMD">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhone" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/Utilities/Maps/ReverseGeocoder.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="MySocialParis/DataContracts/GetUser.cs">
     <Files>
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/StartMapViewController.xib.cs" Line="386" Column="6" />
-      <File FileName="MySocialParis/Utilities/Maps/MapViewDelegate.cs" Line="29" Column="56" />
-      <File FileName="MySocialParis/Utilities/Maps/ReverseGeocoder.cs" Line="116" Column="4" />
-      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Photo/PhotoLocationViewController.xib.cs" Line="251" Column="3" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/StartMediaViewController.xib.cs" Line="186" Column="1" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/Timeline.cs" Line="86" Column="49" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Media/AlbumDetailsViewController.cs" Line="61" Column="32" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Media/MembersPhotoPanelView.cs" Line="481" Column="6" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Photo/PhotoMapViewController.xib.cs" Line="85" Column="3" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/StartMapViewController.xib.cs" Line="14" Column="3" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Home/TilingView.cs" Line="122" Column="82" />
+      <File FileName="MySocialParis/1.PresentationGuiLayer/iPhone/Me/SearchUser.cs" Line="79" Column="5" />
+      <File FileName="MySocialParis/2.ApplicationServicesLayer/UsersService.cs" Line="185" Column="1" />
+      <File FileName="MySocialParis/DataContracts/GetUser.cs" Line="158" Column="4" />
+      <File FileName="MySocialParis/2.ApplicationServicesLayer/AppServiceBase.cs" Line="61" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Client" expanded="True" />
+          <Node name="Client" expanded="True">
+            <Node name="21Off.Client" expanded="True">
+              <Node name="1.PresentationGuiLayer" expanded="True">
+                <Node name="iPhone" expanded="True">
+                  <Node name="Home" expanded="True">
+                    <Node name="StartMapViewController.xib" expanded="True" />
+                  </Node>
+                  <Node name="Me" expanded="True">
+                    <Node name="ProfileViewController.xib" expanded="True" />
+                  </Node>
+                  <Node name="Members" expanded="True" />
+                  <Node name="Photo" expanded="True">
+                    <Node name="PhotoMapViewController.xib" expanded="True" />
+                  </Node>
+                </Node>
+              </Node>
+              <Node name="2.ApplicationServicesLayer" expanded="True" />
+              <Node name="DataContracts" expanded="True">
+                <Node name="GetUser.cs" selected="True" />
+              </Node>
+              <Node name="Images" expanded="True">
+                <Node name="Share" expanded="True" />
+              </Node>
+              <Node name="Utilities" expanded="True">
+                <Node name="Maps" expanded="True" />
+              </Node>
+            </Node>
+          </Node>
         </State>
       </Pad>
     </Pads>
@@ -19,10 +53,14 @@
     <BreakpointStore>
       <Breakpoint file="/Users/Valeriu/Projects/MySocialParis/Share/FaceBook/FacebookAuth.cs" line="191" />
       <Breakpoint file="/Users/Valeriu/Projects/21Off/MySocialParis/1.PresentationGuiLayer/iPhone/Login/oAuthFacebook.cs" line="80" />
+      <Breakpoint hitAction="PrintExpression" traceExpression="{selectedVC}" file="/Users/Valeriu/Projects/21Off/MySocialParis/1.PresentationGuiLayer/iPhone/Media/MembersPhotoPanelView.cs" line="513" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="MySocialParis/1.PresentationGuiLayer/iPhone/Home/StartMediaViewController.xib.cs" line="346" offsetX="489" offsetY="5115" expression="allImgResp" liveUpdate="False" />
+    <Watch file="MySocialParis/2.ApplicationServicesLayer/UsersService.cs" line="184" offsetX="871" offsetY="2745" expression="users" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
   <MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
-    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Update profile&#xA;Better map localisation experience&#xA;Small bugs&#xA;Faster image load" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
+    <IPhoneTestFlightSettings_27CRelease ApiToken="8c9dc4a79e44dfe85efa7ce9e713e921_MTE3MDM4MjAxMS0wNy0yNSAxNToyNDowMy43MDM3MzM" TeamToken="fc00a32aacae05f3d7653282aeef3fae_MjE4NjYyMDExLTA4LTE4IDE5OjAyOjA0LjQyNDA1Ng" ReleaseNotes="Admirers, Friends Navigation bug fixed&#xA;Show album photos on map&#xA;When refreshing timeline, show only 21 photos" NotifyTeamMembers="False" ReplaceBinaries="False" DistributionLists="" />
   </MonoDevelop.Ide.ItemProperties.Client.21Off.Client>
 </Properties>

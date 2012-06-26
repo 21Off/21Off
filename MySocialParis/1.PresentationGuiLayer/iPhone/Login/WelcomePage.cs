@@ -253,8 +253,13 @@ namespace MSP.Client
 					Latitude = Location.Coordinate.Latitude,
 					Longitude = Location.Coordinate.Longitude,
 				});
-				
+
 				AllImagesResponse allImgResp = AppDelegateIPhone.AIphone.ImgServ.GetFullImageList(FilterType.All, geoLoc, 0, 21, -1);
+				InvokeOnMainThread(()=>
+                {
+					likedMediaView.TableView.BackgroundView = new UIImageView(Graphics.GetImgResource("fond"));
+				});
+
 				likedMediaView.ShowLoadedImages(allImgResp == null ? null : allImgResp.RecentImages, request);	
 			}
 			catch (Exception ex)

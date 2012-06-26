@@ -119,7 +119,7 @@ namespace MSP.Client
 		{
 			var resImg = UIImageUtils.drawEmptyImage(photoSize);
 			
-			resImg = UIImageUtils.overlayImage(resImg, UIImageUtils.FromFile("Images/Home/New2/icone_photo.png", new SizeF(26, 26)),
+			resImg = UIImageUtils.overlayImage(resImg, UIImageUtils.FromFile("Images/Share/icone_photo.png", new SizeF(26, 26)),
                           new RectangleF(new PointF(0, 0), photoSize),
                           new RectangleF(new PointF((photoSize.Width - 26)/2, (photoSize.Height - 26)/2),
                           new SizeF(26, 26)), photoSize);

@@ -32,8 +32,8 @@ namespace MSP.Client
 			}
 			
 			Opaque = false;
-			BackgroundColor = UIColor.FromRGBA (0, 0, 0, 0);
-			BackgroundColor = UIColor.FromPatternImage (Graphics.GetImgResource ("fond"));
+			//BackgroundColor = UIColor.Red;
+			//BackgroundColor = UIColor.FromPatternImage (Graphics.GetImgResource ("fond"));
 		}
 
 		public void Update (List<ImageInfo> fileNames, int rowIndex)

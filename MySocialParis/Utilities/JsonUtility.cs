@@ -188,7 +188,7 @@ namespace MSP.Client
 		public static void Upload (string url, object obj, bool callbackOnMainThread, Action<Stream> callback)
 		{
 			Util.PushNetworkActive ();
-			Uri uri = new Uri (url);
+			var uri = new Uri (url);
 			
 			// Wake up 3G if it has been more than 3 minutes		
 			lock (minuteLock){
@@ -257,7 +257,7 @@ namespace MSP.Client
 		public static void Launch (string url, bool callbackOnMainThread, Action<Stream> callback, string method)
 		{
 			Util.PushNetworkActive ();
-			Uri uri = new Uri (url);
+			var uri = new Uri (url);
 			
 			// Wake up 3G if it has been more than 3 minutes
 			lock (minuteLock){

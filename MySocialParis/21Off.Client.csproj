@@ -50,15 +50,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Developer: stephane Mottola (L2B558EGPA)</CodesignKey>
     <ConsolePause>false</ConsolePause>
     <MtouchI18n />
     <AssemblyName>21Off</AssemblyName>
-    <CodesignEntitlements>Info.plist</CodesignEntitlements>
     <MtouchExtraArgs>-v -gcc_flags "-lgcc_eh -xcc -L${ProjectDir}/../Share/FaceBook -lfacebook_ios_sdk -framework CoreGraphics -force_load ${ProjectDir}/../Share/FaceBook/libfacebook_ios_sdk.a"</MtouchExtraArgs>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <IpaPackageName />
     <CodesignProvision>D38E6823-D8C2-436B-9DDD-598BAAD3C425</CodesignProvision>
+    <CrashReportingApiKey />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -658,6 +658,12 @@
     <Content Include="Images\Icon%402x.png" />
     <Content Include="Images\Ver4\logo_FB%402x.png" />
     <Content Include="Images\Ver4\logo_FB.png" />
+    <Content Include="Images\Ver4\fond1%402x.png" />
+    <Content Include="Images\Ver4\fond2%402x.png" />
+    <Content Include="Images\Ver4\fond3%402x.png" />
+    <Content Include="Images\Ver4\fond1.png" />
+    <Content Include="Images\Ver4\fond2.png" />
+    <Content Include="Images\Ver4\fond3.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Share\Share.csproj">

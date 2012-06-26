@@ -110,7 +110,8 @@ namespace MSP.Client
 			};
 
 			tabBarController.SetViewControllers(navigationRoots, true);
-			tabBarController.ViewControllerSelected += HandleTabBarControllerViewControllerSelected;			
+			tabBarController.ViewControllerSelected += HandleTabBarControllerViewControllerSelected;
+			_currentNavControler = buzzNavigationController;
 						
 			window.AddSubview (tabBarController.View);					
 		}					

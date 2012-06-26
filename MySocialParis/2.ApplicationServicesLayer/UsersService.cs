@@ -181,57 +181,14 @@ namespace MSP.Client
 		
 		public List<User> GetAllUsersByName(string name)
 		{				
-			List<User> users = null;
-			var we = new ManualResetEvent(false);
-			string uri = string.Format("http://storage.21offserver.com/json/syncreply/GetAllUsers?ByName={0}", name);
-			
-			JsonUtility.Launch(uri, false, s =>
-	        {
-				try
-				{
-					users = new List<User>();
-					
-					var json = (JsonObject)JsonObject.Load (s);
-					foreach (JsonObject obj in json["Users"])
-					{
-						users.Add(JsonToUser(obj));
-					}
-				}
-				catch (Exception ex)
-				{
-					Util.LogException("GetAllUsersByName", ex);
-				}
-				we.Set();
-			});
-			
-			we.WaitOne(5000);
-			
+			var aaa = ServiceStack.Text.JsonSerializer.SerializeToString(new GetAllUsers(){ByName = name});
+			List<User> users = GetServiceResponse<GetAllUsersResponse>(new GetAllUsers(){ByName = name}).Users;
 			return users;
 		}
 		
 		public User GetUserById(int id)
 		{
-			User user = null;			
-			var we = new ManualResetEvent(false);
-			string uri = string.Format("http://storage.21offserver.com/json/syncreply/GetUsers?UserId={0}", id);
-			
-			JsonUtility.Launch(uri, false, s =>
-	        {
-				try
-				{
-					var json = (JsonObject)JsonObject.Load (s);
-					var obj = (JsonObject)json["User"];
-					user =  JsonToUser(obj);
-				}
-				catch (Exception ex)
-				{
-					Util.LogException("GetUserById", ex);
-				}
-				we.Set();
-			});
-			
-			we.WaitOne();
-			
+			User user = GetServiceResponse<GetUsersResponse>(new GetUsers(){ UserId = id }).User;
 			return user;					
 		}
 		

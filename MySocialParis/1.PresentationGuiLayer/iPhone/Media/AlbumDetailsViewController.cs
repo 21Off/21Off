@@ -7,6 +7,7 @@ using MSP.Client.DataContracts;
 using MonoTouch.Dialog;
 using System.Threading;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MSP.Client
 {
@@ -40,12 +41,28 @@ namespace MSP.Client
 			base.ViewDidLoad ();
 			
 			backBtn.TouchDown += HandleBackBtnTouchDown;
+			okBtn.TouchDown += HandleOkTouchDown;
+
 			
 			// Perform any additional setup after loading the view, typically from a nib.
 			Initialize();
-			
+
 			this.request = new RequestInfo(RequestType.FirstLoad);			
 			InitializeMap(request);			
+		}
+
+		void HandleOkTouchDown (object sender, EventArgs e)
+		{
+			var images = likedMediaView.GetLoadedImages ().Select(f => f.Img).ToList();
+			var headersInfos = new HeaderInfos() { SubTitle = album.Title, Title = "Album" };	
+			
+			UINavigationController navCont = AppDelegateIPhone.AIphone.GetCurrentNavControler();
+
+			var b = new PhotoMapViewController(navCont, images, headersInfos);
+			b.View.Frame = UIScreen.MainScreen.Bounds;
+			
+			if (navCont != null)
+				navCont.VisibleViewController.PresentModalViewController(b, true);
 		}
 
 		void HandleBackBtnTouchDown (object sender, EventArgs e)

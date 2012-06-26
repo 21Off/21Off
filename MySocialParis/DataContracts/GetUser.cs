@@ -156,5 +156,23 @@ namespace MSP.Client.DataContracts
 
 		public ResponseStatus ResponseStatus { get; set; }
 	}	
+
+	public class GetAllUsers
+	{
+        public string ByName { get; set; }
+	}
+
+	public class GetAllUsersResponse
+	{
+		public GetAllUsersResponse()
+		{
+			this.ResponseStatus = new ResponseStatus();
+            Users = new List<User>();
+		}
+
+		public List<User> Users { get; set; }
+
+		public ResponseStatus ResponseStatus { get; set; }
+	}
 }
 

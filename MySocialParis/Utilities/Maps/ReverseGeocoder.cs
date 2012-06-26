@@ -6,6 +6,7 @@ using MonoTouch.Foundation;
 using MonoTouch.MapKit;
 using System.Net;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace MSP.Client
 {	
@@ -28,8 +29,8 @@ namespace MSP.Client
 			requestQueue = new Stack<CLLocationCoordinate2D>();
 			
 			geoCoderDel = new GeoCoderDelegate ();
-			geoCoderDel.OnFoundWithPlacemark += HandleGeoCoderDelOnFoundWithPlacemark;
-			geoCoderDel.OnFailedWithError+= HandleGeoCoderDelOnFailedWithError;			
+			//geoCoderDel.OnFoundWithPlacemark += HandleGeoCoderDelOnFoundWithPlacemark;
+			//geoCoderDel.OnFailedWithError+= HandleGeoCoderDelOnFailedWithError;			
 		}
 		
 		public static string ReverseGeocode (CLLocationCoordinate2D coord, IReverseGeo reverseGeo)
@@ -76,6 +77,8 @@ namespace MSP.Client
 					
 					if (res != null && res.results != null && res.results.Count > 0)
 						OnFoundAddress(coord, res.results[0].formatted_address);
+					else
+						HandleGeoCoderDelOnFailedWithError(coord, new NSError(new NSString("No result found"), 666));
 				});
 				
 				
@@ -99,7 +102,9 @@ namespace MSP.Client
 		{
 			using (var client = new WebClient())
 			{
-				Uri uri = new Uri(string.Format("http://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&sensor=false", coord.Latitude, coord.Longitude));
+				var ci = new CultureInfo("en-us");
+				var uri = new Uri(string.Format("http://maps.googleapis.com/maps/api/geocode/json?latlng={0},{1}&sensor=false", 
+				                                coord.Latitude.ToString(ci), coord.Longitude.ToString(ci)));
 		
 				/* The first number is the status code,
 				* the second is the accuracy,
@@ -125,7 +130,7 @@ namespace MSP.Client
 				bool endedRight = waitEnd.WaitOne(5000);
 				if (!endedRight)
 				{
-					HandleGeoCoderDelOnFailedWithError(g, new NSError(new NSString("Geolocalisation takes more that 5 seconds"), 666));						
+					HandleGeoCoderDelOnFailedWithError(g.coordinate, new NSError(new NSString("Geolocalisation takes more that 5 seconds"), 666));						
 					g = null;
 				}
 			}
@@ -139,27 +144,24 @@ namespace MSP.Client
 		
 		private static int geoCoderDownloaders = 0;
 		
-		static void HandleGeoCoderDelOnFailedWithError (MKReverseGeocoder arg1, NSError arg2)
+		static void HandleGeoCoderDelOnFailedWithError (CLLocationCoordinate2D coordinate, NSError arg2)
 		{
 			try
 			{
-				var coordinate = arg1.coordinate;
 				Interlocked.Decrement (ref geoCoderDownloaders);
-				
-				//Util.Log("FailedWithError for coord: Lat-{0}, Long-{1}", coordinate.Latitude, coordinate.Longitude);							
-				
+							
 				var list = new List<IReverseGeo>();
 				lock (lockGeocoder)
 				{			      
-					list = pendingRequests[arg1.coordinate];
-					pendingRequests.Remove(arg1.coordinate);
+					list = pendingRequests[coordinate];
+					pendingRequests.Remove(coordinate);
 				}
 				
 				nsDispatcher.BeginInvokeOnMainThread(()=>
 	            {
 					foreach (IReverseGeo reverseGeo in list)
 					{
-						reverseGeo.HandleGeoCoderDelOnFailedWithError(arg1, arg2);
+						reverseGeo.HandleGeoCoderDelOnFailedWithError(coordinate, arg2);
 					}
 				});
 				
@@ -221,6 +223,7 @@ namespace MSP.Client
 			}
 			catch (Exception ex)
 			{
+				Util.LogException("On found address", ex);
 			}			
 		}		                           
 		

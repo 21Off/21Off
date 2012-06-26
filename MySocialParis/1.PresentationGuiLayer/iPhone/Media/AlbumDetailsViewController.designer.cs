@@ -12,6 +12,9 @@ namespace MSP.Client
 	partial class AlbumDetailsViewController
 	{
 		[Outlet]
+		MonoTouch.UIKit.UIButton okBtn { get; set; }
+
+		[Outlet]
 		MonoTouch.UIKit.UIButton backBtn { get; set; }
 
 		[Outlet]
@@ -19,6 +22,11 @@ namespace MSP.Client
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (okBtn != null) {
+				okBtn.Dispose ();
+				okBtn = null;
+			}
+
 			if (backBtn != null) {
 				backBtn.Dispose ();
 				backBtn = null;
